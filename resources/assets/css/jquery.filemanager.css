@@ -1,0 +1,362 @@
+@charset "utf-8";
+
+/*-------------------------
+	File manager
+-------------------------*/
+
+.filemanager {
+	position: relative;
+	background-color: #fdf6e3;
+	height: 100%;
+	overflow: hidden;
+}
+
+/*-------------------------
+	Breadcrumps
+-------------------------*/
+
+.filemanager .breadcrumbs {
+	background-color: #eee8d5;
+	height: 32px;
+	line-height: 32px;
+	border: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	padding-left: 10px;
+}
+
+.filemanager .breadcrumbs span {
+	color: #ffffff;
+	text-transform: uppercase;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+/*-------------------------
+	Search box
+-------------------------*/
+
+.filemanager .search {
+	position: absolute;
+	padding-right: 30px;
+	cursor: pointer;
+	right: 0;
+	font-size: 17px;
+	color: #ffffff;
+	display: block;
+	width: 40px;
+	height: 40px;
+}
+
+.filemanager .search:before {
+	content: '';
+	position: absolute;
+	margin-top: 12px;
+	width: 10px;
+	height: 11px;
+	border-radius: 50%;
+	border: 2px solid #ffffff;
+	right: 8px;
+}
+
+.filemanager .search:after {
+	content: '';
+	width: 3px;
+	height: 10px;
+	background-color: #ffffff;
+	border-radius: 2px;
+	position: absolute;
+	top: 23px;
+	right: 6px;
+	-webkit-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+
+.filemanager .search input[type=search] {
+	border-radius: 2px;
+	color: #4D535E;
+	background-color: #FFF;
+	width: 250px;
+	height: 44px;
+	margin-left: -215px;
+	padding-left: 20px;
+	text-decoration-color: #4d535e;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 20px;
+	display: none;
+	outline: none;
+	border: none;
+	padding-right: 10px;
+	-webkit-appearance: none;
+}
+/*-------------------------
+	Content area
+-------------------------*/
+
+.filemanager .data {
+	z-index: -3;
+	padding: 0 !important;
+}
+
+.filemanager .data li {
+	border-radius: 3px;
+	width: 300px;
+	height: 60px;
+	list-style-type: none;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+	cursor: pointer;
+	box-sizing: border-box;
+	transition: 0.3s background-color;
+	display: block;
+	float: left;
+}
+
+.filemanager .data li a {
+	display: block;
+	position: relative;
+	top: 0;
+	left: 0;
+	height: 50px;
+	margin: 5px;
+	z-index: -2;
+}
+
+.filemanager .data li a:hover {
+	background-color: #eee8d5;
+}
+
+.filemanager .data li .name {
+	display: block;
+	height: 20px;
+	padding: 2px 3px;
+	margin-left: 50px;
+	line-height: 16px;
+	color: #586E75;
+	font-size: 12px;
+	font-weight: 700;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.filemanager .data li .details {
+	display: block;
+	height: 15px;
+	padding: 2px 3px;
+	line-height: 11px;
+	margin-left: 50px;
+	color: #b6c1c9;
+	font-size: 8px;
+	text-transform: uppercase;
+	font-weight: 400;
+	width: 55px;
+	top: 64px;
+	white-space: nowrap;
+}
+
+.filemanager .data li .back {
+	color: #586E75;
+	font-size: 28px;
+	font-weight: 700;
+	line-height: 20px;
+	width: 55px;
+	height: 20px;
+	white-space: nowrap;
+	position: absolute;
+	display: inline-block;
+	padding-left: 7px;
+}
+
+/*-------------------------
+Icons
+-------------------------*/
+.filemanager .icon {
+	font-size: 14px;
+	font-weight: bold;
+	width: 50px;
+	display: block;
+	padding-top: 10px;
+	font-family: 'Baloo', serif;
+}
+
+.filemanager .icon.folder {
+	display: block;
+	float: left;
+	background-color: transparent;
+	overflow: hidden;
+}
+
+.filemanager .icon.folder::after {
+	content: '';
+	float: left;
+	clear: left;
+	background-color: #a0d4e4;
+	width: 50px;
+	height: 30px;
+	border-radius: 0.1em;
+}
+
+.filemanager .icon.folder::before {
+	content: '';
+	float: left;
+	background-color: #7ba1ad;
+	width: 24px;
+	height: 5px;
+	margin-left: 1px;
+	border-top-left-radius: 0.1em;
+	border-top-right-radius: 0.1em;
+	box-shadow: 22px 2px 0 0em #7ba1ad;
+}
+
+.filemanager .icon.file {
+	display: block;
+	float: left;
+	margin: 0 5px;
+	position: relative;
+	overflow: hidden;
+	width: 40px;
+	height: 50px;
+	line-height: 35px;
+	text-align: center;
+	border-radius: 0.25em;
+	color: #FFF;
+	box-shadow: 28px -38px 0 0 #A4A7AC inset;
+}
+
+.filemanager .icon.file::after {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	border-width: 0;
+	border-bottom: 50px solid #DADDE1;
+	border-right: 50px solid rgba(0, 0, 0, 0);
+	top: -36px;
+	right: -3px;
+}
+
+.filemanager .icon.file.f-avi,
+.filemanager .icon.file.f-flv,
+.filemanager .icon.file.f-mkv,
+.filemanager .icon.file.f-mov,
+.filemanager .icon.file.f-mpeg,
+.filemanager .icon.file.f-mpg,
+.filemanager .icon.file.f-mp4,
+.filemanager .icon.file.f-m4v,
+.filemanager .icon.file.f-wmv {
+	box-shadow: 28px -38px 0 0 #7e70ee inset;
+}
+
+.filemanager .icon.file.f-avi:after,
+.filemanager .icon.file.f-flv:after,
+.filemanager .icon.file.f-mkv:after,
+.filemanager .icon.file.f-mov:after,
+.filemanager .icon.file.f-mpeg:after,
+.filemanager .icon.file.f-mpg:after,
+.filemanager .icon.file.f-mp4:after,
+.filemanager .icon.file.f-m4v:after,
+.filemanager .icon.file.f-wmv:after {
+	border-bottom-color: #5649c1;
+}
+
+.filemanager .icon.file.f-mp2,
+.filemanager .icon.file.f-mp3,
+.filemanager .icon.file.f-m3u,
+.filemanager .icon.file.f-wma,
+.filemanager .icon.file.f-xls,
+.filemanager .icon.file.f-xlsx {
+	box-shadow: 28px -38px 0 0 #5bab6e inset;
+}
+
+.filemanager .icon.file.f-mp2:after,
+.filemanager .icon.file.f-mp3:after,
+.filemanager .icon.file.f-m3u:after,
+.filemanager .icon.file.f-wma:after,
+.filemanager .icon.file.f-xls:after,
+.filemanager .icon.file.f-xlsx:after {
+	border-bottom-color: #448353;
+}
+
+.filemanager .icon.file.f-doc,
+.filemanager .icon.file.f-docx,
+.filemanager .icon.file.f-psd {
+	box-shadow: 28px -38px 0 0 #03689b inset;
+}
+
+.filemanager .icon.file.f-doc:after,
+.filemanager .icon.file.f-docx:after,
+.filemanager .icon.file.f-psd:after {
+	border-bottom-color: #2980b9;
+}
+
+.filemanager .icon.file.f-gif,
+.filemanager .icon.file.f-jpg,
+.filemanager .icon.file.f-jpeg,
+.filemanager .icon.file.f-pdf,
+.filemanager .icon.file.f-png {
+	box-shadow: 28px -38px 0 0 #e15955 inset;
+}
+
+.filemanager .icon.file.f-gif:after,
+.filemanager .icon.file.f-jpg:after,
+.filemanager .icon.file.f-jpeg:after,
+.filemanager .icon.file.f-pdf:after,
+.filemanager .icon.file.f-png:after {
+	border-bottom-color: #c6393f;
+}
+
+.filemanager .icon.file.f-deb,
+.filemanager .icon.file.f-dmg,
+.filemanager .icon.file.f-gz,
+.filemanager .icon.file.f-rar,
+.filemanager .icon.file.f-zip,
+.filemanager .icon.file.f-7z {
+	box-shadow: 28px -38px 0 0 #867c75 inset;
+}
+
+.filemanager .icon.file.f-deb:after,
+.filemanager .icon.file.f-dmg:after,
+.filemanager .icon.file.f-gz:after,
+.filemanager .icon.file.f-rar:after,
+.filemanager .icon.file.f-zip:after,
+.filemanager .icon.file.f-7z:after {
+	border-bottom-color: #685f58;
+}
+
+.filemanager .icon.file.f-html,
+.filemanager .icon.file.f-rtf,
+.filemanager .icon.file.f-xml,
+.filemanager .icon.file.f-xhtml {
+	box-shadow: 28px -38px 0 0 #a94bb7 inset;
+}
+
+.filemanager .icon.file.f-html:after,
+.filemanager .icon.file.f-rtf:after,
+.filemanager .icon.file.f-xml:after,
+.filemanager .icon.file.f-xhtml:after {
+	border-bottom-color: #d65de8;
+}
+
+.filemanager .icon.file.f-js {
+	box-shadow: 28px -38px 0 0 #d0c54d inset;
+}
+
+.filemanager .icon.file.f-js:after {
+	border-bottom-color: #a69f4e;
+}
+
+.filemanager .icon.file.f-css,
+.filemanager .icon.file.f-saas,
+.filemanager .icon.file.f-scss {
+	box-shadow: 28px -38px 0 0 #44afa6 inset;
+}
+
+.filemanager .icon.file.f-css:after,
+.filemanager .icon.file.f-saas:after,
+.filemanager .icon.file.f-scss:after {
+	border-bottom-color: #30837c;
+}

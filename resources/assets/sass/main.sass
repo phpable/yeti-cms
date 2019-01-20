@@ -1,0 +1,661 @@
+*
+	outline: none !important
+
+html
+	display: block
+	background:
+		image: url("/images/yeti240.png")
+		repeat: no-repeat
+		position: center center
+
+body.nav > li > a
+	margin: 0 !important
+	padding: 0  !important
+	overflow: hidden !important
+
+textarea
+	resize: none !important
+	min-height: 122px !important
+
+.fbaloo
+	font-family: 'Baloo', serif
+
+.navbar
+	height: 56px
+	margin-left: 50px
+	position: fixed
+	left: 0
+	right: 0
+	top: 0
+
+	.nav
+		height: 50px
+
+	.main-menu
+		min-width: 160px
+
+		.dropdown
+			min-width: 160px
+
+		.dropdown-menu
+			position: relative !important
+			width: 160px
+
+		.user-cnt
+			display: block
+			position: relative
+			width: 140px
+			height: 40px
+
+			.avatar
+				float: right
+
+			.user-info
+				display: block
+				height: 40px
+				width: 100px
+				float: left
+				font-size: 10px
+				text-align: center
+
+				span
+					display: block
+					height: 20px
+					width: 100px
+					font-size: 10px
+					padding: 8px 0 0 0
+					line-height: 12px
+					text-align: center
+					font-weight: bold
+
+				em
+					font-style: normal
+					opacity: 0.8
+					display: block
+					height: 25px
+					padding: 0 0 0 13px
+					line-height: 12px
+					width: 100px
+					font-size: 8px
+					text-align: center
+					text-transform: uppercase
+
+	.left-separated
+		margin-left: 22px
+
+	.left-short-separated
+		margin-left: 22px
+
+	.project-tools
+		height: 50px
+
+		li, a
+			height: 50px
+			display: inline-block
+
+		li.empty-after
+			margin-right: 30px
+
+		a
+			width: 60px
+			overflow: hidden
+
+			&.disabled
+				background-color: #cecece
+				opacity: 0.4
+
+			&.waiting
+				background-color: #b58900 !important
+
+		i
+			font-size: 22px
+			text-align: center
+			width: 30px
+			color: #a5b6c7
+
+.navbar-avatar
+
+	.avatar
+		img
+			width: 40px !important
+			height: 40px !important
+
+	a:hover
+		color: #ffffff
+
+.navbar-actions
+	min-width: 222px
+
+.authorize
+	opacity: 0.8
+	margin-top: 122px !important
+
+	.panel-heading
+		margin-bottom: 22px
+
+	button
+		margin-top: 22px
+		float: right
+
+.ace-editor
+	position: relative
+	width: 100%
+	height: 100%
+
+.alert-message
+	padding-top: 22px
+
+.panel
+	height: 100%
+	margin-bottom: 0 !important
+	border-width: 0 !important
+
+.description
+	padding: 7px 15px
+	font-size: 12px
+	text-align: left
+	word-wrap: normal
+
+.dashboard
+	display: block
+
+	.project-cnt
+		display: block
+		height: 120px
+		position: relative
+		padding: 10px
+		cursor: pointer
+
+		.project-tile
+			height: 100px
+			background-color: #ffffff
+			position: relative
+			padding-right: 7px
+
+			.project-logo
+				position: absolute
+				width: 100px
+				height: 100px
+				padding: 5px
+
+				.btn
+					display: block
+					height: 90px
+					width: 90px
+					overflow: hidden
+					position: absolute
+
+			.project-info
+				position: relative
+				margin-left: 100px
+				height: 50px
+				overflow: hidden
+				padding: 0 7px 0 0
+
+				> span
+					display: block
+					padding-left: 12px
+
+					&.project-name
+						display: block
+						height: 38px
+						line-height: 38px
+						font-size: 22px
+
+					&.project-url
+						display: block
+						height: 12px
+						line-height: 12px
+						font-size: 10px
+						text-transform: lowercase
+						position: relative
+						color: #bebebe
+						top: -7px
+
+			.project-owners
+				height: 40px
+				margin-left: 100px
+				bottom: 0
+
+				.avatar
+					height: 40px
+					width: 40px
+
+		.bookmarks
+			display: block
+
+			i
+				display: inline-block
+				height: 18px
+				width: 18px
+				line-height: 18px
+				font-size: 16px
+
+				&.green
+					color: #13c4a5
+
+		.project-name
+			line-height: 32px
+			white-space: nowrap
+			overflow: hidden
+
+.tab-content
+	background-color: #ffffff
+
+.top-margin-block
+	margin-top: 72px
+
+.row-opts
+	width: 72px
+
+.form-horizontal
+	padding-top: 15px
+
+.form-group
+	margin-bottom: 0 !important
+
+.form-group-separated
+	margin: 22px 0 0 0
+
+.row-actions
+	display: block
+	height: 18px
+	position: relative
+
+	a
+		display: block
+		float: left
+		height: 18px
+		width: 18px
+		margin-right: 7px
+
+		&:last-child
+			margin-right: 0
+
+		i
+			display: block
+			height: 18px
+			width: 18px
+			line-height: 18px
+			text-align: center
+
+tr.editing
+	background-color: #ffffff
+
+	td[data-name]
+		padding: 0 !important
+		height: 32px
+
+		input, select
+			display: block
+			height: 32px
+			width: 100%
+			line-height: 18px
+			padding: 5px 15px
+			border: 1px solid #000000
+			border-left-width: 0
+
+			&.error
+				border-color: #ff0000
+
+		&:first-child
+			input, select
+				border-left: 1px solid #000000
+
+.table
+	>tbody
+		>tr
+			height: 32px
+
+			>td
+				line-height: 20px
+
+.editor-container
+	background-color: #eee8d5
+	height: 100%
+	margin-top: -15px
+
+	.tab-pane
+		height:  100%
+
+	.tab-header
+		height: 32px
+		border: none !important
+		display: block
+		position: relative
+		width: 100%
+		padding-right: 202px
+
+		.arrows
+			width: 32px
+			height: 32px
+			cursor: pointer
+			background-color: #586e65
+			border: 1px solid #eee8d5
+			position: absolute
+			top: 0
+			z-index: 255
+
+			i
+				height: 30px
+				width: 30px
+				display: block
+				font-size: 22px
+				line-height: 30px
+				text-align: center
+				color: #ffffff
+
+			&.slide-left
+				left: 0
+
+			&.slide-right
+				right: 172px
+
+		.nav-tabs
+			background-color: #eee8d5
+			margin: 0
+			height: 32px
+			border: none
+			cursor: pointer
+
+			&.nav-slider
+				overflow: hidden
+				margin-left: 32px
+
+			&.nav-tools
+				width: 172px
+				padding: 0 4px 0 0
+				position: absolute
+				right: 0
+				top: 0
+
+			li
+				height: 32px
+				width: 172px
+
+				a
+					display: block
+					height: 32px
+					padding: 5px 10px
+					text-align: left
+					border: 1px solid #d1d4d7
+					border-left-width: 0 !important
+					margin: 0
+
+					&:hover
+						background-color: #eee8d5
+
+				span
+					display: block
+					position: absolute
+					left: 34px
+					top: 5px
+					height: 22px
+					width: 131px
+					font-size: 12px
+					line-height: 22px
+					color: #074542
+					font-weight: bold
+					text-transform: uppercase
+
+				i.fa
+					font-size: 18px
+					line-height: 22px
+					display: inline-block
+					width: 14px
+					height: 22px
+					text-align: left
+					color: #93a1a1
+
+				em.f-ext
+					display: block
+					position: absolute
+					left: 12px
+					top: 16px
+					height: 10px
+					line-height: 10px
+					font-size: 7px
+					text-transform: uppercase
+					font-style: normal
+					color: #074542
+
+				&.active
+					span
+						color: #fff
+
+					em
+						color: #fff
+
+					a
+						background-color: #586e65
+
+						&:hover
+							background-color: #586e65
+
+				&.tab-btn
+					background-color: #586e65
+					float: right
+					width: 56px
+					height: 32px
+					border: 1px solid #eee8d5
+					border-left-width: 0 !important
+					line-height: 32px
+					font-size: 20px
+					cursor: pointer
+					text-align: center
+
+					i
+						color: #ffffff
+						height: 32px
+						line-height: 32px
+						display: block
+						width: 55px
+						font-size: 14px
+						text-align: center
+
+					&.waiting
+						background-color: #b58900 !important
+
+					.tab-dropdown
+						position: absolute
+						display: none
+						top: 32px
+						left: 0
+						z-index: 999
+						background-color: #eee8d5
+						width: 55px
+						box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+						padding: 0
+						margin: 0
+
+						li
+							display: block
+							height: 32px
+							width: 55px
+							font-size: 14px
+							color: #93a1a1
+							text-align: left
+							padding: 0 7px
+
+							&:hover
+								background-color: #586e65
+								color: #ffffff
+
+					&.open
+						background-color: #586e65
+
+						.tab-dropdown
+							display: block
+
+				.rename
+					display: none
+					height: 32px
+					width: 172px
+					padding: 5px 15px
+					background-color: #586e65
+
+					input
+						display: block
+						position: absolute
+						left: 41px
+						height: 22px
+						line-height: 22px
+						font-size: 12px
+						width: 126px
+						font-weight: bold
+						border: 2px solid #ffffff
+						padding: 3px 5px
+						background-color: #475354
+						color: #fff
+						text-transform: uppercase
+
+				&.active.editable
+
+					.rename
+						display: inline-block !important
+
+					a
+						display: none !important
+
+				.tab-dropdown
+					position: absolute
+					display: block
+					top: 32px
+					left: 0
+					z-index: 999
+					background-color: #eee8d5
+					width: 65px
+					box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+
+					li
+						display: block
+						height: 32px
+						width: 32px
+						font-size: 14px
+						color: #93a1a1
+						text-align: left
+						padding: 0 7px
+.fa-action
+	color: #3fcf7f
+
+.pagination
+	height: 40px
+	margin: 0
+
+	span, a
+		display: block
+		height: 40px
+		width: 40px
+		line-height: 40px !important
+		padding: 0 !important
+		text-align: center
+
+.filemanager
+	.scrollable
+		margin-top: 32px
+
+#content
+	background-color: #e5e9ec
+	top: 56px
+	left: 50px
+	position: absolute
+	overflow: hidden
+	padding: 0
+	right: 0
+
+	&.scroll-container
+		overflow-y: scroll !important
+		overflow-x: hidden !important
+
+.progress-bar-build
+	background-color: #5cb85c !important
+
+.progress-bar-deploy
+	background-color: #5bc0de !important
+
+.toolbtn
+	display: inline-block
+	height: 15px
+	width: 15px
+	line-height: 15px
+	font-size: 15px
+
+	& + &
+		margin-left: 7px
+
+.filterbar
+	display: block
+	height: 22px
+	width: 100%
+	margin: 0
+	padding: 0
+
+	li
+		display: block
+		float: left
+		height: 22px
+		width: 3.7%
+
+		a
+			height: 22px
+			display: block
+			border-radius: 0 !important
+			padding: 0 !important
+			line-height: 22px
+			text-transform: uppercase
+
+			&.active
+				font-weight: bold
+				font-size: 16px
+.module-cnt
+	height: 92px
+	overflow: hidden
+	position: relative
+	margin: 0 0 22px 0
+
+	.module-logo
+		display: block
+		height: 92px
+		width: 92px
+		position: absolute
+		line-height: 92px
+		text-align: center
+
+	.module-info
+		display: block
+		margin-left: 92px
+		height: 92px
+		padding: 5px 10px
+
+		a
+			text-transform: uppercase
+
+	.maintainer
+		display: block
+		margin: 3px 0 12px 0
+		font-size: 8px
+		text-transform: uppercase
+
+	.rating
+		span
+			display: block
+			font-size: 22px
+			height: 32px
+			line-height: 32px
+			text-transform: uppercase
+			text-align: center
+
+		.stars
+			height: 60px
+			line-height: 60px
+			font-size: 22px
+			text-align: center
+
+	.status
+		display: block
+		height: 92px
+		line-height: 92px
+		font-size: 72px
+		text-align: center
+
+

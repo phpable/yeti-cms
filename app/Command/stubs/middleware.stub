@@ -1,0 +1,18 @@
+<?php
+namespace DummyNamespace;
+
+use \Illuminate\Http\Request;
+
+class DummyClass {
+
+	/**
+	 * Handle an incoming request.
+	 * @param  Request  $Request
+	 * @param  \Closure  $Callback
+	 * @return mixed
+	 */
+	public function handle(Request $Request, \Closure $Callback) {
+		return $Callback($Request);
+	}
+
+}

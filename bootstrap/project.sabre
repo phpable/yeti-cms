@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>{{ $Page->title }}</title>
+		<link type="text/css" rel="stylesheet" href="/temporary/main.min.css">
+
+		@build(metadata)
+		@build(externals)
+
+		<style type="text/css">
+			@yield(css)
+		</style>
+	</head>
+
+	<body>
+		@yield(main)
+
+		<script type="text/javascript" src="/temporary/main.min.js"></script>
+		<script type="text/javascript">
+			@yield(js)
+		</script>
+
+		<script type="text/javascript">
+			(function ($) {
+				$(function(){
+					$.cookieBar({
+						acceptOnScroll: 200
+					});
+				})
+			})(jQuery)
+		</script>
+	</body>
+</html>
