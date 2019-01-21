@@ -15,7 +15,7 @@ body.nav > li > a
 
 textarea
 	resize: none !important
-	min-height: 122px !important
+	box-shadow: none
 
 .fbaloo
 	font-family: 'Baloo', serif
@@ -248,14 +248,110 @@ textarea
 .row-opts
 	width: 72px
 
-.form-horizontal
-	padding-top: 15px
+.form-content
+	margin: 0 !important
 
 .form-group
-	margin-bottom: 0 !important
+	display: block
+	position: relative
+	margin: 0 !important
 
-.form-group-separated
-	margin: 22px 0 0 0
+	.control-label
+		display: block
+		width: 120px
+		float: left
+		height: 34px
+		padding: 5px 10px 5px 5px
+		line-height: 24px
+		border: 1px solid #ccc
+
+		&.short
+			width: 60px
+			text-align: center
+
+		&.short + .control-body
+			margin-left: 60px
+
+		&.double
+			height: 68px
+			line-height: 58px
+
+	.control-body
+		display: block
+		margin-left: 120px
+		min-height: 34px
+
+		textarea
+			height: 68px
+
+		.radio,
+		.checkbox
+			display: block
+			float: left
+			height: 24px
+			min-height: 24px
+			overflow: hidden
+			padding: 0
+
+			label
+				display: block
+				float: left
+				height: 24px
+				margin: 0
+				min-width: 122px
+
+				i
+					display: inline-block
+					height: 24px
+					width: 24px
+					line-height: 24px
+
+	.control-frame
+		min-height: 34px
+		padding: 5px 5px 5px 12px
+		border: 1px solid #ccc
+		border-left: none
+
+	&.btn-group
+		padding-left: 120px
+
+
+.separated
+	margin: 0 0 22px 0
+
+.btn-right
+	float: right
+
+.btn-flat
+	height: 34px
+	min-width: 34px
+	line-height: 24px
+	padding: 5px
+	background-color: transparent
+	border-color: transparent
+	box-shadow: none
+	border-radius: 3px
+	color: #000000
+	opacity: 0.5
+	text-transform: uppercase
+
+	i
+		display: block
+		float: left
+		height: 24px
+		width: 24px
+		line-height: 24px
+		font-size: 18px
+		color: #000000
+	span
+		display: block
+		margin-left: 24px
+		height: 24px
+		line-height: 24px
+		padding: 0 0 0 5px
+
+	&:hover
+		opacity: 1
 
 .row-actions
 	display: block
@@ -313,7 +409,6 @@ tr.editing
 .editor-container
 	background-color: #eee8d5
 	height: 100%
-	margin-top: -15px
 
 	.tab-pane
 		height:  100%

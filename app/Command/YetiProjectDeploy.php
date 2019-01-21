@@ -137,7 +137,7 @@ class YetiProjectDeploy extends ACommand {
 		}
 
 		$Minimifier->minify($Destination->toPath()
-			->append('css')->forceDirectory()->toPath()->append('main.min.css')->forceFile()->toString());
+			/*->append('css')*/->forceDirectory()->toPath()->append('main.min.css')->forceFile()->toString());
 	}
 
 	/**
@@ -153,7 +153,7 @@ class YetiProjectDeploy extends ACommand {
 		}
 
 		$Minimifier->minify($Destination->toPath()
-			->append('js')->forceDirectory()->toPath()->append('main.min.js')->forceFile()->toString());
+			/*->append('js')*/->forceDirectory()->toPath()->append('main.min.js')->forceFile()->toString());
 	}
 
 	/**

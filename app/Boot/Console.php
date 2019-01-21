@@ -6,7 +6,7 @@ use \Illuminate\Foundation\Console\Kernel;
 use \Yeti\Main\Command\YetiExport;
 use \Yeti\Main\Command\YetiImport;
 use \Yeti\Main\Command\YetiProjectDeploy;
-use \Yeti\Main\Command\YetiModules;
+use \Yeti\Main\Command\YetiModulesUpdate;
 use \Yeti\Main\Command\YetiAdminList;
 use \Yeti\Main\Command\YetiAdminCreate;
 use \Yeti\Main\Command\YetiProjectCreate;
@@ -36,7 +36,7 @@ class Console extends Kernel {
 		YetiImport::class,
 		YetiProjectBuild::class,
 		YetiProjectDeploy::class,
-		YetiModules::class,
+		YetiModulesUpdate::class,
 		YetiAdminList::class,
 		YetiAdminCreate::class,
 		YetiProjectCreate::class,

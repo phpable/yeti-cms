@@ -2,22 +2,28 @@
 <html lang="en">
 	<head>
 		<title>{{ $Page->title }}</title>
-		<link type="text/css" rel="stylesheet" href="/temporary/main.min.css">
+		<link type="text/css" rel="stylesheet" href="{{ $__public }}/main.min.css">
 
 		@build(metadata)
 		@build(externals)
 
 		<style type="text/css">
 			@yield(css)
+			@if (function_exists('collect'))
+				{!! collect('css') !!}
+			@end
 		</style>
 	</head>
 
 	<body>
 		@yield(main)
 
-		<script type="text/javascript" src="/temporary/main.min.js"></script>
+		<script type="text/javascript" src="{{ $__public }}/main.min.js"></script>
 		<script type="text/javascript">
 			@yield(js)
+			@if (function_exists('collect'))
+				{!! collect('js') !!}
+			@end
 		</script>
 
 		<script type="text/javascript">

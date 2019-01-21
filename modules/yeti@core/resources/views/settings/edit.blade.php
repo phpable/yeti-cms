@@ -11,7 +11,7 @@
 		</div>
 	</div>
 
-	<div class="form-group-separated">
+	<div class="separated">
 		<div class="form-group">
 			<label class="col-lg-2 control-label">Domain</label>
 			<div class="col-lg-10">
@@ -29,7 +29,7 @@
 		</div>
 	</div>
 
-	<div class="form-group-separated">
+	<div class="separated">
 		<div class="form-group">
 			<label class="col-lg-2 control-label">Index Page</label>
 			<div class="col-lg-10">

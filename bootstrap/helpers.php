@@ -63,13 +63,31 @@ function preview(?Page $Page = null) {
  * @return array
  */
 function builders(): array {
-	return ['standard', 'populate', 'paginate', 'archive'];
+	return ['standard' => '[Core] Standard Builder', 'extended' => '[Core] Extended Builder'];
 }
 
 /**
  * @return array
  */
-function providers(): array {
-	return ['blog'];
+function entrances(): array {
+	return ['single' => 'One', 'multiple' => 'Many'];
 }
 
+/**
+ * @return array
+ */
+function share(): array {
+	return ['blog-post' => '[Blog] Post', 'blog-topic' => '[Blog] Topic', 'blog-tag' => '[Blog] Tag'];
+}
+
+/**
+ * @return array
+ */
+function properties(): array {
+	return [
+		'url' => '[native] Url',
+		'id' => '[native] Id',
+		'#topic' => '[group] Topic',
+		'@paginator' => '[generic] Paginator',
+	];
+}

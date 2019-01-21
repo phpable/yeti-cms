@@ -25,6 +25,9 @@ use \MatthiasMullie\Minify\JS;
 use \Able\Helpers\Url;
 use \Able\Helpers\Arr;
 use \Able\Helpers\Jsn;
+use \Able\Helpers\Src;
+
+use \Able\Reglib\Regexp;
 
 use \Able\IO\Path;
 use \Able\IO\Directory;
@@ -85,6 +88,60 @@ Route::group(['domain' => Config::get('app.domain')], function(){
 	}
 });
 
+/**
+ * @param string $mask
+ * @param string $url
+ * @param array $Params
+ * @throws \Exception
+ * @return bool
+ */
+function checkUrlByMask(string $mask, string $url, array &$Params = []): bool {
+	foreach (preg_split('/\/+/', $mask, -1, PREG_SPLIT_NO_EMPTY) as $mask){
+		if (preg_match('/^\{\$([A-Za-z0-9-_]+):?([0-9A-Za-z_-]*)\}$/', $mask, $Fragments) > 0) {
+			$Params[$Fragments[1]] = $Fragments[2];
+
+			if (preg_match('/^([^\/]+)(\/|\Z)/', $url, $Matches) > 0) {
+				$Params[$Fragments[1]] = $Matches[1];
+				$url = $Matches[2];
+				continue;
+			}
+
+			if (!empty($Params[$Fragments[1]])){
+				continue;
+			}
+		}
+
+		if (preg_match('/^' . preg_quote($mask, '/') . '(\/.*$|\Z)/', $url, $Matches)){
+			$url = ltrim($Matches[1], '/');
+			continue;
+		}
+
+		return false;
+	}
+
+	return strlen($url) < 1;
+}
+
+/**
+ * @param string $url
+ * @param array $Params
+ * @return Page|null
+ * @throws Exception
+ */
+function findPageByUrl(string $url, array &$Params = []): ?Page {
+	if (!is_null($Page = Page::where('url', '=', '/' . ltrim($url, '/'))->first())) {
+		return $Page;
+	}
+
+	foreach (Page::where('url', 'like', '%$%')->get() as $Page){
+		if (checkUrlByMask($Page->url, $url, $Params)){
+			return $Page;
+		}
+	}
+
+	throw new \Exception('Invalid page!');
+}
+
 Route::group(['domain' => '{project}.' . Config::get('app.domain')], function() {
 	Route::get('/{url}', function($project, $url){
 		try {
@@ -93,15 +150,19 @@ Route::group(['domain' => '{project}.' . Config::get('app.domain')], function() 
 			}
 
 			define('__SCOPE__', $Scope->id);
-			if (is_null($Page = Page::where('url', '=', '/' . ltrim($url, '/'))->first())){
-				throw new \Exception('Invalid page!');
-			}
+
+			$Params = [];
+			$Page = findPageByUrl($url, $Params);
 
 			$Directory = Path::create(Config::get('building.destination'))
 				->append($project, 'pages')->forceDirectory();
 
 			if (!env('APP_DEBUG_TEMPLATES') || $Directory->isEmpty()){
-				$Builder = new Standard($Page);
+				if (!class_exists($class = Src::lns(Standard::class) . '\\' . Src::tcm($Page->builder))){
+					throw new \Exception(sprintf('Undefined builder %s!', $Page->builder));
+				}
+
+				$Builder = new $class($Page, $Page->arguments);
 				$Builder->build($Directory);
 			}
 
@@ -128,8 +189,10 @@ Route::group(['domain' => '{project}.' . Config::get('app.domain')], function() 
 			minimizeCss($CssSource, $Temporary);
 
 			ob_start();
-			call_user_func(function() use ($Page, $View){
-				$__data = Arr::except(get_defined_vars(), 'View');
+			call_user_func(function() use ($Page, $View, $Params){
+				$__data = array_merge(Arr::except(get_defined_vars(), 'View', 'Params'),
+					$Params, ['__public' => '/temporary']);
+
 				include($View->toString());
 			});
 

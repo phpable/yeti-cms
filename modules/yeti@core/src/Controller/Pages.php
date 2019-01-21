@@ -67,6 +67,18 @@ class Pages extends AController {
 	 */
 	public function update($id) {
 		$Page = Page::findOrFail($id);
+		Bus::dispatch(new UpdateSources($Page, Input::get('sources', [])));
+
+		return redirect()->route('yeti@core:pages.edit', $id)
+			->withSuccess('Successful Saved!');
+	}
+
+	/**
+	 * @param  int $id
+	 * @return Response
+	 */
+	public function updateSettings($id) {
+		$Page = Page::findOrFail($id);
 
 		$Page->fill(array_merge(['in_sitemap'=> false],
 			Input::except('arguments')));
@@ -84,13 +96,24 @@ class Pages extends AController {
 		}
 
 		if (Input::has('arguments')) {
-			$Page->arguments = Input::get('arguments');
+			$Page->arguments = (Arr::each(Input::get('arguments'), function($key, $value){
+				if ($key == 'share'){
+
+					return array_filter($value, function($Info){
+						return !empty($Info['item']);
+					});
+				}
+
+				return $value;
+			}));
+		} else {
+			$Page->arguments = [];
 		}
 
-		$Page->save();
-		Bus::dispatch(new UpdateSources($Page, Input::get('sources', [])));
 
-		return redirect()->route('yeti@core:pages.edit', $id)
+		$Page->save();
+
+		return redirect()->route('yeti@core:pages.settings', $id)
 			->withSuccess('Successful Saved!');
 	}
 

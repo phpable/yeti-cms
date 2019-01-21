@@ -53,10 +53,6 @@ class YetiBuildingProvider extends ServiceProvider {
 			}
 		}, 1, false, true));
 
-		Delegate::trap(new STrap('@{{', '}}', function(string $condition){
-			return Collector::findPartial(...preg_split('/:/', $condition));
-		}));
-
 		Delegate::token(new SToken('e64', function (string $value) {
 			return '<?php extract(' . Str::rmnl(var_export(json_decode(base64_decode($value), true), true)) . '); ?>';
 		}, 1, false));
@@ -91,5 +87,29 @@ class YetiBuildingProvider extends ServiceProvider {
 			return '<?php  if (function_exists("init_component")){init_component("' . $name
  				. '", array_merge($__obj->f(get_defined_vars()), ' . (!is_null($params) ? $params : '[]') . '));}?>';
 		}, 2, false));
+
+		Delegate::token(new SToken('export', function ($name, $scope, $condition) {
+			if (!preg_match('/^\$' . Reglib::VAR . '$/', $name)){
+				throw new \Exception(sprintf('Invalid variable name: %s!', $name));
+			}
+
+			$name = substr($name, 1);
+
+			if ($scope == 'url'){
+				$condition = 'md5(' . $condition . ')';
+			}elseif ($scope == 'id'){
+				$condition = '"' . $condition . '"';
+			}elseif ($scope == '@pagination') {
+				$condition = '"page' . $condition . '"';
+			}elseif ($scope == '#topic'){
+				$condition = '"topic" . md5(' . $condition. ')';
+			}else{
+				throw new \Exception(sprintf('Undefined scope: %s!', $scope));
+			}
+
+			return '<?php  if (file_exists($file = __DIR__ . "/data/' . $name . '/" . ' . $condition . ' . ".data")){
+				extract(["' . $name . '" => json_decode(base64_decode(file_get_contents($file)))]);
+			}?>';
+		}, 3, false));
 	}
 }

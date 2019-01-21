@@ -12,7 +12,7 @@ use \Able\Helpers\Arr;
 use \Able\Helpers\Src;
 use \Able\Helpers\Str;
 
-class YetiModules extends Command {
+class YetiModulesUpdate extends Command {
 
 	/**
 	 * @var string
@@ -54,8 +54,8 @@ class YetiModules extends Command {
 									$Params = array_map(function($Param){ return '{'. $Param->getName() .
 										'}'; }, (new \ReflectionClass($class))->getMethod($action)->getParameters());
 
-									$Out .= "\tRoute::any('" . Str::join('/', Src::fcm(Src::rns($class), '-') . "/" . $action, implode('/', $Params)) . "', ['as' => '"
-										. $Module->maintainer . "@" . $Module->name . ":" . Src::fcm(Src::rns($class), '-') . "." . $action . "', \n\t\t'uses' => '"
+									$Out .= "\tRoute::any('" . Str::join('/', Src::fcm(Src::rns($class), '-') . "/" . Src::fcm($action, '-'), implode('/', $Params)) . "', ['as' => '"
+										. $Module->maintainer . "@" . $Module->name . ":" . Src::fcm(Src::rns($class), '-') . "." . Src::fcm($action, '-') . "', \n\t\t'uses' => '"
 											. $class . "@" . $action . "'])->where('params', '.*');\n";
 
 									$count++;

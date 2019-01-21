@@ -64,34 +64,6 @@ class Collector {
 	}
 
 	/**
-	 * @var array
-	 */
-	private static $Partials = [];
-
-	/**
-	 * @param string $name
-	 * @param array $Partials
-	 * @return void
-	 * @throws \Exception
-	 */
-	public final static function registerPartials(string $name, array $Partials): void {
-		if (isset(self::$Partials[$name])){
-			throw new \Exception(sprintf('Partial name is alrerady in use: %s!', $name));
-		}
-
-		self::$Partials[$name] = $Partials;
-	}
-
-	/**
-	 * @param string ...$path
-	 * @return string
-	 */
-	public final static function findPartial(string ...$path): ?string {
-		return Arr::path(self::$Partials, ...$path);
-	}
-
-
-	/**
 	 * @var ITemplatable
 	 */
 	private static $Stacked = [];
@@ -136,8 +108,6 @@ class Collector {
 
 		self::$Stacked = [];
 		self::$History = [];
-
-		self::$Partials = [];
 	}
 
 	/**
