@@ -4,6 +4,7 @@ namespace Yeti\Main\Building\Utilities;
 use \Yeti\Main\Model\Abstracts\AModel;
 use \Yeti\Main\Model\Abstracts\ITemplatable;
 
+use \Yeti\Main\Building\Handlers\Abstractions\AHandler;
 use \Yeti\Main\Building\Containers\Abstractions\AContainer;
 
 use \Yeti\Main\Building\Storages\Metas;
@@ -155,11 +156,13 @@ class Collector {
 
 		foreach ($Collection as $Template) {
 			if (!in_array($Template->getLOcation(), self::$History)) {
-				if ($Template->type == 'html') {
-					$Container->collect((new ReadingBuffer($Template)));
-				} else {
-					$Container->collect((new Container($Template))->setAlternateName($Template->type));
-				}
+//				if ($Template->type == 'html') {
+//					$Container->collect((new ReadingBuffer($Template)));
+//				} else {
+					$Container->collect(AHandler::produce($Template));
+
+					//$Container->collect((new Container($Template))->setAlternateName($Template->type));
+//				}
 
 				array_push(self::$History, $Template->getLocation());
 			}
