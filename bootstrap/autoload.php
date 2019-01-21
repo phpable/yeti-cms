@@ -2,9 +2,9 @@
 define('LARAVEL_START', microtime(true));
 
 if (! function_exists('url')) {
+
 	/**
 	 * Generate a url for the application.
-	 *
 	 * @param  string $path
 	 * @param  mixed $parameters
 	 * @param  bool $secure
@@ -16,7 +16,19 @@ if (! function_exists('url')) {
 
 			if (file_exists($path = Config::get('building.destination')
 				. '/'. App::scope()->name . '/pages/' . ltrim($path, ':') . '/page.json')){
-					return '/' . ltrim(json_decode(file_get_contents($path))->url, '/');
+
+					return preg_replace_callback('/\{\$([A-Za-z0-9-_]+):?([0-9A-Za-z_-]*)\}/',
+						function(array $Matches) use (&$parameters, $path) {
+							if (count($parameters) > 0) {
+								return array_shift($parameters);
+							}
+
+							if (!empty($Matches[2])){
+								return $Matches[2];
+							}
+
+							throw new \Exception(sprintf('Paranetr % missed for %s!', $Matches[2], $parameters));
+					}, '/' . ltrim(json_decode(file_get_contents($path))->url, '/'));
 			}
 
 			return '/';
