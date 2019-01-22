@@ -100,7 +100,7 @@ class YetiBuildingProvider extends ServiceProvider {
 			}elseif ($scope == 'id'){
 				$condition = '"' . $condition . '"';
 			}elseif ($scope == '@pagination') {
-				$condition = '"page' . $condition . '"';
+				$condition = '"page" . ' . $condition;
 			}elseif ($scope == '#topic'){
 				$condition = '"topic" . md5(' . $condition. ')';
 			}else{
