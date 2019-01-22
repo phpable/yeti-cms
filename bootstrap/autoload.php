@@ -26,7 +26,7 @@ if (! function_exists('url')) {
 								return $Matches[2];
 							}
 
-							throw new \Exception(sprintf('Paranetr % missed for %s!', $Matches[2], $parameters));
+							throw new \Exception(sprintf('Parameter % missed for %s!', $Matches[2], $parameters));
 					}, '/' . ltrim($Page->url, '/'));
 			}
 
