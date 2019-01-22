@@ -56,7 +56,9 @@ class Standard extends ABuilder {
 		$View = $Terget->toPath()->append('view.php')->forceFile();
 
 		Collector::stack('page', $this->Page);
-		Collector::externals()->addExternal(new SExternal(SExternal::ET_CANONICAL, $this->Page->absolute_url));
+		if ($this->Page->builder == 'standard') {
+			Collector::externals()->addExternal(new SExternal(SExternal::ET_CANONICAL, $this->Page->absolute_url));
+		}
 
 		Collector::stack('layout', $this->Page->layout);
 		Collector::externals()->addExternals($this->Page->layout->retrieveExternalsList());

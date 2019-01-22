@@ -1,6 +1,8 @@
 <?php
 define('LARAVEL_START', microtime(true));
 
+use \Yeti\Core\Model\Page;
+
 if (! function_exists('url')) {
 
 	/**
@@ -13,10 +15,7 @@ if (! function_exists('url')) {
 	 */
 	function url($path = null, $parameters = [], $secure = null) {
 		if (preg_match('/^:[\w-]+/', $path)){
-
-			if (file_exists($path = Config::get('building.destination')
-				. '/'. App::scope()->name . '/pages/' . ltrim($path, ':') . '/page.json')){
-
+			if (!is_null($Page = Page::where('name', '=', ltrim($path, ':'))->first())){
 					return preg_replace_callback('/\{\$([A-Za-z0-9-_]+):?([0-9A-Za-z_-]*)\}/',
 						function(array $Matches) use (&$parameters, $path) {
 							if (count($parameters) > 0) {
@@ -28,7 +27,7 @@ if (! function_exists('url')) {
 							}
 
 							throw new \Exception(sprintf('Paranetr % missed for %s!', $Matches[2], $parameters));
-					}, '/' . ltrim(json_decode(file_get_contents($path))->url, '/'));
+					}, '/' . ltrim($Page->url, '/'));
 			}
 
 			return '/';
