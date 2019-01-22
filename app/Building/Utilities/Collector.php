@@ -156,14 +156,7 @@ class Collector {
 
 		foreach ($Collection as $Template) {
 			if (!in_array($Template->getLOcation(), self::$History)) {
-//				if ($Template->type == 'html') {
-//					$Container->collect((new ReadingBuffer($Template)));
-//				} else {
-					$Container->collect(AHandler::produce($Template));
-
-					//$Container->collect((new Container($Template))->setAlternateName($Template->type));
-//				}
-
+				$Container->collect(AHandler::produce($Template));
 				array_push(self::$History, $Template->getLocation());
 			}
 		}
