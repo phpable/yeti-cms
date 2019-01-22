@@ -10,6 +10,10 @@ class Js extends AHandler {
 	 * @throws \Exception
 	 */
 	public final function read(): \Generator {
+		$this->process(function(string $content){
+			return (new \MatthiasMullie\Minify\JS())->add($content)->minify();
+		});
+
 		yield '@section(js)';
 		yield from parent::read();
 		yield '@end';
