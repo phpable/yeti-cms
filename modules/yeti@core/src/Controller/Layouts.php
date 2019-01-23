@@ -65,7 +65,23 @@ class Layouts extends AController {
 	 */
 	public function update($id) {
 		$Layout = Layout::findOrFail($id);
-		$Layout->fill(Arr::only(Input::all(), 'name', 'content'));
+
+		Bus::dispatch(new UpdateSources($Layout,
+			Input::get('sources', [])));
+
+		return redirect()->route('yeti@core:layouts.edit', $Layout->id)
+			->withSuccess('Successful Saved!');
+
+	}
+
+	/**
+	 * @param  int $id
+	 * @return Redirect
+	 */
+	public function updateSettings($id) {
+		$Layout = Layout::findOrFail($id);
+
+		$Layout->fill(Arr::only(Input::all(), 'name'));
 		$Layout->save();
 
 		Bus::dispatch(new UpdateMetas($Layout,
@@ -74,10 +90,7 @@ class Layouts extends AController {
 		Bus::dispatch(new UpdateExternals($Layout,
 			Input::get('external', [])));
 
-		Bus::dispatch(new UpdateSources($Layout,
-			Input::get('sources', [])));
-
-		return redirect()->route('yeti@core:layouts.edit', $Layout->id)
+		return redirect()->route('yeti@core:layouts.settings', $Layout->id)
 			->withSuccess('Successful Saved!');
 
 	}
