@@ -69,12 +69,24 @@ class Snippets extends AController {
 	 */
 	public function update($id) {
 		$Snippet = Snippet::findOrFail($id);
-		$Snippet->fill(Arr::only(Input::all(), 'name', 'content', 'params'));
-		$Snippet->save();
 
 		Bus::dispatch(new UpdateSources($Snippet, Input::get('sources', [])));
 
 		return redirect()->route('yeti@core:snippets.edit', $Snippet->id)
+			->withSuccess('Successful Saved!');
+
+	}
+
+	/**
+	 * @param  int $id
+	 * @return Response
+	 */
+	public function updateSettings($id) {
+		$Snippet = Snippet::findOrFail($id);
+		$Snippet->fill(Arr::only(Input::all(), 'name', 'content', 'params'));
+		$Snippet->save();
+
+		return redirect()->route('yeti@core:snippets.settings', $Snippet->id)
 			->withSuccess('Successful Saved!');
 
 	}
