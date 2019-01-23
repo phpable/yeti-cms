@@ -68,7 +68,7 @@ class YetiBuildingProvider extends ServiceProvider {
 
 			if (!empty($params)){
 				try {
-					$params = json_decode($params, true, 512, JSON_THROW_ON_ERROR);
+					$params = parseJsonNotation($params);
 				}catch (\Throwable $Exception){
 					throw new \Exception('Invalid parameters!', -1, $Exception);
 				}
@@ -94,6 +94,7 @@ class YetiBuildingProvider extends ServiceProvider {
 			}
 
 			$name = substr($name, 1);
+			$takeOnlyCount = false;
 
 			if ($scope == 'url'){
 				$condition = 'md5(' . $condition . ')';
@@ -101,10 +102,19 @@ class YetiBuildingProvider extends ServiceProvider {
 				$condition = '"' . $condition . '"';
 			}elseif ($scope == '@pagination') {
 				$condition = '"page" . ' . $condition;
-			}elseif ($scope == '#topic'){
-				$condition = '"topic" . md5(' . $condition. ')';
+			}elseif ($scope == '#topic') {
+				$condition = '"topic" . md5(' . $condition . ')';
+			}elseif ($scope == "@count"){
+				$takeOnlyCount = true;
 			}else{
 				throw new \Exception(sprintf('Undefined scope: %s!', $scope));
+			}
+
+
+			if ($takeOnlyCount){
+				return '<?php  if (is_dir($dir = __DIR__ . "/data/")){
+					extract(["' . $name . '" => count(glob($dir . "*/*.data"))]);
+				}?>';
 			}
 
 			return '<?php  if (file_exists($file = __DIR__ . "/data/' . $name . '/" . ' . $condition . ' . ".data")){

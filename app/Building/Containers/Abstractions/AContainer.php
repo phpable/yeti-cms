@@ -50,19 +50,24 @@ abstract class AContainer extends ReadingContainer {
 	 * @return \Generator
 	 */
 	public function read(): \Generator {
-		$name = 'e_' . md5(microtime(true));
+		$hash = 'e_' . md5(microtime(true));
 
-		yield '@section(' . $name . ')';
+		yield '@section(' . $hash . ')';
 
-		if (!empty($this->Params)){
-			yield '@e64("' . base64_encode(json_encode($this->Params)) . '")';
+		foreach ($this->Params as $name => $value){
+			yield '@declare($' . $name . ', ' . $value . ')';
 		}
+
+
+//		if (!empty($this->Params)){
+//			yield '@e64("' . base64_encode(json_encode($this->Params)) . '")';
+//		}
 
 		yield from parent::read();
 
 		yield '@end';
 
-		yield '@yield(' . $name . ')';
+		yield '@yield(' . $hash . ')';
 	}
 
 }

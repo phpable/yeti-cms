@@ -5,6 +5,8 @@ use \Yeti\Main\Model\Project;
 use \Able\Helpers\Arr;
 use \Able\Helpers\Str;
 
+use \Able\Reglib\Reglib;
+
 use \Yeti\Main\Middleware\Storage;
 
 use \Illuminate\Support\Facades\App;
@@ -90,4 +92,26 @@ function properties(): array {
 		'#topic' => '[group] Topic',
 		'@paginator' => '[generic] Paginator',
 	];
+}
+
+/**
+ * @param string $source
+ * @return array
+ * @throws Exception
+ */
+function parseJsonNotation(string $source): array {
+	if (!preg_match('/^\{(.*)\}$/', $source, $Matches)){
+		throw new \Exception('Invalid notation format!');
+	}
+
+	$Data = [];
+	foreach (preg_split('/\s*,\s*/', $Matches[1], -1 , PREG_SPLIT_NO_EMPTY) as $pair){
+		if (!preg_match('/^[\'"]?(' . \Able\Reglib\Reglib::VAR . ')[\'"]?\s*:(.*)$/', $pair, $Matches)){
+			throw new \Exception('Invalid notation pair format!');
+		}
+
+		$Data[$Matches[1]] = $Matches[2];
+	}
+
+	return $Data;
 }
