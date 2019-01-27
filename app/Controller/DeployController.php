@@ -78,7 +78,7 @@ class DeployController extends AController {
 			return['status' => true,
 				'url' => route('yeti@main:deploy.check')];
 
-		}catch (\Exception $Exception) {
+		}catch (\Throwable $Exception) {
 			Log::error($Exception);
 
 			return ['status' => false,
@@ -94,7 +94,7 @@ class DeployController extends AController {
 
 			return ['status' => true, 'action' => Arr::value($Data, 0),
 				'percent' => Arr::value($Data, 1)];
-		}catch (\Exception $Exception){
+		}catch (\Throwable $Exception){
 			Log::error($Exception);
 
 			return['status' => false,
