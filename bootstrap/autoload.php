@@ -2,6 +2,7 @@
 define('LARAVEL_START', microtime(true));
 
 use \Yeti\Core\Model\Page;
+use \Able\Helpers\Arr;
 
 if (! function_exists('url')) {
 
@@ -15,6 +16,8 @@ if (! function_exists('url')) {
 	 */
 	function url($path = null, $parameters = [], $secure = null) {
 		if (preg_match('/^:[\w-]+/', $path)){
+
+			$parameters = Arr::simplify(array_slice(func_get_args(), 1));
 			if (!is_null($Page = Page::where('name', '=', ltrim($path, ':'))->first())){
 					return preg_replace_callback('/\{\$([A-Za-z0-9-_]+):?([0-9A-Za-z_-]*)\}/',
 						function(array $Matches) use (&$parameters, $path) {

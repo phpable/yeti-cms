@@ -78,16 +78,20 @@ class Extended extends Standard {
 	public final function scale(string $type, Collection $Collection, Directory $Target): void {
 		switch (strtolower($type)) {
 			case '@paginator':
+				$Collection = array_reverse($Collection->toArray());
+
 				for ($i = 0; $i < ceil(count($Collection) / 15); $i++) {
 					Path::create($Target, 'page' . ($i + 1) . '.data')->forceFile()
-						->rewrite(base64_encode(json_encode($Collection->slice(15 * $i, 15)->toArray())));
+						->rewrite(base64_encode(json_encode(array_slice($Collection, 15 * $i, 15))));
 				}
 
 				break;
 			case '#topic':
 				foreach ($this->loadSharedCollection('blog-topic') as $Topic){
+					$Subset = array_reverse($Collection->where('topic_id', $Topic->id)->toArray());
+
 					Path::create($Target, 'topic' . md5($Topic->url) . '.data')->forceFile()
-						->rewrite(base64_encode(json_encode($Collection->where('topic_id', $Topic->id)->toArray())));
+						->rewrite(base64_encode(json_encode($Subset)));
 				}
 
 				break;

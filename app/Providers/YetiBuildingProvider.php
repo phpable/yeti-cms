@@ -110,7 +110,6 @@ class YetiBuildingProvider extends ServiceProvider {
 				throw new \Exception(sprintf('Undefined scope: %s!', $scope));
 			}
 
-
 			if ($takeOnlyCount){
 				return '<?php  if (is_dir($dir = __DIR__ . "/data/")){
 					extract(["' . $name . '" => count(glob($dir . "*/*.data"))]);
