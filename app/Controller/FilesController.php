@@ -5,7 +5,7 @@ use \Illuminate\Support\Facades\Log;
 use \Illuminate\Support\Facades\App;
 use \Illuminate\Support\Facades\Input;
 
-use \Illuminate\View\Vsiew;
+use \Illuminate\View\View;
 
 use \Yeti\Main\Controller\Abstracts\AController;
 
@@ -18,10 +18,21 @@ use \Able\IO\Directory;
 class FilesController extends AController {
 
 	/**
+	 * @const string
+	 */
+	public const RT_MEDIA = 'media';
+
+	/**
+	 * @const string
+	 */
+	public const RT_BLOG = 'blog';
+
+	/**
+	 * @param string $type
 	 * @return Path
 	 */
-	private function getResourceRoot(): Path {
-		return $this->RootCache = App::scope()->path->append('resources', 'media')->try(function () {
+	private function getResourceRoot(string $type = 'media'): Path {
+		return $this->RootCache = App::scope()->path->append('resources', $type)->try(function () {
 			throw new \Exception('Resource root is not exist or not writable!');
 		}, Path::TIF_NOT_DIRECTORY | Path::TIF_NOT_WRITABLE);
 	}
@@ -29,7 +40,7 @@ class FilesController extends AController {
 	/**
 	 * @return View
 	 */
-	public function manager() {
+	public function manager(): View {
 		return view('files.manager');
 	}
 
@@ -73,21 +84,28 @@ class FilesController extends AController {
 	 * @throws \Exception
 	 */
 	public function upload() {
-		$Directory = $this->getResourceRoot()
+		if (!in_array($type = Input::get('type', 'media'), [
+			self::RT_MEDIA, self::RT_BLOG])){
+				throw new \Exception('Unsupported upload type!');
+		}
+
+		$Directory = $this->getResourceRoot($type)
 			->append(Input::get('context'))->toDirectory();
 
-		if (!$Directory->toPath()->isChildOf($this->getResourceRoot())){
+		if (!$Directory->toPath()->isChildOf($this->getResourceRoot($type))){
 			throw new \Exception('Access denied!');
 		}
 
-		if (Input::hasFile('files')) {
-			if (!is_array(Input::file('files')) || count(Input::file('files')) > 1){
-				throw new \Exception('Invalid request!');
-			}
-
-			$File = Input::file('files')[0];
-			$File->move($Directory->toString(), $File->getClientOriginalName());
+		if (!Input::hasFile('files')) {
+			throw new \Exception('Upload queue is empty!');
 		}
+
+		if (!is_array(Input::file('files')) || count(Input::file('files')) > 1){
+			throw new \Exception('Invalid request!');
+		}
+
+		$File = Input::file('files')[0];
+		$File->move($Directory->toString(), $File->getClientOriginalName());
 
 		$File = $Directory->toPath()
 			->append($File->getClientOriginalName())->toFile();
@@ -96,6 +114,7 @@ class FilesController extends AController {
 			'error' => false,
 			'name' => $File->getBaseName(),
 			'path' => $Directory->toPath()->toString(),
+			'url' =>  $File->toPath()->exclude(App::scope()->path)->toString(),
 			'size' => $File->getSize(),
 		];
 	}
@@ -103,7 +122,7 @@ class FilesController extends AController {
 	/**
 	 * @throws \Exception
 	 */
-	public final function createFolder(){
+	public final function createFolder() {
 		$Directory = $this->getResourceRoot()
 			->append(Input::get('context'))->toDirectory();
 
@@ -121,6 +140,10 @@ class FilesController extends AController {
 			'path' => $Destination->toPath()->toString(),
 			'size' => $Destination->getSize(),
 		];
+	}
+
+	public final function proxyResource($url){
+		_dumpe($url);
 	}
 
 }

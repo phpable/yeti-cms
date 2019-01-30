@@ -8,7 +8,7 @@ use \Able\Helpers\Str;
 use \Able\Helpers\Src;
 use \Able\Helpers\Arr;
 
-use \Yeti\Blog\Model\Tag;
+use \Yeti\Blog\Model\Author;
 use \Yeti\Blog\Model\Post;
 use \Yeti\Blog\Model\Topic;
 
@@ -113,11 +113,11 @@ class Extended extends Standard {
 	public final function loadSharedCollection(string $type): Collection{
 		switch (strtolower($type)){
 			case 'blog-post':
-				return Post::all();
+				return Post::where('is_published', '=', 1)->get();
 			case 'blog-topic':
 				return Topic::all();
 			case 'blog-tag':
-				return Tag::all();
+				return Author::all();
 			default:
 				throw new \Exception('Undefined item type!');
 		}
