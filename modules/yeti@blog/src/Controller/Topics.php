@@ -19,6 +19,14 @@ class Topics extends AController {
 	 * @return Response
 	 */
 	public function all(){
+		if (Input::has('filter')
+			&& in_array(strtolower(Input::get('filter')), range('a', 'z'))){
+
+			return view('yeti@blog::topics.all')->with('Topics', Topic::orderBy('title', 'ASC')
+				->where('title', 'like', Input::get('filter'). '%')->paginate(20)
+				->appends(Input::only('filter')))->with('filter', Input::get('filter'));
+		}
+
 		return view()->make('yeti@blog::topics.all')
 			->with('Topics', Topic::orderBy('title', 'asc')->paginate(25));
 	}
@@ -34,8 +42,7 @@ class Topics extends AController {
 	 * @return Redirect
 	 */
 	public function save(){
-		$Topic = Topic::create(array_merge(['url' => 'topic'
-			. (Topic::count() + 1)], Input::all()));
+		$Topic = Topic::create(Input::all());
 
 		return redirect()->route('yeti@blog:topics.edit', $Topic->id)
 			->withSuccess('Blog topic was successful saved!');
@@ -55,9 +62,9 @@ class Topics extends AController {
 	 * @return Redirect
 	 */
 	public function update($id){
-		$Topic = Topic::findOrFail($id)->update(Input::all());
+		Topic::findOrFail($id)->update(Input::all());
 
-		return redirect()->to(previous())
+		return redirect()->route('yeti@blog:topics.edit', $id)
 			->withSuccess('Blog topic was successful saved!');
 	}
 
@@ -66,7 +73,7 @@ class Topics extends AController {
 	 * @return Redirect
 	 */
 	public function delete($id){
-		$Topic = Topic::findOrFail($id)->delete();
+		Topic::findOrFail($id)->delete();
 
 		return redirect()->route('yeti@blog:topics.all')
 			->withSuccess('Blog topic was successful deleted!');

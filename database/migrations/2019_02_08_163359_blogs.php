@@ -8,7 +8,6 @@ class Blogs extends Migration {
 	 * Run the migrations.
 	 */
 	public function up() {
-
 		/**
 		 * Create 'yeti_blog_topics' table;
 		 */
@@ -25,6 +24,24 @@ class Blogs extends Migration {
 			$Table->string('title', 255);
 
 			$Table->string('description', 255)->nullable();
+		});
+
+		/**
+		 * Create 'yeti_blog_authors' table;
+		 */
+		Schema::create('yeti_blog_authors', function (Blueprint $Table) {
+			$Table->increments('id');
+
+			$Table->integer('project_id')->unsigned()
+				->nullable();
+			$Table->foreign('project_id')->references('id')
+				->on('yeti_main_projects')->onDelete('set null')
+					->onUpdate('set null');
+
+			$Table->string('name', 90);
+			$Table->string('photo', 255);
+
+			$Table->text('info')->nullable();
 		});
 
 		/**
@@ -45,11 +62,11 @@ class Blogs extends Migration {
 				->on('yeti_blog_topics')->onDelete('set null')
 					->onUpdate('set null');
 
-			$Table->integer('cover_id')->unsigned()
+			$Table->integer('author_id')->unsigned()
 				->nullable();
-			$Table->foreign('cover_id')->references('id')
-				->on('yeti_main_resources')->onDelete('set null')
-					->onUpdate('cascade');
+			$Table->foreign('author_id')->references('id')
+				->on('yeti_blog_authors')->onDelete('set null')
+					->onUpdate('set null');
 
 			$Table->string('url', 255);
 			$Table->string('title', 255);
@@ -58,110 +75,30 @@ class Blogs extends Migration {
 			$Table->string('preview', 1024)->nullable();
 
 			$Table->text('body')->nullable();
+			$Table->boolean('is_published')->default(0);
+
 			$Table->timestamps();
 		});
-
-
-		/**
-		 * Create 'yeti_blog_tags' table;
-		 */
-		Schema::create('yeti_blog_tags', function (Blueprint $Table) {
-			$Table->increments('id');
-
-			$Table->integer('project_id')->unsigned()
-				->nullable();
-			$Table->foreign('project_id')->references('id')
-				->on('yeti_main_projects')->onDelete('set null')
-					->onUpdate('set null');
-
-			$Table->string('title', 255);
-
-			$Table->unique(['title', 'project_id']);
-		});
-
-
-		/**
-		 * Create 'yeti_blog_tags2posts' table;
-		 */
-		Schema::create('yeti_blog_tags2posts', function (Blueprint $Table) {
-			$Table->increments('id');
-
-			$Table->integer('project_id')->unsigned()
-				->nullable();
-			$Table->foreign('project_id')->references('id')
-				->on('yeti_main_projects')->onDelete('set null')
-					->onUpdate('set null');
-
-			$Table->integer('tag_id')->unsigned()
-				->nullable();
-			$Table->foreign('tag_id')->references('id')
-				->on('yeti_blog_tags')->onDelete('set null')
-					->onUpdate('set null');
-
-			$Table->integer('post_id')->unsigned()
-				->nullable();
-			$Table->foreign('post_id')->references('id')
-				->on('yeti_blog_posts')->onDelete('set null')
-					->onUpdate('set null');
-		});
-
-		/**
-		 * Create 'yeti_blog_tags' table;
-		 */
-		Schema::create('yeti_blog_rating', function (Blueprint $Table) {
-			$Table->increments('id');
-
-			$Table->integer('project_id')->unsigned()
-				->nullable();
-			$Table->foreign('project_id')->references('id')
-				->on('yeti_main_projects')->onDelete('set null')
-					->onUpdate('set null');
-
-			$Table->integer('post_id')->unsigned()
-				->nullable();
-			$Table->foreign('post_id')->references('id')
-				->on('yeti_blog_posts')->onDelete('set null')
-					->onUpdate('set null');
-
-			$Table->string('rating', 255);
-		});
-
 	}
 
 	/**
 	 * Reverse the migrations.
 	 */
 	public function down() {
-
-		/**
-		 * Drop 'yeti_blog_tags2posts' table;
-		 */
-		Schema::drop('yeti_blog_tags2posts');
-
-		/**
-		 * Drop 'yeti_blog_tags' table;
-		 */
-		Schema::drop('yeti_blog_tags');
-
-		/**
-		 * Drop 'yeti_blog_rating' table;
-		 */
-		Schema::drop('yeti_blog_rating');
-
 		/**
 		 * Drop 'yeti_blog_posts' table;
 		 */
 		Schema::drop('yeti_blog_posts');
 
 		/**
-		 * Drop 'yeti_blog_topics' table;
+		 * Drop 'yeti_blog_authors' table;
 		 */
-		Schema::drop('yeti_blog_topics');
+		Schema::drop('yeti_blog_authors');
 
 		/**
 		 * Drop 'yeti_blog_topics' table;
 		 */
-		//Schema::drop('yeti_blog_authors');
+		Schema::drop('yeti_blog_topics');
 	}
 
 }

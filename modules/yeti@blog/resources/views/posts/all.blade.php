@@ -1,4 +1,4 @@
-@extends('yeti@blog::main')
+@extends('yeti@blog::main', ['scrollable' => true])
 
 @param($filter)
 
@@ -10,55 +10,129 @@
 	</a>
 @stop
 
+@section('css')
+	@parent
+
+		<style type="text/css">
+		.posts-list {
+			display: block;
+			background-color: #ffffff;
+		}
+
+		.posts-list .post {
+			display: block;
+			position: relative;
+			overflow: hidden;
+			background-color: transparent;
+			padding: 0 10px;
+			border-top: 1px solid #eaedef;
+		}
+
+		.posts-list .post:nth-child(2n+1) {
+			background-color: #fcfdfe;
+		}
+
+		.posts-list .post > .post-field {
+			font-family: "DejaVu Sans Mono", monospace;
+			font-size: 10px;
+			display: block;
+			height: 22px;
+			line-height: 22px;
+		}
+
+		.posts-list .post > .post-field > strong {
+			display: block;
+			float: left;
+			width: 92px;
+			font-weight: bold;
+			font-size: 12px;
+			text-transform: uppercase;
+			text-align: left;
+		}
+
+		.posts-list .post > .post-field > strong::after {
+			content: ":";
+		}
+
+		.posts-list .post > .post-title {
+			display: block;
+			margin: 22px 0 37px 0;
+			height: 30px;
+			word-wrap: break-word;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-size: 22px;
+			font-weight: bold;
+		}
+
+		.posts-list .post > p {
+			font-size: 12px;
+			margin-bottom: 22px;
+		}
+
+	</style>
+@stop
+
+@section('js')
+	<script type="text/javascript">
+		(function($){
+			$(function(){
+				$('[data-action="follow"]').on('click', function(){
+					var jThis = $(this);
+
+					if (jThis.is('[data-target]')) {
+						window.location.href = jThis.data('target');
+					}
+				});
+			});
+		})(jQuery);
+	</script>
+@stop
+
 @section('workspace')
-	<section class="panel">
-		<div class="table-responsive">
-			@include('filter', ['url' => route('yeti@core:pages.all'), 'filter' => $filter])
+			@include('filter', ['url' => route('yeti@blog:posts.all'), 'filter' => $filter])
 
-			<table class="table table-striped datagrid m-b-small">
-				<thead>
-					<tr>
-						<th>Preview</th>
-						<th width="112"></th>
-					</tr>
-				</thead>
+			<div class="posts-list">
+				@foreach($Posts as $Post)
+					<div class="post" data-action="follow" data-target="{{ route('yeti@blog:posts.edit', $Post->id) }}">
+						<span class="post-field">
+							<strong>url</strong>
 
-				<tbody>
-					@foreach($Posts as $Post)
-						<tr>
-							<td>
-								<div class="post-preview">
-									<div class="header">
+							@if (!empty($Post->url))
+								/{{ ltrim($Post->url, '/') }}
+							@else
+								<span class="empty">~empty~</span>
+							@endif
+						</span>
 
-										@if (!empty($Post->url))
-											<span>
-												/{{ ltrim($Post->url, '/') }}
-											</span>
-										@else
-											<span>~</span>
-										@endif
+						<span class="post-field">
+							<strong>created</strong>
+							{{ date('M j, Y', strtotime($Post->created_at)) }}
+						</span>
 
-										<h4>{{ Str::trf($Post->title, 72) }}</h4>
-									</div>
+						<span class="post-field">
+							<strong>published</strong>
 
-									<p>
-										{{ Str::strip($Post->preview) }}
-									</p>
-								</div>
-							</td>
+							@if (!empty($Post->is_published))
+								Yes
+							@else
+								No
+							@endif
+						</span>
 
-							<td>
-								<a href="{{ route('yeti@blog:posts.edit', $Post->id) }}">
-									<i class="fa fa-pencil"></i>
-								</a>
-							</td>
-						</tr>
-					@endforeach
+						<span class="post-title">{{ $Post->title }}</span>
 
-				</tbody>
-			</table>
+						@if (!empty($Post->preview))
+							<p>
+								{{ Str::strip($Post->preview) }}
+							</p>
+						@else
+							<span class="empty">~empty~</span>
+						@endif
+					</div>
+				@endforeach
+			</div>
 		</div>
-	</section>
 @stop
 
 

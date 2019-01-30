@@ -8,14 +8,15 @@ use \Yeti\Main\Model\Abstracts\AModel;
 use \Yeti\Main\Model\Abstracts\TProject;
 
 use \Illuminate\Database\Eloquent\Collection;
+use \Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Tag extends AModel {
+class Author extends AModel {
 	use TProject;
 
 	/**
 	 * @var string
 	 */
-	protected $table = 'yeti_blog_tags';
+	protected $table = 'yeti_blog_authors';
 
 	/**
 	 * @var bool
@@ -25,34 +26,13 @@ class Tag extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $fillable = ['title'];
+	protected $fillable = ['name', 'photo', 'info'];
 
 	/**
-	 * @var array
+	 * @return HasMany
 	 */
-	protected $appends = ['url', 'weigth'];
-
-	/**
-	 * @return Collection
-	 */
-	public function getPostsAttribute(){
-		return Post::whereIn('id', Tag2Post::where('tag_id',
-			'=', $this->id)->lists('post_id')->toArray())->get();
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlAttribute(){
-		return strtolower(preg_replace('/\s+/', '_', strtolower(trim($this->title))));
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getWeigthAttribute(){
-		return Post::whereIn('id', Tag2Post::where('tag_id',
-					'=', $this->id)->lists('post_id')->toArray())->count();
+	public final function posts(){
+		return $this->hasMany(Post::class);
 	}
 
 }

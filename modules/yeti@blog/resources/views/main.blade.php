@@ -1,4 +1,4 @@
-@extends('workspace')
+@extends('workspace', ['footer' => isset($footer) ? $footer : true])
 
 @section('tools')
 	<li>

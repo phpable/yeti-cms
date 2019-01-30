@@ -44,8 +44,7 @@ class Topic extends AModel {
 	 * @return int
 	 */
 	public function getPostsCountAttribute(){
-		return Post::where('topic_id', '=', $this->id)
-			->count();
+		return Post::where('topic_id', '=', $this->id)->count();
 	}
 
 	/**
