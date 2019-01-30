@@ -71,6 +71,16 @@
 		<i class="fa fa-pencil fa-fw"></i>
 	</a>
 
+	@if (!$Post->is_published)
+		<a href="{{ route('yeti@blog:posts.publish', $Post->id) }}" title="Publish">
+			<i class="fa fa-eye"></i>
+		</a>
+	@else
+		<a href="{{ route('yeti@blog:posts.unpublish', $Post->id) }}" title="Hide">
+			<i class="fa fa-eye-slash"></i>
+		</a>
+	@endif
+
 	<a href="{{ route('yeti@blog:posts.delete', $Post->id) }}" data-effect="waiting"  title="Delete">
 		<i class="fa fa-trash fa-fw"></i>
 	</a>

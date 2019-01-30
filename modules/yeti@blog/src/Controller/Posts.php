@@ -66,7 +66,7 @@ class Posts extends AController {
 		$Post = Post::create(array_merge(['url' => md5(microtime(true))], Input::all()));
 
 		return redirect()->route('yeti@blog:posts.edit', $Post->id)
-			->withSuccess('Blog post was successful saved!');
+			->withSuccess('New blog post was successful created!');
 	}
 
 	/**
@@ -77,7 +77,29 @@ class Posts extends AController {
 		Post::findOrFail($id)->update(Input::all());
 
 		return redirect()->route('yeti@blog:posts.settings', $id)
-			->withSuccess('Blog post was successful saved!');
+			->withSuccess('Th blog post was successful updated!');
+	}
+
+	/**
+	 * @param $id
+	 * @return Redirect
+	 */
+	public function publish($id) {
+		Post::findOrFail($id)->update(['is_published' => true]);
+
+		return redirect()->route('yeti@blog:posts.all')
+			->withSuccess('The blog post was successful published!');
+	}
+
+	/**
+	 * @param $id
+	 * @return Redirect
+	 */
+	public function unpublish($id) {
+		Post::findOrFail($id)->update(['is_published' => false]);
+
+		return redirect()->route('yeti@blog:posts.all')
+			->withSuccess('The blog post was successful hide from publishing!');
 	}
 
 	/**
