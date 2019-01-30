@@ -1,8 +1,6 @@
 @extends('frame', ['action'
 	=> route('yeti@core:pages.update', $Page->id)])
 
-@param($Preview, $Page)
-
 @section('actions')
 	@parent
 

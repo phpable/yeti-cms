@@ -10,14 +10,6 @@
 			</a>
 		</li>
 
-		{{--
-		<li>
-			<a href="{{ route('yeti@core:resources.edit') }}" title="Project Resources">
-				<i class="fa fa-files-o fa-fw text-default"></i>
-			</a>
-		</li>
-		--}}
-
 		<li>
 			<a href="{{ route('yeti@core:robots.edit') }}" title="Robots Setting">
 				<i class="fa fa-android fa-fw text-default"></i>

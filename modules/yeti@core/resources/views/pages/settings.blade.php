@@ -1,8 +1,6 @@
 @extends('frame', ['action'
 	=> route('yeti@core:pages.update-settings', $Page->id), 'scrollable' => true])
 
-@param($Preview, $Page)
-
 @section('actions')
 	@parent
 
