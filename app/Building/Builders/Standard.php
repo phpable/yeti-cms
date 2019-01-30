@@ -63,6 +63,7 @@ class Standard extends ABuilder {
 		Collector::stack('layout', $this->Page->layout);
 		Collector::externals()->addExternals($this->Page->layout->retrieveExternalsList());
 
+		Collector::metas()->addMetas($this->Page->layout->retrieveMetasList());
 		Collector::metas()->addMeta(new SMeta(SMeta::MT_NAME, 'description', $this->Page->description));
 
 		$View->toWriter()->write(Delegate::compile(Collector::restack('layout')->combine($this->Page->getLayoutPartialName())),

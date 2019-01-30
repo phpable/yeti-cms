@@ -42,7 +42,7 @@ class Metas {
 	 * @throws \Exception
 	 */
 	public final function addMeta(SMeta $Meta): void {
-		$this->Metas[] = $Meta;
+		array_push($this->Metas, $Meta);
 	}
 
 	/**
