@@ -70,6 +70,11 @@ class Extended extends Standard {
 	}
 
 	/**
+	 * @const int
+	 */
+	protected const PAGINATION_LIMIT = 14;
+
+	/**
 	 * @param string $type
 	 * @param Collection $Collection
 	 * @param Directory $Target
@@ -80,9 +85,9 @@ class Extended extends Standard {
 			case '@paginator':
 				$Collection = array_reverse($Collection->toArray());
 
-				for ($i = 0; $i < ceil(count($Collection) / 15); $i++) {
+				for ($i = 0; $i < ceil(count($Collection) / self::PAGINATION_LIMIT); $i++) {
 					Path::create($Target, 'page' . ($i + 1) . '.data')->forceFile()
-						->rewrite(base64_encode(json_encode(array_slice($Collection, 15 * $i, 15))));
+						->rewrite(base64_encode(json_encode(array_slice($Collection, self::PAGINATION_LIMIT * $i, self::PAGINATION_LIMIT))));
 				}
 
 				break;
