@@ -25,7 +25,7 @@
 			position: relative;
 			overflow: hidden;
 			background-color: transparent;
-			padding: 0 10px;
+			padding: 12px 10px 0 10px;
 			border-top: 1px solid #eaedef;
 		}
 

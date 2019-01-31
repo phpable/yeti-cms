@@ -24,7 +24,7 @@
 			position: relative;
 			overflow: hidden;
 			background-color: transparent;
-			padding: 0 10px;
+			padding: 12px 10px 0 10px;
 			border-top: 1px solid #eaedef;
 		}
 
@@ -96,7 +96,7 @@
 				@foreach($Posts as $Post)
 					<div class="post" data-action="follow" data-target="{{ route('yeti@blog:posts.edit', $Post->id) }}">
 						<span class="post-field">
-							<strong>url</strong>
+							<strong>URL</strong>
 
 							@if (!empty($Post->url))
 								/{{ ltrim($Post->url, '/') }}
@@ -106,8 +106,17 @@
 						</span>
 
 						<span class="post-field">
-							<strong>created</strong>
+							<strong>Created</strong>
 							{{ date('M j, Y', strtotime($Post->created_at)) }}
+						</span>
+
+						<span class="post-field">
+							<strong>Aurhor</strong>
+							@if (!empty($Post->author))
+								{{ $Post->author->name }}
+							@else
+								<span class="empty">~empty~</span>
+							@endif
 						</span>
 
 						<span class="post-field">

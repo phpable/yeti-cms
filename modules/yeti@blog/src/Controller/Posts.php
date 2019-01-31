@@ -1,17 +1,18 @@
 <?php
 namespace Yeti\Blog\Controller;
 
-use Able\Helpers\Str;
 use \Illuminate\View\View;
 use \Illuminate\Http\Response;
 
 use \Illuminate\Support\Facades\Input;
 use \Illuminate\Support\Facades\Redirect;
 
+use \Able\Helpers\Str;
 use \Able\Helpers\Arr;
 
 use \Yeti\Blog\Model\Post;
 use \Yeti\Blog\Model\Topic;
+use \Yeti\Blog\Model\Author;
 
 use \Yeti\Main\Controller\Abstracts\AController;
 
@@ -56,7 +57,9 @@ class Posts extends AController {
 	 */
 	public function settings($id){
 		return view()->make('yeti@blog::posts.settings')
-			->with('Post', Post::findOrFail($id))->with('Topics', Topic::orderBy('title')->get());
+			->with('Post', Post::findOrFail($id))
+			->with('Topics', Topic::orderBy('title')->get())
+			->with('Authors', Author::orderBy('name')->get());
 	}
 
 	/**

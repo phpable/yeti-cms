@@ -55,9 +55,23 @@
 				<label class="control-label">Topic</label>
 				<div class="control-body">
 					<select class="form-control" name="topic_id">
-						<option value=""></option>
+						<option value="">~</option>
+
 						@foreach($Topics as $Topic)
 							<option value="{{ $Topic->id }}" {{ $Post->topic_id == $Topic->id ? 'selected' : null }}>{{ $Topic->title }}</option>
+						@endforeach
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label">Author</label>
+				<div class="control-body">
+					<select class="form-control" name="topic_id">
+						<option value="">~</option>
+
+						@foreach($Authors as $Author)
+							<option value="{{ $Author->id }}" {{ $Post->author_id == $Author->id ? 'selected' : null }}>{{ $Author->name }}</option>
 						@endforeach
 					</select>
 				</div>
