@@ -98,12 +98,16 @@ class YetiBuildingProvider extends ServiceProvider {
 
 			if ($scope == 'url'){
 				$condition = 'md5(' . $condition . ')';
-			}elseif ($scope == 'id'){
+			}elseif ($scope == 'id') {
 				$condition = '"' . $condition . '"';
+			}elseif ($scope == 'name'){
+				$condition = 'md5(' . $condition . ')';
 			}elseif ($scope == '@pagination') {
 				$condition = '"page" . ' . $condition;
 			}elseif ($scope == '#topic') {
 				$condition = '"topic" . md5(' . $condition . ')';
+			}elseif ($scope == '#author' || $scope == '#author-latest') {
+				$condition = '"author" . md5(' . $condition . ')';
 			}elseif ($scope == "@count"){
 				$takeOnlyCount = true;
 			}else{

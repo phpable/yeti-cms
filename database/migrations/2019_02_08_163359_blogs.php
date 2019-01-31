@@ -38,10 +38,14 @@ class Blogs extends Migration {
 				->on('yeti_main_projects')->onDelete('set null')
 					->onUpdate('set null');
 
+			$Table->string('url', 90)
+				->nullable();
+
 			$Table->string('name', 90);
 			$Table->string('photo', 255);
 
-			$Table->text('info')->nullable();
+			$Table->text('info')
+				->nullable();
 		});
 
 		/**

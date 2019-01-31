@@ -38,7 +38,7 @@ class Post extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $appends = ['topic'];
+	protected $appends = ['topic', 'author'];
 
 
 	/**
@@ -60,6 +60,13 @@ class Post extends AModel {
 	 */
 	public function getTopicAttribute(): Topic {
 		return $this->topic()->first();
+	}
+
+	/**
+	 * @return Author
+	 */
+	public function getAuthorAttribute(): Author {
+		return $this->author()->first();
 	}
 
 	/**

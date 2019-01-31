@@ -79,7 +79,11 @@ function entrances(): array {
  * @return array
  */
 function share(): array {
-	return ['blog-post' => '[Blog] Post', 'blog-topic' => '[Blog] Topic', 'blog-tag' => '[Blog] Tag'];
+	return [
+		'blog-post' => '[Blog] Post',
+		'blog-topic' => '[Blog] Topic',
+		'blog-author' => '[Blog] Author'
+	];
 }
 
 /**
@@ -89,7 +93,10 @@ function properties(): array {
 	return [
 		'url' => '[native] Url',
 		'id' => '[native] Id',
+		'name' => '[native] Name',
 		'#topic' => '[group] Topic',
+		'#author' => '[group] Author',
+		'#author-latest' => '[group] Author (latest only)',
 		'@paginator' => '[generic] Paginator',
 	];
 }

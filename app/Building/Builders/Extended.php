@@ -91,6 +91,25 @@ class Extended extends Standard {
 				}
 
 				break;
+			case '#author':
+				foreach ($this->loadSharedCollection('blog-author') as $Author){
+					$Subset = array_reverse($Collection->where('author_id', $Author->id)->toArray());
+
+					Path::create($Target, 'author' . md5($Author->id) . '.data')->forceFile()
+						->rewrite(base64_encode(json_encode($Subset)));
+				}
+
+				break;
+			case '#author-latest':
+				foreach ($this->loadSharedCollection('blog-author') as $Author){
+					$Subset = array_slice(array_reverse($Collection->where('author_id', $Author->id)
+						->toArray()), 0, 4);
+
+					Path::create($Target, 'author' . md5($Author->id) . '.data')->forceFile()
+						->rewrite(base64_encode(json_encode($Subset)));
+				}
+
+				break;
 			case '#topic':
 				foreach ($this->loadSharedCollection('blog-topic') as $Topic){
 					$Subset = array_reverse($Collection->where('topic_id', $Topic->id)->toArray());
@@ -116,10 +135,10 @@ class Extended extends Standard {
 				return Post::where('is_published', '=', 1)->get();
 			case 'blog-topic':
 				return Topic::all();
-			case 'blog-tag':
+			case 'blog-author':
 				return Author::all();
 			default:
-				throw new \Exception('Undefined item type!');
+				throw new \Exception(sprintf('Undefined item type: %s!', $type));
 		}
 	}
 }

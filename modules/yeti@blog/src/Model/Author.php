@@ -26,7 +26,7 @@ class Author extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $fillable = ['name', 'photo', 'info'];
+	protected $fillable = ['url', 'name', 'photo', 'info'];
 
 	/**
 	 * @return HasMany
