@@ -5,14 +5,13 @@
 @section('css')
 	@parent
 
-	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.css" rel="stylesheet">
+	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
 @stop
 
 @section('js')
 	@parent
 
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.js"></script>
-
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
 	<script type="text/javascript">
 		(function(){
 			$(function(){
@@ -37,30 +36,37 @@
 					codeviewFilter: false,
 			  		codeviewIframeFilter: true,
 
-				}).on('summernote.image.upload', function(Editor, Diles) {
-					for(var i = 0; i < Files.length; i++) {
-						$.ajax({
-							url: '{{ route('yeti@main:files.upload') }}',
-							type: 'POST',
+					callbacks: {
+						onImageUpload: function(Files){
+							for(var i = 0; i < Files.length; i++) {
+								$.ajax({
+									url: '{{ route('yeti@main:files.upload') }}',
+									type: 'POST',
 
-							data: (function (File) {
-								var data = new FormData();
+									data: (function (File) {
+										var data = new FormData();
 
-								data.append('files[]', File);
-								data.append('type', 'blog');
+										data.append('files[]', File);
+										data.append('type', 'blog');
 
-								return data;
-							})(Files[i]),
+										return data;
+									})(Files[i]),
 
-							cache: false,
-							contentType: false,
-							processData: false,
-							success: function (data) {
-								Editor.insertImage(data.url, data.name);
+									cache: false,
+									contentType: false,
+									processData: false,
+									success: function (data) {
+										var Image = document.createElement('img');
+										Image.src = data.url;
+										Image.alt = data.name;
+
+										$('#wysiwyg').summernote('insertNode', Image);
+									}
+								});
 							}
-						});
+						}
 					}
-				});;
+				});
 			});
 		})(jQuery);
 	</script>

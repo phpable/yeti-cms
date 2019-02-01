@@ -90,7 +90,7 @@ class Posts extends AController {
 	public function update($id) {
 		Post::findOrFail($id)->update(Input::all());
 
-		return redirect()->route('yeti@blog:posts.settings', $id)
+		return redirect()->route('yeti@blog:posts.edit', $id)
 			->withSuccess('Th blog post was successful updated!');
 	}
 
