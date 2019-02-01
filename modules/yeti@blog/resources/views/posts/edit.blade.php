@@ -3,10 +3,14 @@
 	'footer' => true])
 
 @section('css')
+	@parent
+
 	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.css" rel="stylesheet">
 @stop
 
 @section('js')
+	@parent
+
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.js"></script>
 
 	<script type="text/javascript">
@@ -25,8 +29,6 @@
 						['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
 						['misc', ['undo', 'redo', 'fullscreen', 'help']],
 					],
-
-					placeholder: 'Write here...',
 
 					dialogsInBody: true,
 					dialogsFade: true,

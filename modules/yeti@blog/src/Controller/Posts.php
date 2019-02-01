@@ -21,7 +21,7 @@ class Posts extends AController {
 	/**
 	 * @return Response
 	 */
-	public function all(){
+	public function all() {
 		if (Input::has('filter')
 			&& in_array(strtolower(Input::get('filter')), range('a', 'z'))){
 
@@ -37,16 +37,17 @@ class Posts extends AController {
 	/**
 	 * @return Response
 	 */
-	public function add(){
+	public function add() {
 		return view()->make('yeti@blog::posts.settings')
-			->with('Topics', Topic::orderBy('title')->get());
+			->with('Topics', Topic::orderBy('title')->get())
+			->with('Authors', Author::orderBy('name')->get());
 	}
 
 	/**
 	 * @param int $id
 	 * @return Response
 	 */
-	public function edit($id){
+	public function edit($id) {
 		return view()->make('yeti@blog::posts.edit')
 			->with('Post', Post::findOrFail($id));
 	}
@@ -55,7 +56,7 @@ class Posts extends AController {
 	 * @param $id
 	 * @return Response
 	 */
-	public function settings($id){
+	public function settings($id) {
 		return view()->make('yeti@blog::posts.settings')
 			->with('Post', Post::findOrFail($id))
 			->with('Topics', Topic::orderBy('title')->get())
@@ -66,7 +67,17 @@ class Posts extends AController {
 	 * @return Redirect
 	 */
 	public function save() {
-		$Post = Post::create(array_merge(['url' => md5(microtime(true))], Input::all()));
+		$Post = Post::create(Input::except('topic_id', 'author_id'));
+
+		if (Input::has('topic_id')) {
+			$Post->topic()->associate(Topic::findOrFail(Input::get('topic_id')));
+		}
+
+		if (Input::has('author_id')) {
+			$Post->author()->associate(Author::findOrFail(Input::get('author_id')));
+		}
+
+		$Post->save();
 
 		return redirect()->route('yeti@blog:posts.edit', $Post->id)
 			->withSuccess('New blog post was successful created!');
@@ -109,7 +120,7 @@ class Posts extends AController {
 	 * @param $id
 	 * @return Redirect
 	 */
-	public function delete($id){
+	public function delete($id) {
 		Post::findOrFail($id)->delete();
 
 		return redirect()->route('yeti@blog:posts.all')

@@ -1,36 +1,45 @@
 @extends('yeti@blog::frame', [
-	'action' => route('yeti@blog:posts.update', $Post->id)])
+	'action' => !empty($Post->id)
+		? route('yeti@blog:posts.update', $Post->id)
+		: route('yeti@blog:posts.save'),
+])
+
+@object($Post, 'id', 'url', 'title',
+	'description', 'preview', 'body', 'is_published', 'topic_id', 'author_id');
 
 @section('actions')
 	@parent
 
-	<a href="{{ route('yeti@blog:posts.edit', $Post->id) }}" title="Content">
-		<i class="fa fa-file fa-fw"></i>
-	</a>
-
-	@if (!$Post->is_published)
-		<a href="{{ route('yeti@blog:posts.publish', $Post->id) }}" title="Publish">
-			<i class="fa fa-eye"></i>
+	@if(!empty($Post->id))
+		<a href="{{ route('yeti@blog:posts.edit', $Post->id) }}" title="Content">
+			<i class="fa fa-file fa-fw"></i>
 		</a>
-	@else
-		<a href="{{ route('yeti@blog:posts.unpublish', $Post->id) }}" title="Hide">
-			<i class="fa fa-eye-slash"></i>
+
+		@if (!$Post->is_published)
+			<a href="{{ route('yeti@blog:posts.publish', $Post->id) }}" title="Publish">
+				<i class="fa fa-eye"></i>
+			</a>
+		@else
+			<a href="{{ route('yeti@blog:posts.unpublish', $Post->id) }}" title="Hide">
+				<i class="fa fa-eye-slash"></i>
+			</a>
+		@endif
+
+
+		<a href="{{ route('yeti@blog:posts.delete', $Post->id) }}" data-effect="waiting"  title="Delete">
+			<i class="fa fa-trash fa-fw"></i>
 		</a>
 	@endif
-
-	<a href="{{ route('yeti@blog:posts.delete', $Post->id) }}" data-effect="waiting"  title="Delete">
-		<i class="fa fa-trash fa-fw"></i>
-	</a>
 @stop
 
 @section('form')
 	<div class="col-lg-12">
 		<div class="row">
 			<div class="separated">
-				<div class="form-group">
+				<div class="form-group required">
 					<label class="control-label">Url</label>
 					<div class="control-body">
-						<input type="text" class="bg-focus form-control parsley-validated" name="url" value="{{ $Post->url }}">
+						<input type="text" class="bg-focus form-control" name="url" value="{{ $Post->url }}">
 					</div>
 				</div>
 			</div>
@@ -39,7 +48,7 @@
 				<div class="form-group">
 					<label class="control-label">Title</label>
 					<div class="control-body">
-						<input type="text" class="bg-focus form-control parsley-validated" name="title" value="{{ $Post->title }}">
+						<input type="text" class="bg-focus form-control" name="title" value="{{ $Post->title }}">
 					</div>
 				</div>
 				<div class="form-group">
@@ -51,7 +60,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group required">
 				<label class="control-label">Topic</label>
 				<div class="control-body">
 					<select class="form-control" name="topic_id">
@@ -64,10 +73,10 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group required">
 				<label class="control-label">Author</label>
 				<div class="control-body">
-					<select class="form-control" name="topic_id">
+					<select class="form-control" name="author_id">
 						<option value="">~</option>
 
 						@foreach($Authors as $Author)

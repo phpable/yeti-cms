@@ -18,6 +18,38 @@
 			});
 		})
 	</script>
+
+	<script type="text/javascript">
+		function validate() {
+			var jContainers = $('.required');
+
+			for(var i = 0; i < jContainers.length; i++) {
+				var jControls = $(jContainers[i]).find('input[type="text"], select');
+
+				for (var j = 0; j < jControls.length; j++) {
+					if (jControls.val().replace(/\s+/, '').length < 1){
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		(function($){
+			$(function(){
+				var jButton = $('#button-entity-save');
+
+				$('.required').find('input[type="text"],select').on('click change keypress', function(){
+					if (validate()){
+						jButton.removeClass('disabled');
+					}else{
+						jButton.addClass('disabled');
+					}
+				}).trigger('click');
+			});
+		})(jQuery);
+	</script>
 @stop
 
 @section('actions')

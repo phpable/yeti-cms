@@ -101,8 +101,8 @@ textarea
 			overflow: hidden
 
 			&.disabled
-				background-color: #cecece
-				opacity: 0.4
+				background-color: #e1e1e1
+				opacity: 0.2
 
 			&.waiting
 				background-color: #b58900 !important
@@ -275,6 +275,11 @@ textarea
 		&.double
 			height: 68px
 			line-height: 58px
+
+	&.required
+		.control-label
+			color: #ff8364
+			font-weight: bold
 
 	.control-body
 		display: block

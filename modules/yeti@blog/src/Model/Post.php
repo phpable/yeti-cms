@@ -66,7 +66,18 @@ class Post extends AModel {
 	 * @return Author
 	 */
 	public function getAuthorAttribute(): Author {
+		if ($this->author()->count() < 1){
+			_dumpe($this->id);
+		}
+
 		return $this->author()->first();
+	}
+
+	/**
+	 * @return string
+	 */
+	public final function getBodyAttribute(): string {
+		return (string)$this->attributes['body'];
 	}
 
 	/**
