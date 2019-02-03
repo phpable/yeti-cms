@@ -3,6 +3,7 @@
 	<head>
 		<title>{{ $Page->title }}</title>
 		<link type="text/css" rel="stylesheet" href="{{ $__public }}/main.min.css">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 		@build(metadata)
 		@build(externals)
