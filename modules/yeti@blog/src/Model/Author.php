@@ -2,7 +2,6 @@
 namespace Yeti\Blog\Model;
 
 use \Yeti\Blog\Model\Post;
-use \Yeti\Blog\Model\Tag2Post;
 
 use \Yeti\Main\Model\Abstracts\AModel;
 use \Yeti\Main\Model\Abstracts\TProject;
@@ -26,7 +25,20 @@ class Author extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $fillable = ['url', 'name', 'photo', 'info'];
+	protected $fillable = ['url', 'title', 'description',
+		'name', 'photo', 'info'];
+
+	/**
+	 * @var array
+	 */
+	protected $appends = ['posts_count'];
+
+	/**
+	 * @return int
+	 */
+	public function getPostsCountAttribute(){
+		return Post::where('author_id', '=', $this->id)->count();
+	}
 
 	/**
 	 * @return HasMany
@@ -34,5 +46,4 @@ class Author extends AModel {
 	public final function posts(){
 		return $this->hasMany(Post::class);
 	}
-
 }

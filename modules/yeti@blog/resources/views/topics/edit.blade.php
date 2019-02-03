@@ -1,5 +1,5 @@
 @extends('yeti@blog::frame', [
-	'action' => isset($Post->id)
+	'action' => isset($Topic->id)
 		? route('yeti@blog:topics.update', $Topic->id)
 		: route('yeti@blog:topics.save'),
 

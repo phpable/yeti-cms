@@ -31,7 +31,7 @@ class Posts extends AController {
 		}
 
 		return view()->make('yeti@blog::posts.all')
-			->with('Posts', Post::orderBy('updated_at', 'desc')->paginate(15));
+			->with('Posts', Post::orderBy('updated_at', 'DESC')->paginate(15));
 	}
 
 	/**
@@ -91,7 +91,7 @@ class Posts extends AController {
 		Post::findOrFail($id)->update(Input::all());
 
 		return redirect()->route('yeti@blog:posts.edit', $id)
-			->withSuccess('Th blog post was successful updated!');
+			->withSuccess('The blog post was successful updated!');
 	}
 
 	/**
@@ -124,7 +124,6 @@ class Posts extends AController {
 		Post::findOrFail($id)->delete();
 
 		return redirect()->route('yeti@blog:posts.all')
-			->withSuccess('Blog post was successful deleted!');
+			->withSuccess('The blog post was successfully deleted!');
 	}
-
 }

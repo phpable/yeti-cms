@@ -11,6 +11,7 @@ use \Able\Helpers\Arr;
 
 use \Yeti\Blog\Model\Topic;
 
+use Yeti\Core\Model\Resource;
 use \Yeti\Main\Controller\Abstracts\AController;
 
 class Topics extends AController {
@@ -18,7 +19,7 @@ class Topics extends AController {
 	/**
 	 * @return Response
 	 */
-	public function all(){
+	public function all() {
 		if (Input::has('filter')
 			&& in_array(strtolower(Input::get('filter')), range('a', 'z'))){
 
