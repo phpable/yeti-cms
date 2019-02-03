@@ -14,7 +14,7 @@
 
 					$('.btn-apply').on('click', function () {
 						var jThis = $(this);
-						var count = $('.share-group').length;
+						var count = $('.share-group').length + 1;
 
 						$('.shares').append(jTpl.html()
 							.replace(/__ID__/g, 'dynamic-' + count)
