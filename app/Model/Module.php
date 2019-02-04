@@ -2,8 +2,16 @@
 namespace Yeti\Main\Model;
 
 use \Illuminate\Database\Eloquent\Collection;
+use \Illuminate\Database\Eloquent\Builder;
 
 use \Yeti\Main\Model\Abstracts\AModel;
+
+use \Able\IO\Path;
+
+use \Able\Helpers\Str;
+use \Able\Helpers\Src;
+use \Able\Helpers\Jsn;
+use \Able\Helpers\Arr;
 
 class Module extends AModel {
 
@@ -20,12 +28,12 @@ class Module extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $fillable = ['maintainer', 'name', 'title', 'route', 'status'];
+	protected $fillable = ['maintainer', 'name', 'title', 'status'];
 
 	/**
 	 * @var array
 	 */
-	protected $appends = ['path'];
+	protected $appends = ['route'];
 
 	/**
 	 * @const string
@@ -48,28 +56,96 @@ class Module extends AModel {
 	const MS_CORRUPTED = 'corrupted';
 
 	/**
-	 * @return Collection
+	 * @param string $value
+	 * @throws \Exception
 	 */
-	public final static function getActive(){
-		return static::where('status', '=', Module::MS_ACTIVE)
-			->orderBy('id')->get();
+	public final function setStatusAttribute(string $value): void {
+		if (!in_array($value, [self::MS_ACTIVE,
+			self::MS_CORRUPTED, self::MS_INACTIVE, self::MS_OUTDATED])) {
+				throw new \Exception(sprintf('Invalid status: %s!', $value));
+		}
+
+		$this->attributes['status'] = $value;
+	}
+
+	/**
+	 * @return Builder
+	 */
+	public final static function whereActive(){
+		return self::where('status', '=', Module::MS_ACTIVE);
 	}
 
 	/**
 	 * @return string
 	 */
-	public final function getPathAttribute(): string {
-		return base_path('modules') . DIRECTORY_SEPARATOR
-			. strtolower($this->maintainer . '@' . $this->name);
+	public final function getMnemonic(): string {
+		return Str::join('@', Src::fcm($this->maintainer, '-'), Src::fcm($this->name, '-'));
 	}
 
 	/**
 	 * @return string
+	 */
+	public final function getNamespace(): string {
+		return Str::join('\\', Src::tcm($this->maintainer), Src::tcm($this->name));
+	}
+
+	/**
+	 * @var Path
+	 */
+	private $Path = null;
+
+	/**
+	 * @return Path
+	 * @throws \Exception
+	 */
+	public final function getPath(): Path {
+		if (is_null($this->Path)){
+			$this->Path = Path::create(base_path('modules'), $this->getMnemonic());
+		}
+
+		return $this->Path->toPath();
+	}
+
+	/**
+	 * @var array
+	 */
+	private $Manifest = null;
+
+	/**
+	 * @param string $name
+	 * @param string $default
+	 * @return string|null
+	 * @throws \Exception
+	 */
+	public final function manifest(string $name, string $default = null): ?string {
+		try {
+			if (is_null($this->Manifest)) {
+				$this->Manifest = Jsn::decode($this->getPath()
+					->append('manifest.json')->toFile()->getContent());
+
+			}
+
+			return Arr::path($this->Manifest, preg_split('/\.+/',
+				$name, -1, PREG_RECURSION_LIMIT_ERROR)) ?? $default;
+
+		}catch (\Exception $Exception){
+			throw new \Exception(sprintf('Can\'t load the manifest file: %s!',
+				$Exception->getMessage()));
+		}
+	}
+
+	/**
+	 * @const string
+	 */
+	protected const DEFAULT_ROUTE = 'main';
+
+	/**
+	 * @return string
+	 * @throws \Exception
 	 */
 	public final function getRouteAttribute(): string {
-		return !empty($this->attributes['route']) ? $this->attributes['route']
-			: implode('.', [$this->maintainer, $this->name, 'main']);
+		return Str::join('::', $this->getMnemonic(),
+			$this->manifest('routes.default', self::DEFAULT_ROUTE));
 	}
-
 }
 

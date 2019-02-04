@@ -1,11 +1,11 @@
 {
 	"maintainer": "yeti",
-	"name": "blog",
+	"name": "core",
 	"version": "1.0",
 	"resources": {
 		"default": "views"
 	},
 	"routes": {
-		"default": "posts.all"
+		"default": "pages.all"
 	}
 }

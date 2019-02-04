@@ -1,12 +1,14 @@
 <?php
 use \Yeti\Main\Model\Module;
 use \Yeti\Main\Model\Project;
-
 use \Yeti\Main\Model\Scope\ProjectScope;
+
 use \Yeti\Main\Exception\InvalidScopeException;
 
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Session;
+
+use \Illuminate\Database\Eloquent\Collection;
 
 if (!function_exists('resources_path')) {
 	/**
@@ -41,33 +43,34 @@ if (!function_exists('module_path')) {
 	 * @return string
 	 */
 	function module_path(Module $Module, $path = ''): string {
-		return $Module->path . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+		return  base_path('modules') . DIRECTORY_SEPARATOR
+			. $Module->getMnemonic() . ($path ? DIRECTORY_SEPARATOR . $path : $path);
 	}
 }
 
-$App = (new class(realpath(__DIR__ . '/../')) extends \Illuminate\Foundation\Application{
+$App = (new class(realpath(__DIR__ . '/../'))
+	extends \Illuminate\Foundation\Application{
 
 	/**
 	 * @return Project
 	 */
-	public final function scope() {
+	public final function scope(): Project {
 		return ProjectScope::detectActiveScope();
 	}
 
 	/**
 	 * @return bool
 	 */
-	public final function scopable() {
+	public final function scopable(): bool {
 		return Auth::check() && Session::has('__SCOPE__');
 	}
 
 	/**
-	 * @return \Illuminate\Database\Eloquent\Collection
+	 * @return Collection
 	 */
-	public final function modules(){
+	public final function modules(): Collection {
 		return Module::getActive();
 	}
-
 });
 
 /*
@@ -95,6 +98,7 @@ $App->singleton(
 	\Illuminate\Contracts\Debug\ExceptionHandler::class,
 	\Yeti\Main\Exception\Interceptor::class
 );
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application
