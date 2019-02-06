@@ -8,70 +8,6 @@
 	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
 @stop
 
-@section('js')
-	@parent
-
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
-	<script type="text/javascript">
-		(function(){
-			$(function(){
-				$('#wysiwyg').summernote({
-					height:(function(){
-						return $('#content').innerHeight(); })() - 40,
-
-					focus: true,
-
-					toolbar: [
-						['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-						['fontsize', ['fontsize']],
-						['insert', ['picture', 'video', 'link']],
-						['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
-						['misc', ['undo', 'redo', 'fullscreen', 'help']],
-					],
-
-					dialogsInBody: true,
-					dialogsFade: true,
-					blockquoteBreakingLevel: 2,
-
-					codeviewFilter: false,
-			  		codeviewIframeFilter: true,
-
-					callbacks: {
-						onImageUpload: function(Files){
-							for(var i = 0; i < Files.length; i++) {
-								$.ajax({
-									url: '{{ route('yeti@main:files.upload') }}',
-									type: 'POST',
-
-									data: (function (File) {
-										var data = new FormData();
-
-										data.append('files[]', File);
-										data.append('type', 'blog');
-
-										return data;
-									})(Files[i]),
-
-									cache: false,
-									contentType: false,
-									processData: false,
-									success: function (data) {
-										var Image = document.createElement('img');
-										Image.src = data.url;
-										Image.alt = data.name;
-
-										$('#wysiwyg').summernote('insertNode', Image);
-									}
-								});
-							}
-						}
-					}
-				});
-			});
-		})(jQuery);
-	</script>
-@stop
-
 @section('actions')
 	@parent
 
@@ -97,7 +33,8 @@
 @section('form')
 	<div class="editor-container">
 		<div class="tab-content" data-effect="full-height" data-height-dec="tabh">
-			<textarea id="wysiwyg" name="body">{{ $Post->body }}</textarea>
+			@include('yeti@blog[components]::summernote', ['text' => $Post->body,
+				'name' => 'body', 'url' => route('yeti@main:files.upload')])
 		</div>
 	</div>
 @stop
