@@ -69,7 +69,7 @@ $App = (new class(realpath(__DIR__ . '/../'))
 	 * @return Collection
 	 */
 	public final function modules(): Collection {
-		return Module::getActive();
+		return Module::whereActive()->get();
 	}
 });
 
