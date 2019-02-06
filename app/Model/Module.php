@@ -144,7 +144,7 @@ class Module extends AModel {
 	 * @throws \Exception
 	 */
 	public final function getRouteAttribute(): string {
-		return Str::join('::', $this->getMnemonic(),
+		return Str::join(':', $this->getMnemonic(),
 			$this->manifest('routes.default', self::DEFAULT_ROUTE));
 	}
 }
