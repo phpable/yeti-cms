@@ -1,6 +1,7 @@
 <?php
 namespace Yeti\Main\Controller;
 
+use \Illuminate\Support\Facades\Bus;
 use \Illuminate\Support\Facades\Log;
 use \Illuminate\Support\Facades\App;
 use \Illuminate\Support\Facades\Input;
@@ -8,6 +9,7 @@ use \Illuminate\Support\Facades\Input;
 use \Illuminate\View\View;
 
 use \Yeti\Main\Controller\Abstracts\AController;
+use \Yeti\Main\Macros\ProcessMedia;
 
 use \Able\Helpers\Arr;
 use \Able\Helpers\Str;
@@ -26,6 +28,11 @@ class FilesController extends AController {
 	 * @const string
 	 */
 	public const RT_BLOG = 'blog';
+
+	/**
+	 * @const string
+	 */
+	public const RT_AUTHORS = 'author';
 
 	/**
 	 * @param string $type
@@ -85,7 +92,7 @@ class FilesController extends AController {
 	 */
 	public function upload() {
 		if (!in_array($type = Input::get('type', 'media'), [
-			self::RT_MEDIA, self::RT_BLOG])){
+			self::RT_MEDIA, self::RT_BLOG, self::RT_AUTHORS])){
 				throw new \Exception('Unsupported upload type!');
 		}
 
@@ -110,11 +117,13 @@ class FilesController extends AController {
 		$File = $Directory->toPath()
 			->append($File->getClientOriginalName())->toFile();
 
+		Bus::dispatch(new ProcessMedia($File, $type));
+
 		return [
 			'error' => false,
 			'name' => $File->getBaseName(),
 			'path' => $Directory->toPath()->toString(),
-			'url' =>  $File->toPath()->exclude(App::scope()->path)->toString(),
+			'url' =>  $File->toPath()->exclude(App::scope()->path->append('resources'))->toString(),
 			'size' => $File->getSize(),
 		];
 	}

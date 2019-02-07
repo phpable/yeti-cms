@@ -61,7 +61,7 @@ Route::group(['domain' => Config::get('app.domain')], function(){
 			Route::get('/files', ['as' => 'yeti@main:files',
 				'uses' => 'FilesController@manager']);
 
-			Route::get('/resources/{type}/{name}', ['as' => 'yeti@main:resources',
+			Route::get('/{type}/{name}', ['as' => 'yeti@main:resources',
 				'uses' => 'ResourcesController@proxyResource']);
 
 			Route::group(['middleware' => 'ajax'], function () {

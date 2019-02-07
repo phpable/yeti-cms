@@ -16,9 +16,14 @@ use \Able\IO\Directory;
 class ResourcesController extends AController {
 
 	public final function proxyResource(string $type, string $name){
+		$Path = App::scope()->path->append('resources', $type);
+
+		if (!$Path->isExists()){
+			return abort(444);
+		}
+
 		try{
-			$File = App::scope()->path->append('resources',
-				$type, $name)->toFile();
+			$File = $Path->append($name)->toFile();
 
 			return response($File->getContent())->header('Content-Type',
 				mime_content_type($File->toString()));

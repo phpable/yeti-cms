@@ -1,14 +1,21 @@
 @param($id, md5(microtime(true)))
 @param($name, $id)
+@param($type)
 @param($text)
 @param($url)
 
 @param($parent, 'content')
 
+@section('css')
+	@parent
+
+	<link href="/css/summernote.css" rel="stylesheet">
+@stop
+
 @section('js')
 	@parent
 
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+	<script src="/js/summernote.js"></script>
 	<script type="text/javascript">
 		(function(){
 			$(function(){
@@ -25,6 +32,16 @@
 						['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
 						['misc', ['undo', 'redo', 'fullscreen', 'help']],
 					],
+
+					popover: {
+						image: [
+							['imagesize', ['imageSize100','imageSizeAuto']],
+							['remove', ['removeMedia']]
+						],
+						link: [
+							['link', ['linkDialogShow', 'unlink']]
+						],
+					},
 
 					dialogsInBody: true,
 					dialogsFade: true,
@@ -44,7 +61,7 @@
 										var data = new FormData();
 
 										data.append('files[]', File);
-										data.append('type', 'blog');
+										data.append('type', "{{ $type }}");
 
 										return data;
 									})(Files[i]),
@@ -57,7 +74,7 @@
 										Image.src = data.url;
 										Image.alt = data.name;
 
-										$("{{ $id }}").summernote('insertNode', Image);
+										$("#{{ $id }}").summernote('insertNode', Image);
 									}
 								});
 							}

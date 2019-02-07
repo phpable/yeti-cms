@@ -15,6 +15,7 @@ const paths = {
 	fileupload: node + 'blueimp-file-upload/',
 	ace: node + 'ace-builds/src/',
 	assets: resources + 'assets/',
+	plugins: resources + 'plugins/',
 	fonts: resources + 'fonts/',
 	js: resources + 'js/'
 };
@@ -51,6 +52,7 @@ mix.copy(paths.cookie + 'jquery.cookie.js', temporary + 'js/');
 mix.copy(paths.fileupload + 'js/jquery.fileupload.js', temporary + 'js/');
 mix.copy(paths.fileupload + 'js/vendor/jquery.ui.widget.js', temporary + 'js/');
 mix.copy(paths.fileupload + 'css/jquery.fileupload.css', temporary + 'css/');
+mix.copy(paths.plugins + 'summernote/fonts/*', 'public/fonts/');
 
 mix.sass(paths.assets + '/sass/bootstrap.sass', temporary + 'css/bootstrap.sass.css', {
 	includePaths: [
@@ -74,6 +76,10 @@ mix.styles([
 	temporary + 'css/jquery.fileupload.css',
 	temporary + 'css/main.sass.css',
 ], 'public/css/main.css');
+
+mix.styles([
+	paths.plugins + 'summernote/css/summernote.css',
+], 'public/css/summernote.css');
 
 mix.scripts(paths.assets + 'js/*',
 	temporary + 'js/main.js');
@@ -103,6 +109,10 @@ mix.scripts([
 	temporary + 'js/editor/css.js',
 	temporary + 'js/editor/javascript.js',
 ],'public/js/editor.js');
+
+mix.scripts([
+	paths.plugins + 'summernote/js/summernote.js'
+], 'public/js/summernote.js');
 
 mix.scripts([
 	temporary + 'js/base64.js',

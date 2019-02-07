@@ -2,12 +2,6 @@
 	'action' => route('yeti@blog:posts.update', $Post->id),
 	'footer' => true])
 
-@section('css')
-	@parent
-
-	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
-@stop
-
 @section('actions')
 	@parent
 
@@ -33,8 +27,11 @@
 @section('form')
 	<div class="editor-container">
 		<div class="tab-content" data-effect="full-height" data-height-dec="tabh">
-			@include('yeti@blog[components]::summernote', ['text' => $Post->body,
-				'name' => 'body', 'url' => route('yeti@main:files.upload')])
+			@include('yeti@blog[components]::summernote', [
+				'text' => $Post->body,
+				'name' => 'body',
+				'type' => 'blog',
+				'url' => route('yeti@main:files.upload')])
 		</div>
 	</div>
 @stop
