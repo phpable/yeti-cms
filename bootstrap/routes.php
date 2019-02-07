@@ -61,9 +61,6 @@ Route::group(['domain' => Config::get('app.domain')], function(){
 			Route::get('/files', ['as' => 'yeti@main:files',
 				'uses' => 'FilesController@manager']);
 
-			Route::get('/{type}/{name}', ['as' => 'yeti@main:resources',
-				'uses' => 'ResourcesController@proxyResource']);
-
 			Route::group(['middleware' => 'ajax'], function () {
 				Route::get('/deploy', ['as' => 'yeti@main:deploy',
 					'uses' => 'DeployController@deploy']);
@@ -82,8 +79,10 @@ Route::group(['domain' => Config::get('app.domain')], function(){
 				Route::post('/files/create-folder', ['as' => 'yeti@main:files.create-folder',
 					'uses' => 'FilesController@createFolder']);
 			});
-		});
 
+			Route::get('/{type}/{name}', ['as' => 'yeti@main:resources',
+				'uses' => 'ResourcesController@proxyResource']);
+		});
 	});
 
 	if (file_exists($file = temporary_path('routes.php'))){

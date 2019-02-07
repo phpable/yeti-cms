@@ -5,7 +5,7 @@
 ])
 
 @object($Post, 'id', 'url', 'title',
-	'description', 'preview', 'body', 'is_published', 'topic_id', 'author_id');
+	'description', 'preview', 'body', 'is_published', 'topic_id', 'author_id')
 
 @section('actions')
 	@parent
