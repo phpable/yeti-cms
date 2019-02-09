@@ -72,7 +72,7 @@ class Extended extends Standard {
 	/**
 	 * @const int
 	 */
-	protected const PAGINATION_LIMIT = 14;
+	protected const PAGINATION_LIMIT = 15;
 
 	/**
 	 * @param string $type
@@ -103,7 +103,7 @@ class Extended extends Standard {
 			case '#author-latest':
 				foreach ($this->loadSharedCollection('blog-author') as $Author){
 					$Subset = array_slice(array_reverse($Collection->where('author_id', $Author->id)
-						->toArray()), 0, 4);
+						->toArray()), 0, 6);
 
 					Path::create($Target, 'author' . md5($Author->id) . '.data')->forceFile()
 						->rewrite(base64_encode(json_encode($Subset)));
