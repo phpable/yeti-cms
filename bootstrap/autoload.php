@@ -2,7 +2,9 @@
 define('LARAVEL_START', microtime(true));
 
 use \Yeti\Core\Model\Page;
+
 use \Able\Helpers\Arr;
+use \Able\Helpers\Str;
 
 if (! function_exists('url')) {
 
@@ -37,6 +39,21 @@ if (! function_exists('url')) {
 		}
 
 		return app(Illuminate\Contracts\Routing\UrlGenerator::class)->to($path, $parameters, $secure);
+	}
+}
+
+if (!function_exists('is_page')) {
+	function is_page(string $mask): bool {
+		if (preg_match('/^:[\w-]+/', $mask)) {
+			if (!is_null($Page = Page::where('name', '=', ltrim($mask, ':'))->first())) {
+				return preg_match('/^\/' . Str::join('\\/', array_map(function(string $value){
+					return !preg_match('/\{\$[^}]+\}/', $value, $Matches)
+						? preg_quote($value, '/') : '[^\\/]+';
+				}, preg_split('/\/+/',$Page->url, -1, PREG_SPLIT_NO_EMPTY))) . '(\\?.+)?$/', $_SERVER['REQUEST_URI']) > 0;
+			}
+		}
+
+		return false;
 	}
 }
 
