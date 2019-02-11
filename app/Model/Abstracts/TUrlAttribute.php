@@ -12,14 +12,6 @@ trait TUrlAttribute {
 			throw new \Exception('Topic URL cannot be empty!');
 		}
 
-		$this->attributes['url'] = $url;
+		$this->attributes['url'] = trim(preg_replace('/\s+/', '_', strtolower(trim($url))), '/');
 	}
-
-	/**
-	 * @return string
-	 */
-	public function getUrlAttribute(){
-		return preg_replace('/\s+/', '_', strtolower(trim($this->attributes['url'])));
-	}
-
 }
