@@ -1,17 +1,8 @@
-<?php
-if (!isset($target)){
-	throw new \Exception('Undefined target!');
-}
-if (!isset($id)){
-	$id = 'fileupload' . md5(implode([time(), rand(1, 100)]));
-}
-if (!isset($url)){
-	$url = '/';
-}
-if (!isset($progress)){
-	$progress = null;
-}
-?>
+@param($target)
+@param($id, 'fileupload' . md5(implode([time(), rand(1, 100)])))
+@param($url, '/')
+@param($progress)
+@param($type)
 
 @section('js')
 	@parent
@@ -42,6 +33,7 @@ if (!isset($progress)){
 			var __ID__ = "#{{ $id }}";
 			var __URL__ = "{{ $url }}";
 			var __PROGRESS__ = "{{ $progress }}";
+			var __TYPE__ = "{{ $type }}";
 
 			$(__ID__).each(function () {
 				var jThis = $(this);
@@ -57,6 +49,8 @@ if (!isset($progress)){
 						if (jProgress !== null) {
 							jProgress.show();
 						}
+
+						$(document).trigger('file-uploading-start', jEvent);
 						jEvent.submit();
 					},
 					progressall: function (index, jEvent) {
@@ -77,8 +71,19 @@ if (!isset($progress)){
 						}
 					}
 				}).bind('fileuploadsubmit', function (jEvent, Data) {
-					Data.formData =  {
-						context: window['__FILEMANAGER__CONTEXT__'] };
+					Data.formData =  (function(){
+						var data = new FormData();
+
+						if (window['__FILEMANAGER__CONTEXT__'] !== undefined){
+							data.append('context', window['__FILEMANAGER__CONTEXT__']);
+						}
+
+						if (__TYPE__.length > 0){
+							data.append('type', __TYPE__);
+						}
+
+						return data;
+					})();
 				});
 			});
 		});
