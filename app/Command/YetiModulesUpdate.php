@@ -57,7 +57,7 @@ class YetiModulesUpdate extends Command {
 	 */
 	public final function collectRouters(): \Generator {
 		$this->info('Collecting router...');
-		yield "<?\n";
+		yield "<?php\n";
 
 		$count = 0;
 		foreach (Module::whereActive()->get() as $Module) {
@@ -114,7 +114,7 @@ class YetiModulesUpdate extends Command {
 	 */
 	public final function collectImports(): \Generator {
 		$this->info('Collecting imports...');
-		yield "<?\nreturn [\n";
+		yield "<?php\nreturn [\n";
 
 		$count = 0;
 		try {
@@ -147,7 +147,7 @@ class YetiModulesUpdate extends Command {
 	 */
 	public final function collectResources(): \Generator {
 		$this->info('Collecting resources...');
-		yield "<?\nreturn [\n";
+		yield "<?php\nreturn [\n";
 
 		$count = 0;
 		try {
