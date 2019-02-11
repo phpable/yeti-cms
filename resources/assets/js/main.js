@@ -43,13 +43,6 @@
 		var jBar = $('#progressbar');
 		$('div', jBar).css({width: 0}).hide();
 
-		// function initBar(action){
-		// 	$('div', jBar).remove();
-		//
-		// 	$('<div></div>').css({width: '0%'})
-		// 		.addClass('progress-bar progress-bar-' + action).appendTo(jBar);
-		// }
-
 		function updateBar(value, action){
 			var jProgress = action !== undefined
 				? $('.progress-bar-' + action, jBar)
