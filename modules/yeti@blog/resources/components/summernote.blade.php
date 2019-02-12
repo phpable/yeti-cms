@@ -40,7 +40,7 @@
 
 							__EXTERNALS__
 								? ['insert', ['picture', 'video', 'link']]
-								: undefined,
+								: ['insert', ['link']],
 
 							['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
 							['misc', ['undo', 'redo', 'fullscreen', 'help']],
