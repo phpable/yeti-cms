@@ -80,7 +80,7 @@ class Posts extends AController {
 		$Post->save();
 
 		return redirect()->route('yeti@blog:posts.edit', $Post->id)
-			->withSuccess('New blog post was successful created!');
+			->withSuccess('New post was successful created!');
 	}
 
 	/**
@@ -88,10 +88,31 @@ class Posts extends AController {
 	 * @return Redirect
 	 */
 	public function update($id) {
-		Post::findOrFail($id)->update(Input::all());
+		$Post = Post::findOrFail($id)->update(Input::all());
+
+		if (Input::has('topic_id')) {
+			$Post->topic()->associate(Topic::findOrFail(Input::get('topic_id')));
+		}
+
+		if (Input::has('author_id')){
+			$Post->author()->associate(Author::findOrFail(Input::get('author_id')));
+		}
+
+		$Post->save();
+
+		return redirect()->route('yeti@blog:posts.settings', $id)
+			->withSuccess('The post was successful updated!');
+	}
+
+	/**
+	 * @param $id
+	 * @return Redirect
+	 */
+	public function updateContent($id) {
+		Post::findOrFail($id)->update(Input::only('body'));
 
 		return redirect()->route('yeti@blog:posts.edit', $id)
-			->withSuccess('The blog post was successful updated!');
+			->withSuccess('The post content was successful updated!');
 	}
 
 	/**
@@ -113,7 +134,7 @@ class Posts extends AController {
 		Post::findOrFail($id)->update(['is_published' => false]);
 
 		return redirect()->route('yeti@blog:posts.all')
-			->withSuccess('The blog post was successful hide from publishing!');
+			->withSuccess('The post was successful hide from publishing!');
 	}
 
 	/**
@@ -124,6 +145,6 @@ class Posts extends AController {
 		Post::findOrFail($id)->delete();
 
 		return redirect()->route('yeti@blog:posts.all')
-			->withSuccess('The blog post was successfully deleted!');
+			->withSuccess('The post was successfully deleted!');
 	}
 }

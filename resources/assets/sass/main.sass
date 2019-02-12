@@ -257,6 +257,7 @@ textarea
 	margin: 0 !important
 
 	.control-label
+		font-family: 'Inconsolata', monospace
 		display: block
 		width: 120px
 		float: left
@@ -758,4 +759,59 @@ tr.editing
 		font-size: 72px
 		text-align: center
 
+.blog-author
+	display: block
+	position: relative
+
+	.topinfo
+		margin-left: 192px
+
+	.leftphoto
+		display: block
+		position: absolute
+		left: 0
+		top: 0
+		width: 192px
+		height: 192px
+
+		img
+			display: block
+			width: 192px
+			height: 192px
+			z-index: 98
+
+		.cover,
+		.spinner
+			display: none
+			position: absolute
+			left: 0
+			top: 0
+			background: rgba(0, 0, 0, 0.6)
+			width: 192px
+			height: 192px
+			z-index: 99
+
+		&:hover
+			.cover
+				display: block
+
+		&.uploading
+			.cover
+				display: none !important
+			.spinner
+				display: block
+
+		i
+			display: block
+			height: 192px
+			width: 192px
+			font-size: 78px
+			line-height: 192px
+			text-align: center
+			color: #ffffff
+
+	.bottominfo
+		display: block
+		position: relative
+		z-index: 100
 

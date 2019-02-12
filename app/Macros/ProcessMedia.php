@@ -53,8 +53,24 @@ class ProcessMedia implements SelfHandling {
 
 	/**
 	 * @return void
+	 * @throws \Exception
 	 */
 	public final function processAuthor(): void {
-		_dumpe(__METHOD__);
+		$Image = (new ImageManager(['driver' => 'imagick']))
+			->make($this->File->toString());
+
+		if ($Image->width() != 300 || $Image->height() != 300) {
+
+			$Image = $Image->height() > $Image->width()
+				? $Image->widen(300)
+				: $Image->heighten(300);
+
+
+			$Image->crop(300, 300,
+				floor(($Image->width() - 300) / 2),
+				floor(($Image->height() - 300) / 2));
+		}
+
+		$Image->save($this->File->toString());
 	}
 }

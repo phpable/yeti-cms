@@ -21,9 +21,12 @@ class Blogs extends Migration {
 					->onUpdate('set null');
 
 			$Table->string('url', 255);
-
 			$Table->string('title', 255);
-			$Table->string('description', 255)->nullable();
+
+			$Table->string('meta_title', 255)
+				->nullable();
+			$Table->string('meta_description', 255)
+				->nullable();
 		});
 
 		/**
@@ -41,8 +44,9 @@ class Blogs extends Migration {
 			$Table->string('url', 90)
 				->nullable();
 
-			$Table->string('title', 255);
-			$Table->string('description', 255)
+			$Table->string('meta_title', 255)
+				->nullable();
+			$Table->string('meta_description', 255)
 				->nullable();
 
 			$Table->string('name', 90);
@@ -79,7 +83,11 @@ class Blogs extends Migration {
 			$Table->string('url', 255);
 			$Table->string('title', 255);
 
-			$Table->string('description', 255)->nullable();
+			$Table->string('meta_title', 255)
+				->nullable();
+			$Table->string('meta_description', 255)
+				->nullable();
+
 			$Table->string('preview', 1024)->nullable();
 
 			$Table->text('body')->nullable();

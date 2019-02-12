@@ -4,8 +4,8 @@
 		: route('yeti@blog:posts.save'),
 ])
 
-@object($Post, 'id', 'url', 'title',
-	'description', 'preview', 'body', 'is_published', 'topic_id', 'author_id')
+@object($Post, 'id', 'url', 'title', 'meta_title'
+	'meta_description', 'preview', 'body', 'is_published', 'topic_id', 'author_id')
 
 @section('actions')
 	@parent
@@ -39,7 +39,52 @@
 				<div class="form-group required">
 					<label class="control-label">Url</label>
 					<div class="control-body">
-						<input type="text" class="bg-focus form-control" name="url" value="{{ $Post->url }}">
+						<input type="text" class="bg-focus form-control" name="url" value="/{{ $Post->url }}">
+					</div>
+				</div>
+			</div>
+
+			<div class="separated">
+				<div class="form-group">
+					<label class="control-label">[META] Title</label>
+					<div class="control-body">
+						<input type="text" class="bg-focus form-control" name="meta_title" value="{{ $Post->meta_title }}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label double">[META] Desc.</label>
+					<div class="control-body">
+						<textarea data-rangelength="[20,200]" data-trigger="keyup"
+							class="form-control" rows="4" name="meta_description">{{ $Post->meta_description }}</textarea>
+					</div>
+				</div>
+			</div>
+
+			<div class="separated">
+				<div class="form-group required">
+					<label class="control-label">Topic</label>
+					<div class="control-body">
+						<select class="form-control" name="topic_id">
+							<option value="">~</option>
+
+							@foreach($Topics as $Topic)
+								<option value="{{ $Topic->id }}" {{ $Post->topic_id == $Topic->id ? 'selected' : null }}>{{ $Topic->title }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group required">
+					<label class="control-label">Author</label>
+					<div class="control-body">
+						<select class="form-control" name="author_id">
+							<option value="">~</option>
+
+							@foreach($Authors as $Author)
+								<option value="{{ $Author->id }}" {{ $Post->author_id == $Author->id ? 'selected' : null }}>{{ $Author->name }}</option>
+							@endforeach
+						</select>
 					</div>
 				</div>
 			</div>
@@ -51,46 +96,13 @@
 						<input type="text" class="bg-focus form-control" name="title" value="{{ $Post->title }}">
 					</div>
 				</div>
+
 				<div class="form-group">
-					<label class="control-label double">Description</label>
+					<label class="control-label double">Preview</label>
 					<div class="control-body">
 						<textarea data-rangelength="[20,200]" data-trigger="keyup"
-							class="form-control parsley-validated" rows="4"  name="description">{{ $Post->description }}</textarea>
+							class="form-control parsley-validated" rows="4"  name="preview">{{ $Post->preview }}</textarea>
 					</div>
-				</div>
-			</div>
-
-			<div class="form-group required">
-				<label class="control-label">Topic</label>
-				<div class="control-body">
-					<select class="form-control" name="topic_id">
-						<option value="">~</option>
-
-						@foreach($Topics as $Topic)
-							<option value="{{ $Topic->id }}" {{ $Post->topic_id == $Topic->id ? 'selected' : null }}>{{ $Topic->title }}</option>
-						@endforeach
-					</select>
-				</div>
-			</div>
-
-			<div class="form-group required">
-				<label class="control-label">Author</label>
-				<div class="control-body">
-					<select class="form-control" name="author_id">
-						<option value="">~</option>
-
-						@foreach($Authors as $Author)
-							<option value="{{ $Author->id }}" {{ $Post->author_id == $Author->id ? 'selected' : null }}>{{ $Author->name }}</option>
-						@endforeach
-					</select>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="control-label double">Preview</label>
-				<div class="control-body">
-					<textarea data-rangelength="[20,200]" data-trigger="keyup"
-						class="form-control parsley-validated" rows="4"  name="preview">{{ $Post->preview }}</textarea>
 				</div>
 			</div>
 

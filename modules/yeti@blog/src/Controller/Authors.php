@@ -36,7 +36,7 @@ class Authors extends AController {
 	 * @return Response
 	 */
 	public function add() {
-		return view()->make('yeti@blog::authors.settings');
+		return view()->make('yeti@blog::authors.edit');
 	}
 
 	/**

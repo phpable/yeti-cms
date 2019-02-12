@@ -5,12 +5,15 @@ use \Yeti\Blog\Model\Post;
 
 use \Yeti\Main\Model\Abstracts\AModel;
 use \Yeti\Main\Model\Abstracts\TProject;
+use \Yeti\Main\Model\Abstracts\TUrlAttribute;
+
 
 use \Illuminate\Database\Eloquent\Collection;
 use \Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Author extends AModel {
 	use TProject;
+	use TUrlAttribute;
 
 	/**
 	 * @var string
@@ -25,7 +28,7 @@ class Author extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $fillable = ['url', 'title', 'description',
+	protected $fillable = ['url', 'meta_title', 'meta_description',
 		'name', 'photo', 'info'];
 
 	/**
@@ -46,4 +49,5 @@ class Author extends AModel {
 	public final function posts(){
 		return $this->hasMany(Post::class);
 	}
+
 }

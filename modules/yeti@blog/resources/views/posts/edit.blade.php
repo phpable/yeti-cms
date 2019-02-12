@@ -1,5 +1,5 @@
 @extends('yeti@blog::frame', [
-	'action' => route('yeti@blog:posts.update', $Post->id),
+	'action' => route('yeti@blog:posts.update-content', $Post->id),
 	'footer' => true])
 
 @section('actions')
@@ -29,6 +29,8 @@
 		<div class="tab-content" data-effect="full-height" data-height-dec="tabh">
 			@include('yeti@blog[components]::summernote', [
 				'text' => $Post->body,
+				'parent' => 'content',
+				'externals' => true,
 				'name' => 'body',
 				'type' => 'blog',
 				'url' => route('yeti@main:files.upload')])

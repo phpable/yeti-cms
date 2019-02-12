@@ -32,8 +32,8 @@ class Post extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $fillable = ['url', 'title', 'description', 'preview',
-		'body', 'is_published', 'topic_id'];
+	protected $fillable = ['url', 'title', 'meta_title', 'meta_description', 'preview',
+		'body', 'is_published'];
 
 	/**
 	 * @var array
@@ -66,10 +66,6 @@ class Post extends AModel {
 	 * @return Author
 	 */
 	public function getAuthorAttribute(): Author {
-		if ($this->author()->count() < 1){
-			_dumpe($this->id);
-		}
-
 		return $this->author()->first();
 	}
 

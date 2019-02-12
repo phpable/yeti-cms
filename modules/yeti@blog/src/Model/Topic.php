@@ -26,7 +26,7 @@ class Topic extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $fillable = ['url', 'title', 'title', 'description'];
+	protected $fillable = ['url', 'title', 'meta_title', 'meta_description'];
 
 	/**
 	 * @var array

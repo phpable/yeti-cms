@@ -1,4 +1,7 @@
-@extends('yeti@core::main', ['scrollable' => true])
+@extends('yeti@core::main', [
+	'scrollable' => true,
+	'footer' => false
+])
 
 @section('actions')
 	@parent

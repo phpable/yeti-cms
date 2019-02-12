@@ -121,14 +121,6 @@
 				</span>
 
 				<span class="post-title">{{ $Topic->title }}</span>
-
-				@if (!empty($Topic->description))
-					<p>
-						{{ Str::strip($Topic->description) }}
-					</p>
-				@else
-					<span class="empty">~empty~</span>
-				@endif
 			</div>
 		@endforeach
 	</div>

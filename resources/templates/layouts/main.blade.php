@@ -8,7 +8,10 @@
 	<link rel="shortcut icon" href="/images/yeti32y.png">
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
 	<link href='https://fonts.googleapis.com/css?family=Miriam+Libre:400,700' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap" rel="stylesheet">
+
 	<link href="{{ asset('fonts/bbr.ttf') }}?family=Baloo+Bhaijaan" rel="stylesheet">
 
 	<title>Yeti CMS</title>

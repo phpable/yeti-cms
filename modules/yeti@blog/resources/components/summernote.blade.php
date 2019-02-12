@@ -4,7 +4,8 @@
 @param($text)
 @param($url)
 
-@param($parent, 'content')
+@param($parent)
+@param($externals, false)
 
 @section('css')
 	@parent
@@ -18,69 +19,82 @@
 	<script src="/js/summernote.js"></script>
 	<script type="text/javascript">
 		(function(){
+			var __PARENT__ = "{{ $parent }}";
+			var __EXTERNALS__ = !!"{{ $externals }}";
+
 			$(function(){
-				$('#{{ $id }}').summernote({
-					height: (function(){
-						return $("#{{ $parent }}").innerHeight(); })() - 40,
+				var jRecipient = $('#{{ $id }}');
+				if (jRecipient.length > 0) {
 
-					focus: true,
+					jRecipient.summernote({
+						height: (function () {
+							return (__PARENT__.length > 0 ? $("#{{ $parent }}")
+								: jRecipient.parent()).innerHeight();
+						})() - 40,
 
-					toolbar: [
-						['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-						['fontsize', ['fontsize']],
-						['insert', ['picture', 'video', 'link']],
-						['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
-						['misc', ['undo', 'redo', 'fullscreen', 'help']],
-					],
+						focus: true,
 
-					popover: {
-						image: [
-							['imagesize', ['imageSize100','imageSizeAuto']],
-							['remove', ['removeMedia']]
+						toolbar: [
+							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+							['fontsize', ['fontsize']],
+
+							__EXTERNALS__
+								? ['insert', ['picture', 'video', 'link']]
+								: undefined,
+
+							['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
+							['misc', ['undo', 'redo', 'fullscreen', 'help']],
 						],
-						link: [
-							['link', ['linkDialogShow', 'unlink']]
-						],
-					},
 
-					dialogsInBody: true,
-					dialogsFade: true,
-					blockquoteBreakingLevel: 2,
+						popover: {
+							image: [
+								['imagesize', ['imageSize100', 'imageSizeAuto']],
+								['remove', ['removeMedia']]
+							],
+							link: [
+								['link', ['linkDialogShow', 'unlink']]
+							],
+						},
 
-					codeviewFilter: false,
-			  		codeviewIframeFilter: true,
+						dialogsInBody: true,
+						dialogsFade: true,
+						blockquoteBreakingLevel: 2,
 
-					callbacks: {
-						onImageUpload: function(Files){
-							for(var i = 0; i < Files.length; i++) {
-								$.ajax({
-									url: '{{ $url  }}',
-									type: 'POST',
+						codeviewFilter: false,
+						codeviewIframeFilter: true,
 
-									data: (function (File) {
-										var data = new FormData();
+						callbacks: {
+							onImageUpload: function (Files) {
+								for (var i = 0; i < Files.length; i++) {
+									$.ajax({
+										url: '{{ $url  }}',
+										type: 'POST',
 
-										data.append('files[]', File);
-										data.append('type', "{{ $type }}");
+										data: (function (File) {
+											var data = new FormData();
 
-										return data;
-									})(Files[i]),
+											data.append('files[]', File);
+											data.append('type', "{{ $type }}");
 
-									cache: false,
-									contentType: false,
-									processData: false,
-									success: function (data) {
-										var Image = document.createElement('img');
-										Image.src = data.url;
-										Image.alt = data.name;
+											return data;
+										})(Files[i]),
 
-										$("#{{ $id }}").summernote('insertNode', Image);
-									}
-								});
+										cache: false,
+										contentType: false,
+										processData: false,
+										success: function (data) {
+											var Image = document.createElement('img');
+											Image.src = data.url;
+											Image.alt = data.name;
+
+											$("#{{ $id }}").summernote('insertNode', Image);
+										}
+									});
+								}
 							}
 						}
-					}
-				});
+					});
+				}
 			});
 		})(jQuery);
 	</script>
