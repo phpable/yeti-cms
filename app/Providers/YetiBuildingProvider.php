@@ -122,10 +122,13 @@ class YetiBuildingProvider extends ServiceProvider {
 
 			return '<?php  if (file_exists($file = __DIR__ . "/data/' . $name . '/" . ' . $condition . ' . ".data")){
 				extract(["' . $name . '" => json_decode(base64_decode(file_get_contents($file)))]);
-				if(isset($' . $name . '->meta_title)){
+				if(!empty($' . $name . '->meta_title)){
 					$Page->title = $' . $name . '->meta_title;
+				}elseif(!empty($' . $name . '->title)){
+					$Page->title = $' . $name . '->title;
 				};
-				if(isset($' . $name . '->meta_description)){
+				
+				if(!empty($' . $name . '->meta_description)){
 					$Page->description = $' . $name . '->meta_description;
 				};
 			}?>';
