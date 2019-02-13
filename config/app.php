@@ -88,7 +88,7 @@ return [
 	|
 	*/
 
-	'key' => env('APP_KEY', 'SomeRandomString'),
+	'key' => env('APP_KEY', md5(__DIR__)),
 	'cipher' => 'AES-256-CBC',
 
 	/*
@@ -105,6 +105,21 @@ return [
 	*/
 
 	'log' => 'single',
+
+	/*
+	|--------------------------------------------------------------------------
+	| Working Directory
+	|--------------------------------------------------------------------------
+	|
+	| The working directories determine where exactly the project's
+	| original data and user's working copy are stored.
+	|
+	*/
+
+	'paths' => [
+		'users' => env('PATH_USERS', 'users'),
+		'projects' => env('PATH_PROJECTS', 'projects'),
+	],
 
 	/*
 	|--------------------------------------------------------------------------

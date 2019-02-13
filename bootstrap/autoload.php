@@ -2,6 +2,8 @@
 define('LARAVEL_START', microtime(true));
 
 use \Yeti\Core\Model\Page;
+use \Yeti\Main\Model\User;
+use \Yeti\Main\Model\Project;
 
 use \Able\Helpers\Arr;
 use \Able\Helpers\Str;
@@ -131,5 +133,31 @@ $compiledPath = __DIR__ . '/cache/compiled.php';
 
 if (file_exists($compiledPath)) {
 	require $compiledPath;
+}
+
+if (! function_exists('user_path')) {
+
+	/**
+	 * Returns the path to the working directory of the given user.
+	 * @param User $User
+	 * @param string $path
+	 * @return string
+	 */
+	function user_path(User $User, string $path = ''): string {
+		return base_path(Str::join(DIRECTORY_SEPARATOR, config('app.paths.users'), $User->uid, $path));
+	}
+}
+
+if (! function_exists('project_path')) {
+
+	/**
+	 * Returns the path to the working directory of the project.
+	 * @param Project $Project
+	 * @param string $path
+	 * @return string
+	 */
+	function project_path(Project $Project, string $path = ''): string {
+		return base_path(Str::join(DIRECTORY_SEPARATOR, config('app.paths.projects'), $Project->uid, $path));
+	}
 }
 

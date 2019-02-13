@@ -38,12 +38,12 @@ class Project extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $hidden = ['storage'];
+	protected $appends = ['uid', 'path'];
 
 	/**
 	 * @var array
 	 */
-	protected $appends = ['path'];
+	protected $hidden = ['storage'];
 
 	/**
 	 * @return array
@@ -69,6 +69,13 @@ class Project extends AModel {
 	public final function store(array $Options){
 		$this->storage = Jsn::merge($this->storage, $Options);
 		$this->save();
+	}
+
+	/**
+	 * @return string
+	 */
+	public final function getUidAttribute(): string {
+		return sprintf('#%1$08d', $this->id);
 	}
 
 	/**

@@ -18,7 +18,6 @@ class User extends AModel implements AuthenticatableContract {
 	protected $table = 'yeti_main_users';
 
 	/**
-	 * The attributes that are mass assignable.
 	 * @var array
 	 */
 	protected $fillable = ['name', 'email', 'password'];
@@ -26,5 +25,17 @@ class User extends AModel implements AuthenticatableContract {
 	/**
 	 * @var array
 	 */
+	protected $appends = ['uid'];
+
+	/**
+	 * @var array
+	 */
 	protected $hidden = ['password'];
+
+	/**
+	 * @return string
+	 */
+	public final function getUidAttribute(): string {
+		return sprintf('#%1$05d', $this->id);
+	}
 }

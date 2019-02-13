@@ -45,7 +45,7 @@
 				jThis.fileupload({
 					url: __URL__,
 					dataType: 'json',
-					add: function (index, jEvent) {
+					add: function (index, jEvent) {``
 						if (jProgress !== null) {
 							jProgress.show();
 						}
