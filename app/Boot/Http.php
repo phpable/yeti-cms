@@ -15,7 +15,7 @@ use \Yeti\Main\Middleware\Scope;
 use \Yeti\Main\Middleware\Storage;
 use \Yeti\Main\Middleware\Unscope;
 
-class YetiKernel extends Kernel {
+class Http extends Kernel {
 
 	/**
 	 * The application's global HTTP middleware stack.
