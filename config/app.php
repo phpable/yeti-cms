@@ -49,7 +49,7 @@ return [
 	|
 	*/
 
-	'timezone' => 'UTC',
+	'timezone' => env('APP_TIMEZONE', 'UTC'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -62,7 +62,7 @@ return [
 	|
 	*/
 
-	'locale' => 'en',
+	'locale' => env('APP_LOCALE', 'en'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -133,10 +133,6 @@ return [
 	*/
 
 	'providers' => [
-
-		/*
-		 * Laravel Framework Service Providers...
-		 */
 		\Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
 		\Illuminate\Auth\AuthServiceProvider::class,
 		\Illuminate\Broadcasting\BroadcastServiceProvider::class,
