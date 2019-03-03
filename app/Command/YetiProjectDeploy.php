@@ -137,6 +137,8 @@ class YetiProjectDeploy extends ACommand {
 		$Target = Path::create(Config::get('building.destination'),
 			App::scope()->name, 'resources')->forceDirectory();
 
+		$this->comment(sprintf('Target: %s', $Target));
+
 		$count = 0;
 		foreach ($Target->list() as $Path){
 			$this->saveProcessInfo((ceil(++$count * 100 / $Target->count()) / 1.23));
