@@ -21,7 +21,8 @@ use \Able\IO\Path;
 
 use Exception;
 
-class Project extends AModel {
+class Project
+	extends AModel {
 
 	/**
 	 * @var string

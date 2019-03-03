@@ -2,6 +2,7 @@
 namespace Yeti\Main\Building\Storages\Structures;
 
 use \Able\Struct\AStruct;
+use \Exception;
 
 /**
  * @property string type
@@ -23,16 +24,16 @@ class SMeta extends AStruct {
 	/**
 	 * @var array
 	 */
-	protected static $Prototype = ['type', 'property', 'content'];
+	protected static array $Prototype = ['type', 'property', 'content'];
 
 	/**
 	 * @param string $value
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function setTypeProperty(string $value): string {
 		if (!in_array($value = strtolower(trim($value)), [self::MT_HTTP_EQUIV, self::MT_NAME])){
-			throw new \Exception(sprintf('Invalid metadata type: %s!', $value));
+			throw new Exception(sprintf('Invalid metadata type: %s!', $value));
 		}
 
 		return $value;
@@ -41,11 +42,11 @@ class SMeta extends AStruct {
 	/**
 	 * @param string $value
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function setPropertyProperty(string $value): string {
 		if (!preg_match('/^[A-Za-z0-9_-]+$/', $value)){
-			throw new \Exception(sprintf('Invalid metadata name: %s!', $value));
+			throw new Exception(sprintf('Invalid metadata name: %s!', $value));
 		}
 
 		return $value;
