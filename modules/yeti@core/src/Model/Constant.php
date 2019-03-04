@@ -4,7 +4,7 @@ namespace Yeti\Core\Model;
 use \Yeti\Main\Model\Abstracts\AModel;
 use \Yeti\Main\Model\Abstracts\TProject;
 
-use \Able\Reglib\Reglib;
+use \Able\Reglib\Regex;
 
 class Constant extends AModel {
 	use TProject;
@@ -29,7 +29,7 @@ class Constant extends AModel {
 	 * @throws \Exception
 	 */
 	public final function setNameAttribute(string $value): void {
-		if (!preg_match('/^' . Reglib::VAR . '$/', ($value = trim($value)))){
+		if (!preg_match('/^' . Regex::RE_VARIABLE . '$/', ($value = trim($value)))){
 			throw new \Exception('Invalid variable name!');
 		}
 

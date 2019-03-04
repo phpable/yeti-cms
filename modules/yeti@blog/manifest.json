@@ -2,6 +2,13 @@
 	"maintainer": "yeti",
 	"name": "blog",
 	"version": "1.0",
+	"export": {
+		"objects" : [
+			"post",
+			"author",
+			"topic"
+		]
+	},
 	"resources": {
 		"default": "views"
 	},

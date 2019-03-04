@@ -1,0 +1,34 @@
+@snippet header
+
+<section id="hero">
+	<div class="intro_title">
+		@page head
+	</div>
+</section>
+
+<div id="position">
+	<div class="container">
+		<ul>
+			<li>
+				<a href="{{ url(':index') }}">Home</a>
+			</li>
+			@page crumbs
+		</ul>
+	</div>
+</div>
+
+<div class="container margin_60">
+	<div class="row">
+		<div class="col-md-8 wow fadeIn" data-wow-delay="0.1s">
+			@page content
+		</div>
+
+		<aside class="col-md-4">
+			@snippet rightbanner1
+			@snippet rightbanner2
+			@snippet rightbanner3
+		</aside>
+	</div>
+</div>
+
+@snippet footer

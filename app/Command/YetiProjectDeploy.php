@@ -61,8 +61,8 @@ class YetiProjectDeploy extends ACommand {
 	 */
 	protected final function deployPages(): int {
 		$Destination = Path::create(App::scope()->option('deploy_path'),
-			'/pages/')->try(function(){
-				throw new \Exception('Destination is not a directory or not writable!');
+			'/pages/')->try(function(Path $Path){
+				throw new \Exception(sprintf('Destination is not a directory or not writable: %s!', $Path));
 			}, Path::TIF_NOT_DIRECTORY | Path::TIF_NOT_WRITABLE)->forceDirectory();
 
 		$Destination->clear();

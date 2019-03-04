@@ -267,11 +267,11 @@ textarea
 		border: 1px solid #ccc
 
 		&.short
-			width: 60px
+			width: 40px
 			text-align: center
 
 		&.short + .control-body
-			margin-left: 60px
+			margin-left: 40px
 
 		&.double
 			height: 68px
@@ -311,6 +311,12 @@ textarea
 					height: 24px
 					width: 24px
 					line-height: 24px
+
+		&.short-label
+			margin-left: 34px
+
+		&.no-label
+			margin-left: 0
 
 	.control-frame
 		min-height: 34px
@@ -815,3 +821,8 @@ tr.editing
 		position: relative
 		z-index: 100
 
+
+.btn-prepend
+	display: block
+	position: absolute
+	z-index: 99

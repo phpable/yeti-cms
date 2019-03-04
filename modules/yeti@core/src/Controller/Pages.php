@@ -1,8 +1,8 @@
 <?php
 namespace Yeti\Core\Controller;
 
-use http\Env\Response;
 use \Illuminate\View\View;
+use \Illuminate\Http\Response;
 use \Illuminate\Support\Facades\Bus;
 use \Illuminate\Support\Facades\Input;
 use \Illuminate\Support\Facades\Redirect;
@@ -49,7 +49,7 @@ class Pages extends AController {
 	 * @throws \Exception
 	 */
 	public function settings($id) {
-		return view('yeti@core::pages.settings')->with('Page',Page::findOrFail($id))
+		return view('yeti@core::pages.settings')->with('Page', Page::findOrFail($id))
 			->with('Layouts', Layout::all())->with('Templates', Layout::collectTemplates('html'));
 	}
 
@@ -85,6 +85,8 @@ class Pages extends AController {
 
 		if (Input::has('layout')) {
 			$Page->layout()->associate(Layout::findOrFail(Input::get('layout')));
+		} else {
+			$Page->layout()->dissociate();
 		}
 
 		if (Input::has('template')) {
@@ -93,6 +95,8 @@ class Pages extends AController {
 			if (!is_null($Template)){
 				$Page->template()->associate($Template);
 			}
+		}else{
+			$Page->template()->dissociate();
 		}
 
 		if (Input::has('arguments')) {

@@ -2,6 +2,7 @@
 namespace Yeti\Core\Model;
 
 use Able\Helpers\Src;
+use Able\Reglib\Regex;
 use \Illuminate\Database\Eloquent\Relations\HasMany;
 use \Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -94,7 +95,7 @@ class Template extends AModel
 	 * @return string
 	*/
 	public static final function generate(AModel $Owner, string $type, string $prefix = 'main'){
-		if (!preg_match('/^' . Reglib::VAR . '$/', $prefix)){
+		if (!preg_match('/^' . Regex::RE_VARIABLE . '$/', $prefix)){
 			throw new \Exception('Invalid name format');
 		}
 

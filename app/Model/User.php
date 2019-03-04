@@ -25,7 +25,7 @@ class User extends AModel implements AuthenticatableContract {
 	/**
 	 * @var array
 	 */
-	protected $appends = ['uid'];
+	protected $appends = ['uid'/*, 'path'*/];
 
 	/**
 	 * @var array
@@ -36,6 +36,7 @@ class User extends AModel implements AuthenticatableContract {
 	 * @return string
 	 */
 	public final function getUidAttribute(): string {
-		return sprintf('#%1$05d', $this->id);
+		return sprintf('%1$05d', $this->id);
 	}
+
 }

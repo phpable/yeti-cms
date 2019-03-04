@@ -4,8 +4,9 @@ use \Yeti\Main\Model\Project;
 
 use \Able\Helpers\Arr;
 use \Able\Helpers\Str;
+use \Able\Helpers\Src;
 
-use \Able\Reglib\Reglib;
+use \Able\Reglib\Regex;
 
 use \Yeti\Main\Middleware\Storage;
 
@@ -64,41 +65,26 @@ function preview(?Page $Page = null) {
 /**
  * @return array
  */
-function builders(): array {
-	return ['standard' => '[Core] Standard Builder', 'extended' => '[Core] Extended Builder'];
-}
-
-/**
- * @return array
- */
 function entrances(): array {
-	return ['single' => 'One', 'multiple' => 'Many'];
+	return [
+		'one' => 'One',
+		'set' => 'Set',
+		'page' => 'Page',
+		'list' =>  'List',
+	];
 }
 
 /**
  * @return array
  */
 function share(): array {
-	return [
-		'blog-post' => '[Blog] Post',
-		'blog-topic' => '[Blog] Topic',
-		'blog-author' => '[Blog] Author'
-	];
-}
+	return (Arr::combine($types = array_keys(App::exporter()->getExportableItems()),
+		array_map(function(string $value){
+			return sprintf('[%s] %s %s', ...array_values(array_map(function(string $name){
+				return Src::tcm($name);
+			}, Regex::create('/^([^@]+)@([^:]+):(.+)$/')->parse($value, 'vendor', 'module', 'entity'))));
 
-/**
- * @return array
- */
-function properties(): array {
-	return [
-		'url' => '[native] Url',
-		'id' => '[native] Id',
-		'name' => '[native] Name',
-		'#topic' => '[group] Topic',
-		'#author' => '[group] Author',
-		'#author-latest' => '[group] Author (latest only)',
-		'@paginator' => '[generic] Paginator',
-	];
+	}, $types)));
 }
 
 /**
@@ -113,7 +99,7 @@ function parseJsonNotation(string $source): array {
 
 	$Data = [];
 	foreach (preg_split('/\s*,\s*/', $Matches[1], -1 , PREG_SPLIT_NO_EMPTY) as $pair){
-		if (!preg_match('/^[\'"]?(' . \Able\Reglib\Reglib::VAR . ')[\'"]?\s*:(.*)$/', $pair, $Matches)){
+		if (!preg_match('/^[\'"]?(' . Regex::RE_VARIABLE . ')[\'"]?\s*:(.*)$/', $pair, $Matches)){
 			throw new \Exception('Invalid notation pair format!');
 		}
 

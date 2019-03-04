@@ -33,7 +33,8 @@ class Project extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $fillable = ['name', 'domain', 'builded_at', 'deployed_at'];
+	protected $fillable = ['name', 'domain', 'builded_at',
+		'objects', 'deployed_at'];
 
 	/**
 	 * @var array
@@ -44,6 +45,13 @@ class Project extends AModel {
 	 * @var array
 	 */
 	protected $hidden = ['storage'];
+
+	/**
+	 * @var array
+	 */
+	protected $casts = [
+		'objects' => 'array'
+	];
 
 	/**
 	 * @return array
@@ -75,7 +83,7 @@ class Project extends AModel {
 	 * @return string
 	 */
 	public final function getUidAttribute(): string {
-		return sprintf('#%1$08d', $this->id);
+		return sprintf('%1$08d', $this->id);
 	}
 
 	/**

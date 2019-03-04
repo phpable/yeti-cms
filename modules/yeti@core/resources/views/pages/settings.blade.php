@@ -31,6 +31,8 @@
 						var jThis = $(this);
 
 						jRelative.empty();
+						jRelative.append('<option value="">~</option>');
+
 						if (__VALUES[jThis.val()] !== undefined){
 							for(var i in __VALUES[jThis.val()]){
 								jRelative.append($('<option value="' +  i + '">' + __VALUES[jThis.val()][i] + '</option>'));
@@ -45,17 +47,6 @@
 						}
 					}).trigger('change');
 				}
-			});
-		})(jQuery);
-	</script>
-
-	<script type="text/javascript">
-		(function(){
-			$(function() {
-				$('[name="builder"]').on('change', function(){
-					$('.builder-arguments').hide().filter('#builder-'
-						+ $(this).val() + '-arguments').show();
-				}).trigger('change');
 			});
 		})(jQuery);
 	</script>
@@ -100,6 +91,7 @@
 					<label class="control-label">Template</label>
 					<div class="control-body">
 						<select class="form-control" name="template" @if (!empty($Page->template_id)) data-selected="{{ $Page->template_id }}" @endif>
+							<option value="">~</option>
 						</select>
 					</div>
 				</div>
@@ -165,27 +157,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-
-			<div class="separated">
-				<div class="form-group">
-					<label class="control-label">Builder</label>
-					<div class="control-body">
-						<select class="form-control" name="builder">
-							@foreach(builders() as $builder => $title)
-								<option value="{{ $builder }}" {{ $Page->builder == $builder ? 'selected' : null }}>{{ ucfirst($title) }}</option>
-							@endforeach
-						</select>
-					</div>
-				</div>
-
-				@foreach(array_keys(builders()) as $builder)
-					@if (in_array($builder, ['extended']))
-						<div class="builder-arguments" id="builder-{{ $builder }}-arguments" style="display: none;">
-							@include('yeti@core::pages.builders.' . $builder, ['Arguments' => $Page->arguments])
-						</div>
-					@endif
-				@endforeach
 			</div>
 		</div>
 	</div>

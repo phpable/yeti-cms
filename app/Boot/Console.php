@@ -6,12 +6,13 @@ use \Illuminate\Foundation\Console\Kernel;
 use \Yeti\Main\Command\YetiExport;
 use \Yeti\Main\Command\YetiImport;
 use \Yeti\Main\Command\YetiProjectDeploy;
-use \Yeti\Main\Command\YetiModulesUpdate;
+use \Yeti\Main\Command\YetiModulesRefresh;
 use \Yeti\Main\Command\YetiAdminList;
 use \Yeti\Main\Command\YetiAdminCreate;
 use \Yeti\Main\Command\YetiProjectCreate;
 use \Yeti\Main\Command\YetiProjectConfig;
 
+use \Yeti\Main\Command\YetiDataBuild;
 use \Yeti\Main\Command\YetiProjectBuild;
 
 use \Yeti\Main\Command\YetiResourcesCheck;
@@ -34,9 +35,12 @@ class Console extends Kernel {
 
 		YetiExport::class,
 		YetiImport::class,
+
+		YetiDataBuild::class,
 		YetiProjectBuild::class,
+
 		YetiProjectDeploy::class,
-		YetiModulesUpdate::class,
+		YetiModulesRefresh::class,
 		YetiAdminList::class,
 		YetiAdminCreate::class,
 		YetiProjectCreate::class,

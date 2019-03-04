@@ -1,7 +1,6 @@
 {
 	"name": "eggbe/yeti-cms",
 	"description": "Yeti CMS.",
-	"version": "1.0.0-alpha1",
 	"license": "MIT",
 	"type": "project",
 	"require": {
@@ -32,7 +31,7 @@
 		],
 		"post-update-cmd": [
 			"php artisan optimize",
-			"php artisan yeti:modules:update"
+			"php artisan yeti:modules:refresh"
 		],
 		"post-root-package-install": [
 			"php -r \"copy('.env.example', '.env');\""

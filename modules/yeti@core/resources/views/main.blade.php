@@ -29,6 +29,12 @@
 
 	@if (App::scopable())
 		<li>
+			<a href="{{ route('yeti@core:objects.all') }}" title="Objects">
+				<i class="fa fa-database fa-lg"></i>
+			</a>
+		</li>
+
+		<li>
 			<a href="{{route('yeti@core:layouts.all') }}" title="Layouts">
 				<i class="fa fa-clone"></i>
 			</a>

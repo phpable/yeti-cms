@@ -6,7 +6,7 @@
 @section('main')
 	<header id="header" class="navbar">
 		<div class="row">
-			<div class="col-sm-4">
+			<div class="col-sm-5">
 				<ul class="nav navbar-nav navbar-actions project-tools">
 					<li>
 						@yield('actions')
@@ -14,7 +14,7 @@
 				</ul>
 			</div>
 
-			<div class="col-sm-8">
+			<div class="col-sm-7">
 				<ul class="nav navbar-nav navbar-avatar pull-right main-menu">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">

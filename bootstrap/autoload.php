@@ -135,7 +135,7 @@ if (file_exists($compiledPath)) {
 	require $compiledPath;
 }
 
-if (! function_exists('user_path')) {
+if (!function_exists('user_path')) {
 
 	/**
 	 * Returns the path to the working directory of the given user.
@@ -148,7 +148,7 @@ if (! function_exists('user_path')) {
 	}
 }
 
-if (! function_exists('project_path')) {
+if (!function_exists('project_path')) {
 
 	/**
 	 * Returns the path to the working directory of the project.
@@ -158,6 +158,17 @@ if (! function_exists('project_path')) {
 	 */
 	function project_path(Project $Project, string $path = ''): string {
 		return base_path(Str::join(DIRECTORY_SEPARATOR, config('app.paths.projects'), $Project->uid, $path));
+	}
+}
+
+if (!function_exists('handle')) {
+	/**
+	 * @todo this function doesn't make any real stuff for now.
+	 * @param $name
+	 * @return string
+	 */
+	function handle($name) {
+		return "";
 	}
 }
 

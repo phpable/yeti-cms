@@ -13,7 +13,11 @@ use \Able\IO\Path;
 use \Able\IO\ReadingBuffer;
 use \Able\IO\WritingBuffer;
 
-use \Able\Reglib\Reglib;
+use \Able\Reglib\Regex;
+
+use \Illuminate\Support\Facades\App;
+use \Illuminate\Support\Facades\Config;
+use \Illuminate\Support\ServiceProvider;
 
 use \Yeti\Core\Model\Page;
 use \Yeti\Core\Model\Layout;
@@ -26,9 +30,7 @@ use \Yeti\Main\Building\Utilities\Collector;
 use \Able\Helpers\Str;
 
 use function \Able\Sabre\Standard\checkArraySyntax;
-use \Yeti\Main\Building\Builders\Abstractions\ABuilder;
 
-use \Illuminate\Support\ServiceProvider;
 
 class YetiBuildingProvider extends ServiceProvider {
 
@@ -88,50 +90,57 @@ class YetiBuildingProvider extends ServiceProvider {
  				. '", array_merge($__obj->f(get_defined_vars()), ' . (!is_null($params) ? $params : '[]') . '));}?>';
 		}, 2, false));
 
-		Delegate::token(new SToken('export', function ($name, $scope, $condition) {
-			if (!preg_match('/^\$' . Reglib::VAR . '$/', $name)){
+		/** @noinspection PhpUnhandledExceptionInspection */
+		Delegate::token(new SToken('load', function ($name, $scope, $condition) {
+			if (!preg_match('/^\$' . Regex::RE_VARIABLE . '$/', $name)){
 				throw new \Exception(sprintf('Invalid variable name: %s!', $name));
 			}
 
-			$name = substr($name, 1);
-			$takeOnlyCount = false;
-
-			if ($scope == 'url'){
-				$condition = 'md5(' . $condition . ')';
-			}elseif ($scope == 'id') {
-				$condition = '"' . $condition . '"';
-			}elseif ($scope == 'name'){
-				$condition = 'md5(' . $condition . ')';
-			}elseif ($scope == '@pagination') {
-				$condition = '"page" . ' . $condition;
-			}elseif ($scope == '#topic') {
-				$condition = '"topic" . md5(' . $condition . ')';
-			}elseif ($scope == '#author' || $scope == '#author-latest') {
-				$condition = '"author" . md5(' . $condition . ')';
-			}elseif ($scope == "@count"){
-				$takeOnlyCount = true;
-			}else{
-				throw new \Exception(sprintf('Undefined scope: %s!', $scope));
-			}
-
-			if ($takeOnlyCount){
-				return '<?php  if (is_dir($dir = __DIR__ . "/data/")){
-					extract(["' . $name . '" => count(glob($dir . "*/*.data"))]);
-				}?>';
-			}
-
-			return '<?php  if (file_exists($file = __DIR__ . "/data/' . $name . '/" . ' . $condition . ' . ".data")){
-				extract(["' . $name . '" => json_decode(base64_decode(file_get_contents($file)))]);
-				if(!empty($' . $name . '->meta_title)){
-					$Page->title = $' . $name . '->meta_title;
-				}elseif(!empty($' . $name . '->title)){
-					$Page->title = $' . $name . '->title;
-				};
+			return '<?php  if (file_exists($file = __DIR__ . "/../../data/' . strtolower($scope) . '/data.php")) {
 				
-				if(!empty($' . $name . '->meta_description)){
-					$Page->description = $' . $name . '->meta_description;
+				extract(["' . substr($name, 1) . '" => call_user_func(function($file, $key){ return include($file); }, $file, ' . (!empty($condition) ? $condition : 'null'). ')]);
+				
+				if(!empty(' . $name . '->meta_title)){
+					$Page->title = ' . $name . '->meta_title;
+				}elseif(!empty(' . $name . '->title)){
+					$Page->title = ' . $name . '->title;
+				};
+
+				if(!empty(' . $name . '->meta_description)){
+					$Page->description = ' . $name . '->meta_description;
 				};
 			}?>';
 		}, 3, false));
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		Delegate::token(new SToken('count', function ($name, $scope) {
+			if (!preg_match('/^\$' . Regex::RE_VARIABLE . '$/', $name)){
+				throw new \Exception(sprintf('Invalid variable name: %s!', $name));
+			}
+
+			return '<?php  if (is_dir($dir = __DIR__ . "/../../data/' . strtolower($scope) . '/")) {
+				extract(["' . substr($name, 1) . '" => count(array_filter(scandir($dir), function($value){
+					return preg_match("/\\\\.data$/", $value);
+				}))]);
+			}?>';
+		}, 3, false));
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		Delegate::token(new SToken('auth', function () {
+			return '<?php if (Auth::check()){?>';
+		}));
+
+		Delegate::finalize('auth', new SToken('off', function(){
+			return '<?php } ?>';
+		}));
+
+		/** @noinspection PhpUnhandledExceptionInspection */
+		Delegate::token(new SToken('guest', function () {
+			return '<?php if (!Auth::check()){?>';
+		}));
+
+		Delegate::finalize('guest', new SToken('off', function(){
+			return '<?php } ?>';
+		}));
 	}
 }

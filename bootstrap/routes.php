@@ -17,7 +17,7 @@ use \Yeti\Main\Model\User;
 use \Yeti\Main\Model\Module;
 use \Yeti\Main\Model\Project;
 
-use \Yeti\Main\Building\Builders\Standard;
+use \Yeti\Main\Building\Builder;
 
 use \MatthiasMullie\Minify\CSS;
 use \MatthiasMullie\Minify\JS;
@@ -26,8 +26,6 @@ use \Able\Helpers\Url;
 use \Able\Helpers\Arr;
 use \Able\Helpers\Jsn;
 use \Able\Helpers\Src;
-
-use \Able\Reglib\Regexp;
 
 use \Able\IO\Path;
 use \Able\IO\Directory;
@@ -41,6 +39,7 @@ Route::group(['domain' => Config::get('app.domain')], function(){
 
 	Route::group(['middleware' => 'auth'], function () {
 		Route::group(['middleware' => 'unscope'], function () {
+
 			Route::get('/', ['as' => 'yeti@main:dashboard', function() {
 				return View::make('dashboard')
 					->with('Projects', Project::all());
@@ -160,12 +159,7 @@ Route::group(['domain' => '{project}.' . Config::get('app.domain')], function() 
 				->append($project, 'pages')->forceDirectory();
 
 			if (!env('APP_DEBUG_TEMPLATES') || $Directory->isEmpty()){
-				if (!class_exists($class = Src::lns(Standard::class) . '\\' . Src::tcm($Page->builder))){
-					throw new \Exception(sprintf('Undefined builder %s!', $Page->builder));
-				}
-
-				$Builder = new $class($Page, $Page->arguments);
-				$Builder->build($Directory);
+				(new Builder($Page))->build($Directory);
 			}
 
 			$Root = $Directory->toPath()

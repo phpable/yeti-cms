@@ -7,8 +7,6 @@ use \Illuminate\Support\Facades\Blade;
 use \Yeti\Core\Model\Page;
 use \Yeti\Main\Model\Project;
 
-use \Able\Reglib\Reglib;
-
 use \Able\LaravelBridge\BridgeViewServiceProvider;
 
 class YetiViewProvider extends BridgeViewServiceProvider {

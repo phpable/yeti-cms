@@ -17,7 +17,7 @@ use \Able\IO\Path;
 use \Able\IO\Directory;
 
 use \Able\Helpers\Src;
-use \Able\Reglib\Regexp;
+use \Able\Reglib\Regex;
 
 class YetiImport extends ACommand {
 
@@ -72,14 +72,15 @@ class YetiImport extends ACommand {
 		$errors = 0;
 
 		$this->warn('Importing sources from: ' . $Directory->toString());
-		foreach ($Directory->filter('*/page_*') as $Element){
+
+		foreach ($Directory->filter('page_*') as $Element){
 			try {
 				if (!$Element->isDot()) {
-					if (!is_null($Page = Page::find(Regexp::create('/[0-9]+$/')
+					if (!is_null($Page = Page::find(Regex::create('/[0-9]+$/')
 						->take($Element->getEnding())))) {
 
-							foreach ($Element->toDirectory()->filter('*/template_*.*') as $Path) {
-								if (!is_null($Template = $Page->templates()->find(Regexp::create('/([0-9]+)\.\w+$/')
+							foreach ($Element->toDirectory()->filter('template_*.*') as $Path) {
+								if (!is_null($Template = $Page->templates()->find(Regex::create('/([0-9]+)\.\w+$/')
 									->take($Path->getEnding(), 1)))){
 
 										$Template->update(['source' => $Path->toFile()->getContent()]);
@@ -111,14 +112,14 @@ class YetiImport extends ACommand {
 		$errors = 0;
 
 		$this->warn('Importing sources from: ' . $Directory->toString());
-		foreach ($Directory->filter('*/snippet_*') as $Element){
+		foreach ($Directory->filter('snippet_*') as $Element){
 			try {
 				if (!$Element->isDot()) {
-					if (!is_null($Snippet = Snippet::find(Regexp::create('/[0-9]+$/')
+					if (!is_null($Snippet = Snippet::find(Regex::create('/[0-9]+$/')
 						->take($Element->getEnding())))) {
 
-							foreach ($Element->toDirectory()->filter('*/template_*.*') as $Path) {
-								if (!is_null($Template = $Snippet->templates()->find(Regexp::create('/([0-9]+)\.\w+$/')
+							foreach ($Element->toDirectory()->filter('template_*.*') as $Path) {
+								if (!is_null($Template = $Snippet->templates()->find(Regex::create('/([0-9]+)\.\w+$/')
 									->take($Path->getEnding(), 1)))){
 										$Template->update(['source' => $Path->toFile()->getContent()]);
 
@@ -150,14 +151,14 @@ class YetiImport extends ACommand {
 		$errors = 0;
 
 		$this->warn('Importing sources from: ' . $Directory->toString());
-		foreach ($Directory->filter('*/layout_*') as $Element){
+		foreach ($Directory->filter('layout_*') as $Element){
 			try {
 				if (!$Element->isDot()) {
-					if (!is_null($Layout = Layout::find(Regexp::create('/[0-9]+$/')
+					if (!is_null($Layout = Layout::find(Regex::create('/[0-9]+$/')
 						->take($Element->getEnding())))) {
 
-							foreach ($Element->toDirectory()->filter('*/template_*.*') as $Path) {
-								if (!is_null($Template = $Layout->templates()->find(Regexp::create('/([0-9]+)\.\w+$/')
+							foreach ($Element->toDirectory()->filter('template_*.*') as $Path) {
+								if (!is_null($Template = $Layout->templates()->find(Regex::create('/([0-9]+)\.\w+$/')
 									->take($Path->getEnding(), 1)))){
 										$Template->update(['source' => $Path->toFile()->getContent()]);
 
