@@ -19,6 +19,13 @@ class Export {
 	private $Builder = null;
 
 	/**
+	 * @return Builder
+	 */
+	private final function getBuilder(): Builder {
+		return clone $this->Builder;
+	}
+
+	/**
 	 * Export constructor.
 	 * @param Builder $Builder
 	 */
@@ -77,7 +84,7 @@ class Export {
 			throw new \Exception('Invalid or empty attribute name!');
 		}
 
-		foreach ($this->Builder->get() as $Item) {
+		foreach ($this->getBuilder()->get() as $Item) {
 			if (!empty($Item->{$Options['%attr']})) {
 				yield 'attr' . md5($Item->{$Options['%attr']}) . '.data' => base64_encode(json_encode($Item));
 			}
@@ -98,7 +105,7 @@ class Export {
 				throw new \Exception('Invalid size!');
 		}
 
-		$Chunks = $this->Builder->get()->chunk($Options['%size']);
+		$Chunks = $this->getBuilder()->get()->chunk($Options['%size']);
 		if (isset($Options['%order']) && $Options['%order'] == 'desc'){
 			$Chunks = $Chunks->reverse();
 		}
@@ -122,26 +129,30 @@ class Export {
 			throw new \Exception('Invalid or empty attribute name!');
 		}
 
-		$Values = array_filter(array_unique($this->Builder->get()->pluck($Options['%attr'])->toArray()));
+		$Values = array_filter(array_unique($this->getBuilder()->get()->pluck($Options['%attr'])->toArray()));
 		sort($Values);
 
 		foreach ($Values as $value) {
-			$Chunks = $this->Builder->where($Options['%attr'], '=', $value)->get();
+			$Chunks = $this->getBuilder()->where($Options['%attr'], '=', $value)->get();
 
-			if (isset($Options['%order']) && $Options['%order'] == 'desc'){
-				$Chunks = $Chunks->reverse();
-			}
+			echo sprintf("%s:%s=>%s[%s]\n", $Options['%attr'], $value, $Chunks->count(), $this->getBuilder()->count());
 
-			if (isset($Options['%limit'])){
-				if (!is_numeric($Options['%limit']) || (int)$Options['%limit'] < 1){
-					throw new \Exception('Limit can not be less than zero!');
+			if (count($Chunks) > 0) {
+				if (isset($Options['%order']) && $Options['%order'] == 'desc') {
+					$Chunks = $Chunks->reverse();
 				}
 
-				$Chunks = $Chunks->take($Options['%limit']);
-			}
+				if (isset($Options['%limit'])) {
+					if (!is_numeric($Options['%limit']) || (int)$Options['%limit'] < 1) {
+						throw new \Exception('Limit can not be less than zero!');
+					}
 
-			yield 'set' . md5($value) . '.data'
+					$Chunks = $Chunks->take($Options['%limit']);
+				}
+
+				yield 'set' . md5($value) . '.data'
 				=> base64_encode(json_encode($Chunks->toArray()));
+			}
 
 		}
 
@@ -155,7 +166,7 @@ class Export {
 	 * @throws \Exception
 	 */
 	private final function scaleList(array $Options = []): \Generator {
-		$List = $this->Builder->get();
+		$List = $this->getBuilder()->get();
 
 		if (isset($Options['%order']) && $Options['%order'] == 'desc'){
 			$List = $List->reverse();
@@ -172,7 +183,7 @@ class Export {
 	 * @return mixed
 	 */
 	public final function count(){
-		return $this->Builder->count();
+		return $this->getBuilder()->count();
 	}
 }
 
