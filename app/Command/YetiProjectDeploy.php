@@ -47,8 +47,9 @@ class YetiProjectDeploy extends ACommand {
 		}
 
 		$count += $this->deployPages();
+		$count += $this->deployData();
 		$count += $this->deployResources();
-		$count += $this->deployFiles();
+//		$count += $this->deployFiles();
 
 		if (!$this->option('silent')){
 			$this->info(sprintf('Total: %s', $count));
@@ -72,12 +73,44 @@ class YetiProjectDeploy extends ACommand {
 		$count = 0;
 		foreach ($Target->list() as $Path) {
 			if (!$Path->isDot() && $Path->isDirectory()) {
-				$this->saveProcessInfo(ceil(++$count * 49 / $Target->count()));
+				$this->saveProcessInfo(ceil((++$count * 100 / $Target->count()) / 4));
 				$Path->toDirectory()->copy($Destination->toPath());
 
-				usleep(10000);
+				usleep(1000);
 				if (!$this->option('silent')) {
 					$this->info(sprintf('[%1$03d%% Done] Copying page %2$s',
+						$this->getProcessInfo(), $Path->getEnding()));
+				}
+			}
+		}
+
+		return $count;
+	}
+
+
+	/**
+	 * @throws \Exception
+	 * @return int
+	 */
+	protected final function deployData(): int {
+		$Destination = Path::create(App::scope()->option('deploy_path'),
+			'/data/')->try(function(Path $Path){
+				throw new \Exception(sprintf('Destination is not a directory or not writable: %s!', $Path));
+			}, Path::TIF_NOT_DIRECTORY | Path::TIF_NOT_WRITABLE)->forceDirectory();
+
+		$Destination->clear();
+		$Target = Path::create(Config::get('building.destination'),
+			App::scope()->name, 'data')->forceDirectory();
+
+		$count = 0;
+		foreach ($Target->list() as $Path) {
+			if (!$Path->isDot() && $Path->isDirectory()) {
+				$this->saveProcessInfo(ceil((++$count * 100 / $Target->count()) / 2));
+				$Path->toDirectory()->copy($Destination->toPath());
+
+				usleep(1000);
+				if (!$this->option('silent')) {
+					$this->info(sprintf('[%1$03d%% Done] Copying data folder %2$s',
 						$this->getProcessInfo(), $Path->getEnding()));
 				}
 			}
@@ -101,7 +134,7 @@ class YetiProjectDeploy extends ACommand {
 
 		$count = 0;
 		foreach ($Target->list() as $Path){
-			$this->saveProcessInfo(50 + ceil(++$count * 50 / $Target->count()));
+			$this->saveProcessInfo((ceil(++$count * 100 / $Target->count()) / 1.23));
 
 			if (!$Path->isDot()
 				&& !in_array($Path->getEnding(), ['index.php'])){
