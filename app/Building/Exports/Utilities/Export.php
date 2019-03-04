@@ -134,9 +134,6 @@ class Export {
 
 		foreach ($Values as $value) {
 			$Chunks = $this->getBuilder()->where($Options['%attr'], '=', $value)->get();
-
-			echo sprintf("%s:%s=>%s[%s]\n", $Options['%attr'], $value, $Chunks->count(), $this->getBuilder()->count());
-
 			if (count($Chunks) > 0) {
 				if (isset($Options['%order']) && $Options['%order'] == 'desc') {
 					$Chunks = $Chunks->reverse();
