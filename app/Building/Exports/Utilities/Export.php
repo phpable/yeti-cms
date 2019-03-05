@@ -105,7 +105,12 @@ class Export {
 				throw new \Exception('Invalid size!');
 		}
 
-		$Chunks = $this->getBuilder()->get()->chunk($Options['%size']);
+		$List = $this->getBuilder()->get();
+		if (isset($Options['%order']) && $Options['%order'] == 'desc'){
+			$List = $List->reverse();
+		}
+
+		$Chunks = $List->chunk($Options['%size']);
 		if (isset($Options['%order']) && $Options['%order'] == 'desc'){
 			$Chunks = $Chunks->reverse();
 		}
