@@ -111,10 +111,6 @@ class Export {
 		}
 
 		$Chunks = $List->chunk($Options['%size']);
-		if (isset($Options['%order']) && $Options['%order'] == 'desc'){
-			$Chunks = $Chunks->reverse();
-		}
-
 		foreach ($Chunks as $index => $Collection){
 			yield 'page' . (++$index) . '.data'
 				=> base64_encode(json_encode($Collection->toArray()));
