@@ -33,13 +33,19 @@ class Post extends AModel {
 	 * @var array
 	 */
 	protected $fillable = ['url', 'title', 'meta_title', 'meta_description', 'preview',
-		'body', 'is_published'];
+		'body', 'markers', 'is_published'];
 
 	/**
 	 * @var array
 	 */
-	protected $appends = ['topic', 'author'];
+	protected $appends = ['topic', 'author', 'lightweight'];
 
+	/**
+	 * @var array
+	 */
+	protected $casts = [
+		'groups' => 'array',
+	];
 
 	/**
 	 * @return BelongsTo
@@ -81,9 +87,15 @@ class Post extends AModel {
 	 */
 	public final function getPreviewAttribute(): string {
 		return !empty($this->attributes['preview'])
-			? $this->attributes['preview'] : Str::tr(Str::strip($this->body), 1024);
+			? $this->attributes['preview'] : Str::tr(Str::strip($this->body), 1000);
 	}
 
+	/**
+	 * @return string
+	 */
+	public final function getLightweightAttribute() {
+		return Str::strip(Str::tr($this->body, 5000), 'p', 'a', 'ul', 'ol', 'li');
+	}
 
 	/**
 	 * @return string

@@ -12,6 +12,8 @@ const paths = {
 	underscore: node + 'underscore/',
 	piechart: node + 'easy-pie-chart/dist/',
 	cookie: node + 'jquery.cookie/',
+	jselect: node + 'jquery-editable-select/',
+	jtags: node + 'suggestags/',
 	fileupload: node + 'blueimp-file-upload/',
 	ace: node + 'ace-builds/src/',
 	assets: resources + 'assets/',
@@ -49,6 +51,9 @@ mix.copy(paths.ace + 'snippets/javascript.js', temporary + 'js/editor/');
 
 mix.copy(paths.piechart + 'jquery.easypiechart.js', temporary + 'js/');
 mix.copy(paths.cookie + 'jquery.cookie.js', temporary + 'js/');
+mix.copy(paths.jselect + 'src/jquery-editable-select.js', temporary + 'js/');
+mix.copy(paths.jtags + 'js/jquery.amsify.suggestags.js', temporary + 'js/');
+
 mix.copy(paths.fileupload + 'js/jquery.fileupload.js', temporary + 'js/');
 mix.copy(paths.fileupload + 'js/vendor/jquery.ui.widget.js', temporary + 'js/');
 mix.copy(paths.fileupload + 'css/jquery.fileupload.css', temporary + 'css/');
@@ -65,6 +70,8 @@ mix.styles([
 	paths.assets + 'css/app.theme.css',
 	paths.assets + 'css/jquery.scrollbar.css',
 	paths.assets + 'css/jquery.filemanager.css',
+	paths.jselect + 'src/jquery-editable-select.css',
+	paths.jtags + 'css/amsify.suggestags.css',
 ],temporary + 'css/app.static.css');
 
 mix.sass(paths.assets + '/sass/main.sass',
@@ -119,8 +126,10 @@ mix.scripts([
 	temporary + 'js/underscore.js',
 	temporary + 'js/jquery.js',
 	temporary + 'js/bootstrap.js',
-	temporary + 'js/jquery.easypiechart.js',
 	temporary + 'js/jquery.cookie.js',
+	temporary + 'js/jquery.easypiechart.js',
+	temporary + 'js/jquery-editable-select.js',
+	temporary + 'js/jquery.amsify.suggestags.js',
 	temporary + 'js/jquery.ui.widget.js',
 	temporary + 'js/jquery.fileupload.js',
 	temporary + 'js/main.js',

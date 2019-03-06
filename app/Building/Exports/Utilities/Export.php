@@ -19,10 +19,46 @@ class Export {
 	private $Builder = null;
 
 	/**
+	 * @param string $filter
 	 * @return Builder
+	 * @throws \Exception
 	 */
-	private final function getBuilder(): Builder {
-		return clone $this->Builder;
+	private final function getBuilder(string $filter = null): Builder {
+		if (is_null($filter)) {
+			return clone $this->Builder;
+		}
+
+		$Builder = clone $this->Builder;
+		foreach (preg_split('/\s*,+\s*/', $filter, -1 , PREG_SPLIT_NO_EMPTY) as $condition) {
+			if (!preg_match('/^([A-Za-z0-9_-]+)(!?&?=)(.*)$/', $condition, $Macthes)) {
+				throw new \Exception(sprintf('Invalid condition: %s', $condition));
+			}
+
+			if ($Macthes[2] == '=') {
+				$Builder->where($Macthes[1], '=', $Macthes[3]);
+				continue;
+			}
+
+
+			if ($Macthes[2] == '!=') {
+				$Builder->where($Macthes[1], '!=', $Macthes[3]);
+			}
+
+			if ($Macthes[2] == '&=') {
+				$Builder->where($Macthes[1], 'like', '%' . trim($Macthes[3], '%') . '%');
+				continue;
+			}
+
+			if ($Macthes[2] == '!&=') {
+				$Builder->where(function(Builder $Query) use ($Macthes) {
+					$Query->where($Macthes[1], 'not like', '%' . trim($Macthes[3], '%') . '%')->OrwhereNull($Macthes[1]);
+				});
+
+				continue;
+			}
+		}
+
+		return $Builder;
 	}
 
 	/**
@@ -84,7 +120,7 @@ class Export {
 			throw new \Exception('Invalid or empty attribute name!');
 		}
 
-		foreach ($this->getBuilder()->get() as $Item) {
+		foreach ($this->getBuilder(Arr::get($Options, '%filter'))->get() as $Item) {
 			if (!empty($Item->{$Options['%attr']})) {
 				yield 'attr' . md5($Item->{$Options['%attr']}) . '.data' => base64_encode(json_encode($Item));
 			}
@@ -105,7 +141,7 @@ class Export {
 				throw new \Exception('Invalid size!');
 		}
 
-		$List = $this->getBuilder()->get();
+		$List = $this->getBuilder(Arr::get($Options, '%filter'))->get();
 		if (isset($Options['%order']) && $Options['%order'] == 'desc'){
 			$List = $List->reverse();
 		}
@@ -134,7 +170,7 @@ class Export {
 		sort($Values);
 
 		foreach ($Values as $value) {
-			$Chunks = $this->getBuilder()->where($Options['%attr'], '=', $value)->get();
+			$Chunks = $this->getBuilder(Arr::get($Options, '%filter'))->where($Options['%attr'], '=', $value)->get();
 			if (count($Chunks) > 0) {
 				if (isset($Options['%order']) && $Options['%order'] == 'desc') {
 					$Chunks = $Chunks->reverse();
@@ -149,7 +185,7 @@ class Export {
 				}
 
 				yield 'set' . md5($value) . '.data'
-				=> base64_encode(json_encode($Chunks->toArray()));
+					=> base64_encode(json_encode($Chunks->toArray()));
 			}
 
 		}
@@ -164,10 +200,18 @@ class Export {
 	 * @throws \Exception
 	 */
 	private final function scaleList(array $Options = []): \Generator {
-		$List = $this->getBuilder()->get();
+		$List = $this->getBuilder(Arr::get($Options, '%filter'))->get();
 
 		if (isset($Options['%order']) && $Options['%order'] == 'desc'){
 			$List = $List->reverse();
+		}
+
+		if (isset($Options['%limit'])) {
+			if (!is_numeric($Options['%limit']) || (int)$Options['%limit'] < 1) {
+				throw new \Exception('Limit can not be less than zero!');
+			}
+
+			$List = $List->take($Options['%limit']);
 		}
 
 		yield 'list.data'
@@ -175,13 +219,6 @@ class Export {
 
 		yield 'data.php' => '<?php return file_exists($file = __DIR__ . "/list.data")'
 			. ' ? json_decode(base64_decode(file_get_contents($file))) : [];?>';
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public final function count(){
-		return $this->getBuilder()->count();
 	}
 }
 

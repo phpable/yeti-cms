@@ -75,6 +75,13 @@
 					</div>
 				</div>
 
+				<div class="form-group">
+					<label class="control-label">Groups</label>
+					<div class="control-body">
+						<input type="text" data-control="jtags" data-jtags-limit="5" data-jtags-suggestions="{{ implode(',', groups()) }}" class="bg-focus form-control" name="groups" value="{{ implode(',', (array)$Post->groups) }}">
+					</div>
+				</div>
+
 				<div class="form-group required">
 					<label class="control-label">Author</label>
 					<div class="control-body">

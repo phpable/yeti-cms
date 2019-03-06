@@ -98,6 +98,11 @@ class Posts extends AController {
 			$Post->author()->associate(Author::findOrFail(Input::get('author_id')));
 		}
 
+		if (Input::has('groups')) {
+			$Post->groups = preg_split('/\s*,+\s*/',
+				Input::get('groups'), -1, PREG_SPLIT_NO_EMPTY);
+		}
+
 		$Post->save();
 
 		return redirect()->route('yeti@blog:posts.settings', $id)

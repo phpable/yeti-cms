@@ -1,4 +1,36 @@
 @extends('workspace', ['footer' => isset($footer) ? $footer : true])
+@section('js')
+	@parent
+
+	<script type="text/javascript">
+		(function($) {
+			$(function () {
+				$('[data-control="jselect"]').editableSelect();
+
+				$('input[data-control="jtags"]').each(function () {
+					var jThis = $(this);
+
+					var jTagsLimit = parseInt(jThis.data('jtags-limit'));
+					if (!isNaN(jTagsLimit) || jTagsLimit < 1 || jTagsLimit > 99) {
+						jTagsLimit = 99;
+					}
+
+					var jTagsSuggestions = [];
+					if (jThis.is('[data-jtags-suggestions]')){
+						jTagsSuggestions = jThis.data('jtags-suggestions').split(/\s*,+\s*/);
+					}
+
+					jTagsSuggestions = ['aaaa', 'bbbbb'];
+					jThis.amsifySuggestags({
+						tagLimit: jTagsLimit,
+						suggestions: jTagsSuggestions,
+						defaultTagClass: 'amsify-suggestags-badge'
+					});
+				});
+			});
+		})(jQuery);
+	</script>
+@stop
 
 @section('tools')
 	<li>

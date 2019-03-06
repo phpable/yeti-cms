@@ -11,6 +11,7 @@
 
 		<style type="text/css">
 			@yield(css)
+
 			@if (function_exists('collect'))
 				{!! collect('css') !!}
 			@end
@@ -23,6 +24,7 @@
 		<script type="text/javascript" src="{{ $__public }}/main.min.js"></script>
 		<script type="text/javascript">
 			@yield(js)
+
 			@if (function_exists('collect'))
 				{!! collect('js') !!}
 			@end

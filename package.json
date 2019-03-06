@@ -28,5 +28,9 @@
 		"popper.js": "^1.12",
 		"underscore": "^1.9.1",
 		"vue": "^2.5.7"
+	},
+	"dependencies": {
+		"jquery-editable-select": "^2.2.5",
+		"suggestags": "^1.6.0"
 	}
 }

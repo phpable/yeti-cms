@@ -1,4 +1,6 @@
 <?php
+
+use \Yeti\Blog\Model\Post;
 use \Yeti\Core\Model\Page;
 use \Yeti\Main\Model\Project;
 
@@ -85,6 +87,15 @@ function share(): array {
 			}, Regex::create('/^([^@]+)@([^:]+):(.+)$/')->parse($value, 'vendor', 'module', 'entity'))));
 
 	}, $types)));
+}
+
+/**
+ * @todo Move this code under the module control.
+ * @return array
+ */
+function groups(): array {
+	return [];
+//	_dumpe(Post::get()->pluck('markers'));
 }
 
 /**

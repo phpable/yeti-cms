@@ -11,7 +11,9 @@ class Js extends AHandler {
 	 */
 	public final function read(): \Generator {
 		$this->process(function(string $content){
-			return (new \MatthiasMullie\Minify\JS())->add($content)->minify();
+			if (!empty($content)) {
+				return (new \MatthiasMullie\Minify\JS())->add($content)->minify() . ';';
+			}
 		});
 
 		yield '@section(js)';
