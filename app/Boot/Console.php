@@ -9,6 +9,7 @@ use \Yeti\Main\Command\YetiProjectDeploy;
 use \Yeti\Main\Command\YetiModulesRefresh;
 use \Yeti\Main\Command\YetiAdminList;
 use \Yeti\Main\Command\YetiAdminCreate;
+use \Yeti\Main\Command\YetiAdminChange;
 use \Yeti\Main\Command\YetiProjectCreate;
 use \Yeti\Main\Command\YetiProjectConfig;
 
@@ -45,6 +46,7 @@ class Console extends Kernel {
 		YetiModulesRefresh::class,
 		YetiAdminList::class,
 		YetiAdminCreate::class,
+		YetiAdminChange::class,
 		YetiProjectCreate::class,
 		YetiProjectConfig::class,
 

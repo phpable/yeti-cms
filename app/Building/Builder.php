@@ -1,6 +1,7 @@
 <?php
 namespace Yeti\Main\Building;
 
+use Exception;
 use \Illuminate\Support\Facades\App;
 
 use \Yeti\Core\Model\Layout;
@@ -41,11 +42,17 @@ class Builder {
 	private $Destination = null;
 
 	/**
+	 * @var string
+	 */
+	private $hash = null;
+
+	/**
 	 * @param Directory $Distination
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function __construct(Directory $Distination) {
 		$this->Destination = $Distination;
+		$this->hash = md5(implode('|', [__FILE__, $Distination->toString(), time()]));
 	}
 
 	/**
@@ -54,15 +61,15 @@ class Builder {
 	 */
 	public function build(Page $Page): void {
 		if (!preg_match('/^[A-Za-z]+[A-Za-z_-]/', $Page->name)){
-			throw new \Exception('Page name is invalid or empty!');
+			throw new Exception('Page name is invalid or empty!');
 		}
 
 		if ($Page->is_hidden) {
-			throw new \Exception('Page is hidden!');
+			throw new Exception('Page is hidden!');
 		}
 
 		if (is_null($Page->layout)) {
-			throw new \Exception('Undefined layout!');
+			throw new Exception('Undefined layout!');
 		}
 
 		$Directory = (new Path($this->Destination, $Page->name))->forceDirectory();
@@ -76,13 +83,15 @@ class Builder {
 	 * @param Directory $Terget
 	 * @param array $Arguments
 	 * @param array $Overrides
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function proceed(Page $Page, Directory $Terget, array $Arguments = [], array $Overrides = []){
 		$Terget->toPath()->append('page.json')->forceFile()
 			->rewrite(Jsn::encode(array_merge($Page->config, [
 				'url' => $Page->url,
-				'hash' => $Page->hash
+				'hash' => $Page->hash,
+
+				'__build_hash' => $this->hash,
 			], $Overrides)));
 
 		$View = $Terget->toPath()
