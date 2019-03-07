@@ -9,6 +9,7 @@ use \Illuminate\Support\Facades\Log;
 use \Illuminate\Support\Facades\File;
 use \Illuminate\Support\Facades\View;
 use \Illuminate\Support\Facades\Input;
+use \Illuminate\Support\Facades\Artisan;
 
 use \Yeti\Core\Model\Page;
 use \Yeti\Core\Model\Layout;
@@ -72,13 +73,20 @@ class DeployController extends AController {
 				throw new \Exception('Process is already running!');
 			}
 
+//			Artisan::call('yeti:project:deploy', [
+//				'scope' => App::scope()->name,
+//				'--force' => true,
+//				'--rebuild' => true,
+//				'--silent' => true,
+//			]);
+
 			exec(base_path() . '/artisan yeti:project:deploy ' . App::scope()->name
 				. ' --pid=' . self::buildPidFilePath() . ' --force --rebuild --silent > ' . self::buildLogFilePath() . ' 2>&1 &');
 
 			return['status' => true,
 				'url' => route('yeti@main:deploy.check')];
 
-		}catch (\Throwable $Exception) {
+		} catch (\Throwable $Exception) {
 			Log::error($Exception);
 
 			return ['status' => false,

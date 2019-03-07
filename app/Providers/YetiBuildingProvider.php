@@ -4,7 +4,7 @@ namespace Yeti\Main\Providers;
 use \Able\Sabre\Compiler;
 use \Able\Sabre\Utilities\Queue;
 
-use \Able\Sabre\Structures\SToken;
+use \Able\Sabre\Structures\SCommand;
 use \Able\Sabre\Structures\STrap;
 
 use \Able\Sabre\Standard\Delegate;
@@ -42,7 +42,7 @@ class YetiBuildingProvider extends ServiceProvider {
 		Delegate::registerSourcePath(Path::create(base_path(),
 			'bootstrap'), 'base');
 
-		Delegate::token(new SToken('build', function (string $name, Queue $Queue, Compiler $Compiler) {
+		Delegate::command(new SCommand('build', function (string $name, Queue $Queue, Compiler $Compiler) {
 			switch (strtolower($name)){
 				case 'constants':
 					return '<?php extract(' . Str::rmnl(var_export(Constant::all()->pluck('value', 'name')->toArray(), true)) . ');?>';
@@ -55,15 +55,15 @@ class YetiBuildingProvider extends ServiceProvider {
 			}
 		}, 1, false, true));
 
-		Delegate::token(new SToken('e64', function (string $value) {
+		Delegate::command(new SCommand('e64', function (string $value) {
 			return '<?php extract(' . Str::rmnl(var_export(json_decode(base64_decode($value), true), true)) . '); ?>';
 		}, 1, false));
 
-		Delegate::token(new SToken('page', function (string $name, Queue $Queue, Compiler $Compiler) {
+		Delegate::command(new SCommand('page', function (string $name, Queue $Queue, Compiler $Compiler) {
 			$Queue->immediately(Collector::restack('page')->combine($name));
 		}, 1, false, true));
 
-		Delegate::token(new SToken('snippet', function (string $name, ?string $params, Queue $Queue, Compiler $Compiler) {
+		Delegate::command(new SCommand('snippet', function (string $name, ?string $params, Queue $Queue, Compiler $Compiler) {
 			if (is_null($Snippet = Snippet::where('name', '=', $name)->first())){
 				throw new \Exception('Undefined snippet: ' . $name . '!');
 			}
@@ -81,7 +81,7 @@ class YetiBuildingProvider extends ServiceProvider {
 			$Queue->immediately((new Collector($Snippet))->combine('main', $params));
 		}, 2, false, true));
 
-		Delegate::token(new SToken('component', function ($name, $params) {
+		Delegate::command(new SCommand('component', function ($name, $params) {
 			if (!is_null($params) && !checkArraySyntax($params)){
 				throw new \Exception('Invalid parameters!');
 			}
@@ -91,7 +91,7 @@ class YetiBuildingProvider extends ServiceProvider {
 		}, 2, false));
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		Delegate::token(new SToken('load', function ($name, $scope, $condition) {
+		Delegate::command(new SCommand('load', function ($name, $scope, $condition) {
 			if (!preg_match('/^\$' . Regex::RE_VARIABLE . '$/', $name)){
 				throw new \Exception(sprintf('Invalid variable name: %s!', $name));
 			}
@@ -113,7 +113,7 @@ class YetiBuildingProvider extends ServiceProvider {
 		}, 3, false));
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		Delegate::token(new SToken('count', function ($name, $scope) {
+		Delegate::command(new SCommand('count', function ($name, $scope) {
 			if (!preg_match('/^\$' . Regex::RE_VARIABLE . '$/', $name)){
 				throw new \Exception(sprintf('Invalid variable name: %s!', $name));
 			}
@@ -126,20 +126,20 @@ class YetiBuildingProvider extends ServiceProvider {
 		}, 3, false));
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		Delegate::token(new SToken('auth', function () {
+		Delegate::command(new SCommand('auth', function () {
 			return '<?php if (Auth::check()){?>';
 		}));
 
-		Delegate::finalize('auth', new SToken('off', function(){
+		Delegate::finalize('auth', new SCommand('off', function(){
 			return '<?php } ?>';
 		}));
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		Delegate::token(new SToken('guest', function () {
+		Delegate::command(new SCommand('guest', function () {
 			return '<?php if (!Auth::check()){?>';
 		}));
 
-		Delegate::finalize('guest', new SToken('off', function(){
+		Delegate::finalize('guest', new SCommand('off', function(){
 			return '<?php } ?>';
 		}));
 	}

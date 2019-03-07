@@ -25,6 +25,8 @@ use \Able\Prototypes\TTraitable;
 
 use \Yeti\Main\Model\Project;
 
+use \Exception;
+
 abstract class ACommand extends Command {
 	use TTraitable;
 
@@ -39,22 +41,22 @@ abstract class ACommand extends Command {
 	protected static $prefix = 'command';
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function detectScope(): void {
 		if (static::$scopable && !defined('__SCOPE__')) {
 			try {
 				define('__SCOPE__', Project::where('name', '=',
 					$this->argument('scope'))->first()->id);
-			} catch (\Exception $Exception) {
-				throw new \Exception('Invalid scope!');
+			} catch (Exception $Exception) {
+				throw new Exception('Invalid scope!');
 			}
 		}
 	}
 
 	/**
 	 * APidable constructor.
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -84,34 +86,34 @@ abstract class ACommand extends Command {
 
 	/**
 	 * @return File
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	protected final function getPidFile(): File {
 		if (is_null($this->PidFile)){
-			throw new \Exception('Process is not running!');
+			throw new Exception('Process is not running!');
 		}
 
 		return $this->PidFile;
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function prepareProcessFile(): void {
 		$this->PidFile = Path::create(Fs::normalize($this->option('pid')
 			?? md5(get_class($this)) . '.pid', base_path()))->try(function(Path $Path){
 				$Path->prepend(base_path('storage'));
 		}, Path::TIF_NOT_ABSOLUTE)->try(function(){ if (!$this->option('force')) {
-			throw new \Exception('Process is already running!');
+			throw new Exception('Process is already running!');
 		}}, Path::TIF_EXIST)->forceFile();
 
 		$this->PidFile->purge();
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function removeProcessFile(){
+	private function removeProcessFile():void {
 		if (!$this->option('keep')) {
 			$this->getPidFile()->remove();
 		}
@@ -121,7 +123,7 @@ abstract class ACommand extends Command {
 
 	/**
 	 * @param string $info
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	protected final function saveProcessInfo(string $info): void {
 		$this->getPidFile()->rewrite(Str::join(';', static::$prefix, $info));
@@ -129,7 +131,7 @@ abstract class ACommand extends Command {
 
 	/**
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	protected final function getProcessInfo(): string {
 		return preg_replace('/^[^;]+;/', '', $this->getPidFile()->getContent());
@@ -139,7 +141,7 @@ abstract class ACommand extends Command {
 	 * @param InputInterface $Input
 	 * @param OutputInterface $Output
 	 * @return int
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	protected function execute(InputInterface $Input, OutputInterface $Output): int {
 		try {

@@ -111,7 +111,7 @@ class Page extends AModel
 	/**
 	 * @param string $value
 	 */
-	public final function setTitleAttribute($value){
+	public final function setTitleAttribute($value): void {
 		$this->toConfig('title', $value);
 	}
 
@@ -125,7 +125,7 @@ class Page extends AModel
 	/**
 	 * @param string $value
 	 */
-	public final function setDescriptionAttribute($value){
+	public final function setDescriptionAttribute($value): void {
 		$this->toConfig('description', $value);
 	}
 
@@ -147,7 +147,7 @@ class Page extends AModel
 	 * @param array $Args
 	 * @return string
 	 */
-	public final function route(array $Args = []){
+	public final function route(array $Args = []): string {
 		return preg_replace_callback('/\{\$[A-Za-z][A-Za-z0-9_-]+\}/', function($Maches) use (&$Args){
 			return array_shift($Args); }, $this->url);
 	}

@@ -24,6 +24,8 @@ use \Yeti\Main\Command\LaravelControllerMake;
 use \Yeti\Main\Command\LaravelMiddlewareMake;
 use \Yeti\Main\Command\LaravelModelMake;
 
+use \Yeti\Main\Command\YetiProjectMigrate;
+
 class Console extends Kernel {
 
 	/**
@@ -51,6 +53,7 @@ class Console extends Kernel {
 		LaravelMacrosMake::class,
 		LaravelMiddlewareMake::class,
 		LaravelModelMake::class,
-	];
 
+		YetiProjectMigrate::class,
+	];
 }

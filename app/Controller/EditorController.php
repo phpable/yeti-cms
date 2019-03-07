@@ -15,11 +15,14 @@ use \Yeti\Main\Exception\RetrievableException;
 use \Able\Helpers\Arr;
 use \Able\Helpers\Arg;
 
+use \Exception;
+use \Throwable;
+
 class EditorController extends AController {
 
 	/**
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function rename() {
 		if (!Arr::has(Input::all(), 'id', 'name')){
@@ -33,7 +36,7 @@ class EditorController extends AController {
 	/**
 	 * @return array
 	 * @throws RetrievableException
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	public final function create() {
 		if (!Arr::has(Input::all(), 'pid', 'type', 'owner')){
@@ -68,7 +71,7 @@ class EditorController extends AController {
 
 	/**
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function delete() {
 		if (!Arr::has(Input::all(), 'id')){

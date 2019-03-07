@@ -18,6 +18,9 @@ use \Symfony\Component\HttpKernel\Exception\HttpException;
 use \Yeti\Main\Exception\RetrievableException;
 use \Yeti\Main\Exception\InvalidScopeException;
 
+use \Throwable;
+use \Exception;
+
 class Interceptor extends Handler {
 
 	/**
@@ -35,9 +38,10 @@ class Interceptor extends Handler {
 	 * Report or log an exception.
 	 * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
 	 *
-	 * @param  \Exception $Exception
+	 * @param Throwable $Exception $Exception
+	 * @throws Exception
 	 */
-	public function report(\Exception $Exception) {
+	public function report(Throwable $Exception) {
 		parent::report($Exception);
 	}
 
@@ -45,10 +49,10 @@ class Interceptor extends Handler {
 	 * Render an exception into an HTTP response.
 	 *
 	 * @param  Request $Request
-	 * @param  \Exception $Exception
+	 * @param  Throwable $Exception
 	 * @return \Illuminate\Http\Response|array
 	 */
-	public function render($Request, \Exception $Exception) {
+	public function render($Request, Throwable $Exception) {
 		if ($Request->isXmlHttpRequest()){
 			if ($Exception instanceof RetrievableException
 				&& !config('app.debug')){

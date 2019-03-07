@@ -18,6 +18,8 @@ use \Yeti\Main\Building\Queue;
 use \Able\IO\Path;
 use \Able\IO\Directory;
 
+use \Throwable;
+
 class YetiProjectDeploy extends ACommand {
 
 	/**
@@ -36,7 +38,7 @@ class YetiProjectDeploy extends ACommand {
 	protected $signature = 'yeti:project:deploy {--rebuild} {--silent}';
 
 	/**
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	public function handle(): void {
 		$count = 0;
