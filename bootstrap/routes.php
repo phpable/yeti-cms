@@ -3,6 +3,7 @@ use \Illuminate\Support\Facades\Log;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Config;
 use \Illuminate\Support\Facades\Session;
+use \Illuminate\Support\Facades\Artisan;
 
 use \Illuminate\Routing\Router;
 
@@ -155,11 +156,25 @@ Route::group(['domain' => '{project}.' . Config::get('app.domain')], function() 
 			$Params = [];
 			$Page = findPageByUrl($url, $Params);
 
+			$CacheFile = Path::create(Config::get('building.destination'))
+				->append($project, '.datacache')->forceFile();
+
+			if ($CacheFile->getContent() !== ($cache = md5(json_encode($Scope->objects)))) {
+				$CacheFile->rewrite($cache);
+
+				/*
+				Artisan::call('yeti:data:build', [
+					'scope' => 'writersperhour',
+					'--force' => true,
+				]);
+				*/
+			}
+
 			$Directory = Path::create(Config::get('building.destination'))
 				->append($project, 'pages')->forceDirectory();
 
 			if (!env('APP_DEBUG_TEMPLATES') || $Directory->isEmpty()){
-				(new Builder($Page))->build($Directory);
+				(new Builder($Directory))->build($Page);
 			}
 
 			$Root = $Directory->toPath()
