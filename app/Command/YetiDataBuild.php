@@ -25,7 +25,7 @@ class YetiDataBuild extends ACommand {
 	/**
 	 * @var string
 	 */
-	protected static $prefix = 'build.data';
+	protected static $prefix = 'prepare';
 
 	/**
 	 * @var string

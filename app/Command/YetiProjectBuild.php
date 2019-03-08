@@ -25,7 +25,7 @@ class YetiProjectBuild extends ACommand {
 	/**
 	 * @var string
 	 */
-	protected static $prefix = 'build.pages';
+	protected static $prefix = 'build';
 
 	/**
 	 * @var string

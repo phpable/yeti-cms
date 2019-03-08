@@ -92,8 +92,11 @@ class DeployController extends AController {
 				throw new \Exception('Process not found!');
 			}, Path::TIF_NOT_FILE)->toFile()->getContent(), -1, PREG_SPLIT_NO_EMPTY);
 
-			return ['status' => true, 'action' => Arr::value($Data, 0),
-				'percent' => Arr::value($Data, 1)];
+			return [
+				'status' => true,
+				'action' => Arr::value($Data, 0, 'initialize'),
+				'percent' => Arr::value($Data, 1, 0)
+			];
 		}catch (\Throwable $Exception){
 			Log::error($Exception);
 

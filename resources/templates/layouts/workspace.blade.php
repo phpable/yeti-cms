@@ -69,8 +69,9 @@
 		</div>
 
 		<div id="progressbar" class="progress progress-mini m-t-mini m-b-none">
-			<div class="progress-bar progress-bar-deploy" style="display: none"></div>
+			<div class="progress-bar progress-bar-prepare" style="display: none;"></div>
 			<div class="progress-bar progress-bar-build" style="display: none;"></div>
+			<div class="progress-bar progress-bar-deploy" style="display: none"></div>
 		</div>
 	</header>
 

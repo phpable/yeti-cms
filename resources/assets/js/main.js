@@ -41,6 +41,7 @@
 (function ($) {
 	$(function (){
 		var jBar = $('#progressbar');
+
 		$('div', jBar).css({width: 0}).hide();
 
 		function updateBar(value, action){
@@ -93,7 +94,7 @@
 
 							setTimeout(function () {
 								document.location.reload();
-							}, 300);
+							}, 500);
 						}
 
 						updateBar(Response['percent'], Response['action']);

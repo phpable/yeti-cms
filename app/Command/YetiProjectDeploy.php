@@ -42,6 +42,9 @@ class YetiProjectDeploy extends ACommand {
 		$count = 0;
 
 		if ($this->option('rebuild')){
+			$this->call('yeti:data:build', ['scope' => 'writersperhour', '--force' => true,
+				'--silent' => $this->option('silent'), '--pid' => $this->option('pid'), '--keep' => true]);
+
 			$this->call('yeti:project:build', ['scope' => 'writersperhour', '--force' => true,
 				'--silent' => $this->option('silent'), '--pid' => $this->option('pid'), '--keep' => true]);
 		}
@@ -49,7 +52,7 @@ class YetiProjectDeploy extends ACommand {
 		$count += $this->deployPages();
 		$count += $this->deployData();
 		$count += $this->deployResources();
-//		$count += $this->deployFiles();
+		$count += $this->deployFiles();
 
 		if (!$this->option('silent')){
 			$this->info(sprintf('Total: %s', $count));
