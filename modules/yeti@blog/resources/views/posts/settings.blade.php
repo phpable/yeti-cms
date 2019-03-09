@@ -4,7 +4,7 @@
 		: route('yeti@blog:posts.save'),
 ])
 
-@object($Post, 'id', 'url', 'title', 'meta_title'
+@object($Post, 'id', 'url', 'title', 'meta_title', 'groups',
 	'meta_description', 'preview', 'body', 'is_published', 'topic_id', 'author_id')
 
 @section('actions')
