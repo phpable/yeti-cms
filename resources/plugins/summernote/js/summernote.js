@@ -1668,6 +1668,7 @@
 	 */
 	function html($node, isNewlineOnBlock) {
 		var markup = value($node);
+
 		if (isNewlineOnBlock) {
 			var regexTag = /<(\/?)(\b(?!!)[^>\s]*)(.*?)(\s*\/?>)/g;
 			markup = markup.replace(regexTag, function (match, endSlash, name) {
@@ -1679,6 +1680,7 @@
 			});
 			markup = $$1.trim(markup);
 		}
+
 		return markup;
 	}
 
@@ -5105,11 +5107,16 @@
 			if (isImage) {
 				var $image = $$1(target);
 				var position = $image.position();
+
+				if ($image.parent().is('[data-cnt="wrapper"]')){
+					position = $image.parent().position();
+				}
+
 				var pos = {
 					left: position.left + parseInt($image.css('marginLeft'), 10),
 					top: position.top + parseInt($image.css('marginTop'), 10)
 				};
-				// exclude margin
+
 				var imageSize = {
 					w: $image.outerWidth(false),
 					h: $image.outerHeight(false)
@@ -5204,6 +5211,7 @@
 	var AutoSync = /** @class */ (function () {
 		function AutoSync(context) {
 			var _this = this;
+
 			this.$note = context.layoutInfo.note;
 			this.events = {
 				'summernote.change': function () {
@@ -7240,6 +7248,7 @@
 		};
 		Context.prototype.code = function (html) {
 			var isActivated = this.invoke('codeview.isActivated');
+
 			if (html === undefined) {
 				this.invoke('codeview.sync');
 				return isActivated ? this.layoutInfo.codable.val() : this.layoutInfo.editable.html();
@@ -7249,6 +7258,7 @@
 				} else {
 					this.layoutInfo.editable.html(html);
 				}
+
 				this.$note.val(html);
 				this.triggerEvent('change', html);
 			}
@@ -7374,18 +7384,22 @@
 			var isExternalAPICalled = type === 'string';
 			var hasInitOptions = type === 'object';
 			var options = $$1.extend({}, $$1.summernote.options, hasInitOptions ? lists.head(arguments) : {});
+
 			// Update options
 			options.langInfo = $$1.extend(true, {}, $$1.summernote.lang['en-US'], $$1.summernote.lang[options.lang]);
 			options.icons = $$1.extend(true, {}, $$1.summernote.options.icons, options.icons);
 			options.tooltip = options.tooltip === 'auto' ? !env.isSupportTouch : options.tooltip;
+
 			this.each(function (idx, note) {
 				var $note = $$1(note);
+
 				if (!$note.data('summernote')) {
 					var context = new Context($note, options);
 					$note.data('summernote', context);
 					$note.data('summernote').triggerEvent('init', context.layoutInfo);
 				}
 			});
+
 			var $note = this.first();
 			if ($note.length) {
 				var context = $note.data('summernote');
@@ -7648,4 +7662,3 @@
 		}
 	});
 })));
-//# sourceMappingURL=summernote.js.map

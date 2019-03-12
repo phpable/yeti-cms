@@ -154,5 +154,4 @@ class FilesController extends AController {
 	public final function proxyResource($url){
 		_dumpe($url);
 	}
-
 }

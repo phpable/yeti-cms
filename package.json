@@ -9,7 +9,7 @@
 		"prod": "npm run production",
 		"production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
 	},
-	"devDependencies": {
+	"dependencies": {
 		"ace-builds": "^1.4.1",
 		"axios": "^0.18",
 		"base-64": "^0.1.0",
@@ -21,16 +21,13 @@
 		"easy-pie-chart": "^2.1.7",
 		"font-awesome": "^4.7.0",
 		"jquery": "^3.2",
+		"jquery-editable-select": "^2.2.5",
 		"jquery.cookie": "^1.4.1",
 		"laravel-mix": "^2.0",
 		"lodash": "^4.17.5",
 		"node-sass": "^4.9.3",
 		"popper.js": "^1.12",
-		"underscore": "^1.9.1",
-		"vue": "^2.5.7"
-	},
-	"dependencies": {
-		"jquery-editable-select": "^2.2.5",
-		"suggestags": "^1.6.0"
+		"suggestags": "^1.6.0",
+		"underscore": "^1.9.1"
 	}
 }

@@ -27,6 +27,16 @@
 				if (jRecipient.length > 0) {
 
 					jRecipient.summernote({
+						imageTitle: {
+							specificAltField: false,
+						},
+
+						captionIt: {
+							captionText: 'Default Caption'
+						},
+
+						airMode: false,
+						styleWithSpan: false,
 						height: (function () {
 							return (__PARENT__.length > 0 ? $("#{{ $parent }}")
 								: jRecipient.parent()).innerHeight();
@@ -49,7 +59,9 @@
 						popover: {
 							image: [
 								['imagesize', ['imageSize100', 'imageSizeAuto']],
-								['remove', ['removeMedia']]
+								['remove', ['removeMedia']],
+								['custom', ['imageTitle']],
+								['custom2', ['captionIt']],
 							],
 							link: [
 								['link', ['linkDialogShow', 'unlink']]

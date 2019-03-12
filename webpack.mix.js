@@ -118,7 +118,9 @@ mix.scripts([
 ],'public/js/editor.js');
 
 mix.scripts([
-	paths.plugins + 'summernote/js/summernote.js'
+	paths.plugins + 'summernote/js/summernote.js',
+	paths.plugins + 'summernote/js/summernote-image-title.js',
+	paths.plugins + 'summernote/js/summernote-image-captionit.js',
 ], 'public/js/summernote.js');
 
 mix.scripts([
