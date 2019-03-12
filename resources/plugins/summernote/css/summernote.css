@@ -825,22 +825,21 @@ span[data-cnt="caption"] {
 	bottom: 0;
 	height: 32px;
 	line-height: 22px;
-	padding: 5px 7px;
+	padding: 5px 7px 5px 46px;
 	color: #ffffff;
 	background-color: #1d2d3d;
 	user-modify: read-only;
 }
-
-span[data-cnt="caption"] em {
-	font-style: normal;
-}
-
-span[data-cnt="caption"] .fa {
-	display: inline-block;
-	height: 22px;
+span[data-cnt="caption"]:before {
+	font: normal normal normal 14px/1 FontAwesome;
+	content: "\f05a";
+	display: block;
+	position: absolute;
+	height: 32px;
 	width: 22px;
-	line-height: 22px;
+	margin: 0 0 0 12px;
+	bottom: 0;
+	left: 0;
+	line-height: 32px;
 	text-align: center;
-	margin-right: 12px;
-	user-modify: read-only;
 }

@@ -206,7 +206,7 @@
 					}
 
 					if ($img.parent().is('[data-cnt="wrapper"')) {
-						$img.parent().find('[data-cnt="caption"]').find('em').text(imgInfo.title);
+						$img.parent().find('[data-cnt="caption"]').text(imgInfo.title);
 					}
 
 					$note.val(context.invoke('code'));

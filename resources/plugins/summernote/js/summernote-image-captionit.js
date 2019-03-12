@@ -41,28 +41,22 @@
 
 					click: function () {
 						var img = $($editable.data('target'));
-						var $parentAnchorLink = img.parent();
+						var jParent = img.parent();
 
-						if ($parentAnchorLink.parent().find('span[data-cnt="caption"]').length > 0) {
-							$parentAnchorLink.parent().find('span[data-cnt="caption"]').remove();
+						if (jParent.parent().find('span[data-cnt="caption"]').length > 0) {
+							jParent.parent().find('span[data-cnt="caption"]').remove();
 						} else {
-							var titleText = img.attr('title'),
-								classList = img.attr('class'),
-								inlineStyles = img.attr('style'),
-								imgWidth = img.width(),
-								captionText = '';
-
-							captionText = context.options.captionIt.captionText;
-							if (titleText) {
-								captionText = titleText;
+							var captionText = context.options.captionIt.captionText;
+							if (img.attr('title')) {
+								captionText = img.attr('title');
 							}
 
 							if (!img.parent().is('span[data-cnt="wrapper"]')) {
 								img.wrap($('<span data-cnt="wrapper"></span>'));
 							}
 
-							img.after('<span data-cnt="caption"><i class="fa fa-info-circle"></i><em>'
-								+ captionText + '</em></span>');
+							img.after('<span data-cnt="caption">'
+								+ captionText + '</span>');
 						}
 
 						$note.val(context.invoke('code'));
