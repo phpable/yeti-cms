@@ -821,11 +821,12 @@ span[data-cnt="wrapper"] {
 span[data-cnt="caption"] {
 	display: block;
 	position: absolute;
+	font-size: 12px;
 	left: 0;
 	bottom: 0;
 	height: 32px;
 	line-height: 22px;
-	padding: 5px 7px 5px 46px;
+	padding: 5px 22px 5px 46px;
 	color: #ffffff;
 	background-color: #1d2d3d;
 	user-modify: read-only;
