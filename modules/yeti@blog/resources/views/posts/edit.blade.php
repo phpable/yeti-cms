@@ -1,6 +1,6 @@
 @extends('yeti@blog::frame', [
 	'action' => route('yeti@blog:posts.update-content', $Post->id),
-	'footer' => true])
+	'footer' => false])
 
 @section('actions')
 	@parent
@@ -27,6 +27,7 @@
 @section('form')
 	<div class="editor-container">
 		<div class="tab-content" data-effect="full-height" data-height-dec="tabh">
+
 			@include('yeti@blog[components]::summernote', [
 				'text' => $Post->body,
 				'parent' => 'content',

@@ -58,7 +58,7 @@
 
 						popover: {
 							image: [
-								['imagesize', ['imageSize100', 'imageSizeAuto']],
+								['imagesize', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto']],
 								['remove', ['removeMedia']],
 								['custom', ['imageTitle']],
 								['custom2', ['captionIt']],
@@ -74,6 +74,9 @@
 
 						codeviewFilter: false,
 						codeviewIframeFilter: true,
+
+						// popoverContainer: '#global-popover',
+						popoverContainer: '#active-area',
 
 						callbacks: {
 							onImageUpload: function (Files) {

@@ -28,34 +28,24 @@
 	@parent
 
 	@if (App::scopable())
-		<li>
-			<a href="{{ route('yeti@core:objects.all') }}" title="Objects">
-				<i class="fa fa-database fa-lg"></i>
-			</a>
-		</li>
+		<a href="{{ route('yeti@core:objects.all') }}" title="Objects">
+			<i class="fa fa-database fa-lg"></i>
+		</a>
 
-		<li>
-			<a href="{{route('yeti@core:layouts.all') }}" title="Layouts">
-				<i class="fa fa-clone"></i>
-			</a>
-		</li>
+		<a href="{{route('yeti@core:layouts.all') }}" title="Layouts">
+			<i class="fa fa-clone"></i>
+		</a>
 
-		<li>
-			<a href="{{ route('yeti@core:pages.all') }}" title="Pages">
-				<i class="fa fa-sticky-note fa-lg"></i>
-			</a>
-		</li>
+		<a href="{{ route('yeti@core:pages.all') }}" title="Pages">
+			<i class="fa fa-sticky-note fa-lg"></i>
+		</a>
 
-		<li>
-			<a href="{{ route('yeti@core:snippets.all') }}" title="Snippets">
-				<i class="fa fa-code"></i>
-			</a>
-		</li>
+		<a href="{{ route('yeti@core:snippets.all') }}" title="Snippets">
+			<i class="fa fa-code"></i>
+		</a>
 
-		<li>
-			<a href="{{ route('yeti@main:files') }}" title="Files">
-				<i class="fa fa-folder-open fa-lg"></i>
-			</a>
-		</li>
+		<a href="{{ route('yeti@main:files') }}" title="Files">
+			<i class="fa fa-folder-open fa-lg"></i>
+		</a>
 	@endif
 @stop
