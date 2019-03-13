@@ -5,16 +5,19 @@
 
 @section('main')
 	<header id="header" class="navbar">
-		<div class="row">
-			<div class="col-sm-5">
+		<div class="col-sm-5">
+			<div class="row">
 				<ul class="nav navbar-nav navbar-actions project-tools">
 					<li>
 						@yield('actions')
 					</li>
 				</ul>
 			</div>
+		</div>
 
-			<div class="col-sm-7">
+		<div class="col-sm-7">
+			<div class="row">
+
 				<ul class="nav navbar-nav navbar-avatar pull-right main-menu">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -75,30 +78,23 @@
 		</div>
 	</header>
 
-	<nav id="nav" class="nav-primary hidden-xs nav-vertical">
-		<ul class="nav affix-top" data-spy="affix">
+	<div id="yeti-left" class="yeti-nav nav-vertical">
+		<a href="{{ route('yeti@main:dashboard') }}" title="Projects">
+			<i class="fa fa-th"></i>
+		</a>
 
-			<li>
-				<a href="{{ route('yeti@main:dashboard') }}" title="Projects">
-					<i class="fa fa-th"></i>
-				</a>
-			</li>
+		@if (!App::scopable())
+			<a href="{{ route('yeti@main:configuration') }}" title="Configuration">
+				<i class="fa fa-wrench"></i>
+			</a>
+		@endif
 
-			@if (!App::scopable())
-				<li>
-					<a href="{{ route('yeti@main:configuration') }}" title="Configuration">
-						<i class="fa fa-wrench"></i>
-					</a>
-				</li>
-			@endif
+		@if (App::scopable())
+			@yield('tools')
+		@endif
+	</div>
 
-			@if (App::scopable())
-				@yield('tools')
-			@endif
-		</ul>
-	</nav>
-
-	<section id="content" data-effect="full-height full-width" data-height-dec="header footer" data-width-dec="nav" @if($scrollable) class="scroll-container" @endif>
+	<section id="content" data-effect="full-height full-width" data-height-dec="header footer" data-width-dec="yeti-left" @if($scrollable) class="scroll-container" @endif>
 		@yield('workspace')
 	</section>
 

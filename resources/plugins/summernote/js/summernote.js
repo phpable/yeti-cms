@@ -73,12 +73,17 @@
 	};
 
 	var editor = renderer.create('<div class="note-editor note-frame panel panel-default"/>');
-	var toolbar = renderer.create('<div class="note-toolbar panel-heading" role="toolbar"></div></div>');
+
+	// var toolbar = renderer.create('<div class="note-toolbar panel-heading" role="toolbar"></div></div>');
+	//<div id="active-area" class="btn-group"></div>
+
+	var toolbar = renderer.create('<div class="note-toolbar panel-heading" role="toolbar"></div>');
 	var editingArea = renderer.create('<div class="note-editing-area"/>');
 	var codable = renderer.create('<textarea class="note-codable" role="textbox" aria-multiline="true"/>');
 	var editable = renderer.create('<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"/>');
 	var statusbar = renderer.create([
-		'<output class="note-status-output" aria-live="polite"/>',
+		//'<output class="note-status-output" aria-live="polite"/>',
+
 		'<div class="note-statusbar" role="status">',
 		'  <div class="note-resizebar" role="seperator" aria-orientation="horizontal" aria-label="Resize">',
 		'    <div class="note-icon-bar"/>',
@@ -86,11 +91,6 @@
 		'    <div class="note-icon-bar"/>',
 		'  </div>',
 		'</div>'
-	].join(''));
-	var airEditor = renderer.create('<div class="note-editor"/>');
-	var airEditable = renderer.create([
-		'<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"/>',
-		'<output class="note-status-output" aria-live="polite"/>'
 	].join(''));
 	var buttonGroup = renderer.create('<div class="note-btn-group btn-group">');
 	var dropdown = renderer.create('<ul class="dropdown-menu" role="list">', function ($node, options) {
@@ -168,18 +168,23 @@
 			'</div>'
 		].join(''));
 	});
+
 	var popover = renderer.create([
 		'<div class="note-popover popover in">',
-		'  <div class="arrow"/>',
-		'  <div class="popover-content note-children-container"/>',
+		// '<div class="arrow"></div>',
+		'<div class="popover-content note-children-container"/>',
 		'</div>'
 	].join(''), function ($node, options) {
+		/*
 		var direction = typeof options.direction !== 'undefined' ? options.direction : 'bottom';
+
 		$node.addClass(direction);
 		if (options.hideArrow) {
 			$node.find('.arrow').hide();
 		}
+		*/
 	});
+
 	var checkbox = renderer.create('<div class="checkbox"></div>', function ($node, options) {
 		$node.html([
 			'<label' + (options.id ? ' for="' + options.id + '"' : '') + '>',
@@ -201,8 +206,6 @@
 		codable: codable,
 		editable: editable,
 		statusbar: statusbar,
-		airEditor: airEditor,
-		airEditable: airEditable,
 		buttonGroup: buttonGroup,
 		dropdown: dropdown,
 		dropdownButtonContents: dropdownButtonContents,
@@ -247,18 +250,14 @@
 			$dialog.modal('hide');
 		},
 		createLayout: function ($note, options) {
-			var $editor = (options.airMode ? ui.airEditor([
-				ui.editingArea([
-					ui.airEditable()
-				])
-			]) : ui.editor([
+			var $editor = (ui.editor([
 				ui.toolbar(),
 				ui.editingArea([
-					ui.codable(),
 					ui.editable()
 				]),
 				ui.statusbar()
 			])).render();
+
 			$editor.insertAfter($note);
 			return {
 				note: $note,
@@ -2334,6 +2333,7 @@
 		};
 		return WrappedRange;
 	}());
+
 	/**
 	 * Data structure
 	 *  * BoundaryPoint: a point of dom tree
@@ -2571,8 +2571,7 @@
 			},
 			options: {
 				help: 'Help',
-				fullscreen: 'Full Screen',
-				codeview: 'Code View'
+				fullscreen: 'Full Screen'
 			},
 			paragraph: {
 				paragraph: 'Paragraph',
@@ -4246,20 +4245,20 @@
 			}).on('focusout', function (event) {
 				_this.context.triggerEvent('focusout', event);
 			});
-			if (!this.options.airMode) {
-				if (this.options.width) {
-					this.$editor.outerWidth(this.options.width);
-				}
-				if (this.options.height) {
-					this.$editable.outerHeight(this.options.height);
-				}
-				if (this.options.maxHeight) {
-					this.$editable.css('max-height', this.options.maxHeight);
-				}
-				if (this.options.minHeight) {
-					this.$editable.css('min-height', this.options.minHeight);
-				}
+
+			if (this.options.width) {
+				this.$editor.outerWidth(this.options.width);
 			}
+			if (this.options.height) {
+				this.$editable.outerHeight(this.options.height);
+			}
+			if (this.options.maxHeight) {
+				this.$editable.css('max-height', this.options.maxHeight);
+			}
+			if (this.options.minHeight) {
+				this.$editable.css('min-height', this.options.minHeight);
+			}
+
 			this.history.recordUndo();
 		};
 		Editor.prototype.destroy = function () {
@@ -4762,9 +4761,8 @@
 			var collection = $$1();
 			var $dropzoneMessage = this.$dropzone.find('.note-dropzone-message');
 			this.documentEventHandlers.onDragenter = function (e) {
-				var isCodeview = _this.context.invoke('codeview.isActivated');
 				var hasEditorSize = _this.$editor.width() > 0 && _this.$editor.height() > 0;
-				if (!isCodeview && !collection.length && hasEditorSize) {
+				if (!collection.length && hasEditorSize) {
 					_this.$editor.addClass('dragover');
 					_this.$dropzone.width(_this.$editor.width());
 					_this.$dropzone.height(_this.$editor.height());
@@ -4837,102 +4835,6 @@
 			CodeMirror = window.CodeMirror;
 		}
 	}
-	/**
-	 * @class Codeview
-	 */
-	var CodeView = /** @class */ (function () {
-		function CodeView(context) {
-			this.context = context;
-			this.$editor = context.layoutInfo.editor;
-			this.$editable = context.layoutInfo.editable;
-			this.$codable = context.layoutInfo.codable;
-			this.options = context.options;
-		}
-
-		CodeView.prototype.sync = function () {
-			var isCodeview = this.isActivated();
-			if (isCodeview && env.hasCodeMirror) {
-				this.$codable.data('cmEditor').save();
-			}
-		};
-		/**
-		 * @return {Boolean}
-		 */
-		CodeView.prototype.isActivated = function () {
-			return this.$editor.hasClass('codeview');
-		};
-		/**
-		 * toggle codeview
-		 */
-		CodeView.prototype.toggle = function () {
-			if (this.isActivated()) {
-				this.deactivate();
-			} else {
-				this.activate();
-			}
-			this.context.triggerEvent('codeview.toggled');
-		};
-		/**
-		 * activate code view
-		 */
-		CodeView.prototype.activate = function () {
-			var _this = this;
-			this.$codable.val(dom.html(this.$editable, this.options.prettifyHtml));
-			this.$codable.height(this.$editable.height());
-			this.context.invoke('toolbar.updateCodeview', true);
-			this.$editor.addClass('codeview');
-			this.$codable.focus();
-			// activate CodeMirror as codable
-			if (env.hasCodeMirror) {
-				var cmEditor_1 = CodeMirror.fromTextArea(this.$codable[0], this.options.codemirror);
-				// CodeMirror TernServer
-				if (this.options.codemirror.tern) {
-					var server_1 = new CodeMirror.TernServer(this.options.codemirror.tern);
-					cmEditor_1.ternServer = server_1;
-					cmEditor_1.on('cursorActivity', function (cm) {
-						server_1.updateArgHints(cm);
-					});
-				}
-				cmEditor_1.on('blur', function (event) {
-					_this.context.triggerEvent('blur.codeview', cmEditor_1.getValue(), event);
-				});
-				// CodeMirror hasn't Padding.
-				cmEditor_1.setSize(null, this.$editable.outerHeight());
-				this.$codable.data('cmEditor', cmEditor_1);
-			} else {
-				this.$codable.on('blur', function (event) {
-					_this.context.triggerEvent('blur.codeview', _this.$codable.val(), event);
-				});
-			}
-		};
-		/**
-		 * deactivate code view
-		 */
-		CodeView.prototype.deactivate = function () {
-			// deactivate CodeMirror as codable
-			if (env.hasCodeMirror) {
-				var cmEditor = this.$codable.data('cmEditor');
-				this.$codable.val(cmEditor.getValue());
-				cmEditor.toTextArea();
-			}
-			var value = dom.value(this.$codable, this.options.prettifyHtml) || dom.emptyPara;
-			var isChange = this.$editable.html() !== value;
-			this.$editable.html(value);
-			this.$editable.height(this.options.height ? this.$codable.height() : 'auto');
-			this.$editor.removeClass('codeview');
-			if (isChange) {
-				this.context.triggerEvent('change', this.$editable.html(), this.$editable);
-			}
-			this.$editable.focus();
-			this.context.invoke('toolbar.updateCodeview', false);
-		};
-		CodeView.prototype.destroy = function () {
-			if (this.isActivated()) {
-				this.deactivate();
-			}
-		};
-		return CodeView;
-	}());
 
 	var EDITABLE_PADDING = 24;
 	var Statusbar = /** @class */ (function () {
@@ -4945,10 +4847,11 @@
 
 		Statusbar.prototype.initialize = function () {
 			var _this = this;
-			if (this.options.airMode || this.options.disableResizeEditor) {
+			if (this.options.disableResizeEditor) {
 				this.destroy();
 				return;
 			}
+
 			this.$statusbar.on('mousedown', function (event) {
 				event.preventDefault();
 				event.stopPropagation();
@@ -4978,7 +4881,6 @@
 			this.$editor = context.layoutInfo.editor;
 			this.$toolbar = context.layoutInfo.toolbar;
 			this.$editable = context.layoutInfo.editable;
-			this.$codable = context.layoutInfo.codable;
 			this.$window = $$1(window);
 			this.$scrollbar = $$1('html, body');
 			this.onResize = function () {
@@ -4990,10 +4892,6 @@
 
 		Fullscreen.prototype.resizeTo = function (size) {
 			this.$editable.css('height', size.h);
-			this.$codable.css('height', size.h);
-			if (this.$codable.data('cmeditor')) {
-				this.$codable.data('cmeditor').setsize(null, size.h);
-			}
 		};
 		/**
 		 * toggle fullscreen
@@ -5039,9 +4937,6 @@
 				},
 				'summernote.disable': function () {
 					_this.hide();
-				},
-				'summernote.codeview.toggled': function () {
-					_this.update();
 				}
 			};
 		}
@@ -5235,9 +5130,6 @@
 			this.events = {
 				'summernote.init summernote.change': function () {
 					_this.update();
-				},
-				'summernote.codeview.toggled': function () {
-					_this.update();
 				}
 			};
 		}
@@ -5257,8 +5149,7 @@
 			this.$placeholder.remove();
 		};
 		Placeholder.prototype.update = function () {
-			var isShow = !this.context.invoke('codeview.isActivated') && this.context.invoke('editor.isEmpty');
-			this.$placeholder.toggle(isShow);
+			this.$placeholder.toggle(this.context.invoke('editor.isEmpty'));
 		};
 		return Placeholder;
 	}());
@@ -5466,6 +5357,7 @@
 				]
 			}).render();
 		};
+
 		Buttons.prototype.addToolbarButtons = function () {
 			var _this = this;
 			this.context.memo('button.style', function () {
@@ -5789,14 +5681,6 @@
 					click: _this.context.createInvokeHandler('fullscreen.toggle')
 				}).render();
 			});
-			this.context.memo('button.codeview', function () {
-				return _this.button({
-					className: 'btn-codeview',
-					contents: _this.ui.icon(_this.options.icons.code),
-					tooltip: _this.lang.options.codeview,
-					click: _this.context.createInvokeHandler('codeview.toggle')
-				}).render();
-			});
 			this.context.memo('button.redo', function () {
 				return _this.button({
 					contents: _this.ui.icon(_this.options.icons.redo),
@@ -5819,6 +5703,7 @@
 				}).render();
 			});
 		};
+
 		/**
 		 * image : [
 		 *   ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
@@ -5888,6 +5773,7 @@
 				}).render();
 			});
 		};
+
 		Buttons.prototype.addLinkPopoverButtons = function () {
 			var _this = this;
 			this.context.memo('button.linkDialogShow', function () {
@@ -5905,6 +5791,7 @@
 				}).render();
 			});
 		};
+
 		/**
 		 * table : [
 		 *  ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
@@ -5970,6 +5857,7 @@
 				}).render();
 			});
 		};
+
 		Buttons.prototype.build = function ($container, groups) {
 			for (var groupIdx = 0, groupLen = groups.length; groupIdx < groupLen; groupIdx++) {
 				var group = groups[groupIdx];
@@ -5987,6 +5875,7 @@
 				$group.appendTo($container);
 			}
 		};
+
 		/**
 		 * @param {jQuery} [$container]
 		 */
@@ -6105,9 +5994,6 @@
 			this.followScroll = this.followScroll.bind(this);
 		}
 
-		Toolbar.prototype.shouldInitialize = function () {
-			return !this.options.airMode;
-		};
 		Toolbar.prototype.initialize = function () {
 			var _this = this;
 			this.options.toolbar = this.options.toolbar || [];
@@ -6182,26 +6068,12 @@
 			this.ui.toggleBtnActive(this.$toolbar.find('.btn-fullscreen'), isFullscreen);
 			this.changeContainer(isFullscreen);
 		};
-		Toolbar.prototype.updateCodeview = function (isCodeview) {
-			this.ui.toggleBtnActive(this.$toolbar.find('.btn-codeview'), isCodeview);
-			if (isCodeview) {
-				this.deactivate();
-			} else {
-				this.activate();
-			}
-		};
-		Toolbar.prototype.activate = function (isIncludeCodeview) {
+		Toolbar.prototype.activate = function () {
 			var $btn = this.$toolbar.find('button');
-			if (!isIncludeCodeview) {
-				$btn = $btn.not('.btn-codeview');
-			}
 			this.ui.toggleBtn($btn, true);
 		};
-		Toolbar.prototype.deactivate = function (isIncludeCodeview) {
+		Toolbar.prototype.deactivate = function () {
 			var $btn = this.$toolbar.find('button');
-			if (!isIncludeCodeview) {
-				$btn = $btn.not('.btn-codeview');
-			}
 			this.ui.toggleBtn($btn, false);
 		};
 		return Toolbar;
@@ -6572,10 +6444,13 @@
 		ImagePopover.prototype.shouldInitialize = function () {
 			return !lists.isEmpty(this.options.popover.image);
 		};
+
 		ImagePopover.prototype.initialize = function () {
 			this.$popover = this.ui.popover({
 				className: 'note-image-popover'
-			}).render().appendTo(this.options.container);
+			}).render().appendTo(this.options.popoverContainer !== undefined
+				? this.options.popoverContainer : this.options.container);
+
 			var $content = this.$popover.find('.popover-content,.note-popover-content');
 			this.context.invoke('buttons.build', $content, this.options.popover.image);
 		};
@@ -6586,11 +6461,15 @@
 			if (dom.isImg(target)) {
 				var pos = dom.posFromPlaceholder(target);
 				var posEditor = dom.posFromPlaceholder(this.editable);
+
 				this.$popover.css({
 					display: 'block',
-					left: this.options.popatmouse ? event.pageX - 20 : pos.left,
-					top: this.options.popatmouse ? event.pageY : Math.min(pos.top, posEditor.top)
+					// left: this.options.popatmouse ? event.pageX - 20 : pos.left,
+					// top: this.options.popatmouse ? event.pageY : Math.min(pos.top, posEditor.top)
+					left: 0,
+					top: 0,
 				});
+
 			} else {
 				this.hide();
 			}
@@ -6598,6 +6477,7 @@
 		ImagePopover.prototype.hide = function () {
 			this.$popover.hide();
 		};
+
 		return ImagePopover;
 	}());
 
@@ -6892,9 +6772,9 @@
 				return $row.html();
 			}).join('');
 		};
+
 		/**
 		 * show help dialog
-		 *
 		 * @return {Promise}
 		 */
 		HelpDialog.prototype.showHelpDialog = function () {
@@ -6915,69 +6795,6 @@
 			});
 		};
 		return HelpDialog;
-	}());
-
-	var AIR_MODE_POPOVER_X_OFFSET = 20;
-	var AirPopover = /** @class */ (function () {
-		function AirPopover(context) {
-			var _this = this;
-			this.context = context;
-			this.ui = $$1.summernote.ui;
-			this.options = context.options;
-			this.events = {
-				'summernote.keyup summernote.mouseup summernote.scroll': function () {
-					_this.update();
-				},
-				'summernote.disable summernote.change summernote.dialog.shown': function () {
-					_this.hide();
-				},
-				'summernote.focusout': function (we, e) {
-					// [workaround] Firefox doesn't support relatedTarget on focusout
-					//  - Ignore hide action on focus out in FF.
-					if (env.isFF) {
-						return;
-					}
-					if (!e.relatedTarget || !dom.ancestor(e.relatedTarget, func.eq(_this.$popover[0]))) {
-						_this.hide();
-					}
-				}
-			};
-		}
-
-		AirPopover.prototype.shouldInitialize = function () {
-			return this.options.airMode && !lists.isEmpty(this.options.popover.air);
-		};
-		AirPopover.prototype.initialize = function () {
-			this.$popover = this.ui.popover({
-				className: 'note-air-popover'
-			}).render().appendTo(this.options.container);
-			var $content = this.$popover.find('.popover-content');
-			this.context.invoke('buttons.build', $content, this.options.popover.air);
-		};
-		AirPopover.prototype.destroy = function () {
-			this.$popover.remove();
-		};
-		AirPopover.prototype.update = function () {
-			var styleInfo = this.context.invoke('editor.currentStyle');
-			if (styleInfo.range && !styleInfo.range.isCollapsed()) {
-				var rect = lists.last(styleInfo.range.getClientRects());
-				if (rect) {
-					var bnd = func.rect2bnd(rect);
-					this.$popover.css({
-						display: 'block',
-						left: Math.max(bnd.left + bnd.width / 2, 0) - AIR_MODE_POPOVER_X_OFFSET,
-						top: bnd.top + bnd.height
-					});
-					this.context.invoke('buttons.updateCurrentStyle', this.$popover);
-				}
-			} else {
-				this.hide();
-			}
-		};
-		AirPopover.prototype.hide = function () {
-			this.$popover.hide();
-		};
-		return AirPopover;
 	}());
 
 	var POPOVER_DIST = 5;
@@ -7247,18 +7064,10 @@
 			this.triggerEvent('destroy', this);
 		};
 		Context.prototype.code = function (html) {
-			var isActivated = this.invoke('codeview.isActivated');
-
 			if (html === undefined) {
-				this.invoke('codeview.sync');
-				return isActivated ? this.layoutInfo.codable.val() : this.layoutInfo.editable.html();
+				return this.layoutInfo.editable.html();
 			} else {
-				if (isActivated) {
-					this.layoutInfo.codable.val(html);
-				} else {
-					this.layoutInfo.editable.html(html);
-				}
-
+				this.layoutInfo.editable.html(html);
 				this.$note.val(html);
 				this.triggerEvent('change', html);
 			}
@@ -7272,10 +7081,6 @@
 			this.triggerEvent('disable', false);
 		};
 		Context.prototype.disable = function () {
-			// close codeview if codeview is opend
-			if (this.invoke('codeview.isActivated')) {
-				this.invoke('codeview.deactivate');
-			}
 			this.layoutInfo.editable.attr('contenteditable', false);
 			this.invoke('toolbar.deactivate', true);
 			this.triggerEvent('disable', true);
@@ -7315,6 +7120,8 @@
 		};
 		Context.prototype.removeModule = function (key) {
 			var module = this.modules[key];
+
+			module.shouldInitialize = module.shouldInitialize || func.ok;
 			if (module.shouldInitialize()) {
 				if (module.events) {
 					dom.detachEvents(this.$note, module.events);
@@ -7424,7 +7231,6 @@
 				'editor': Editor,
 				'clipboard': Clipboard,
 				'dropzone': Dropzone,
-				'codeview': CodeView,
 				'statusbar': Statusbar,
 				'fullscreen': Fullscreen,
 				'handle': Handle,
@@ -7443,13 +7249,12 @@
 				'tablePopover': TablePopover,
 				'videoDialog': VideoDialog,
 				'helpDialog': HelpDialog,
-				'airPopover': AirPopover
 			},
 			buttons: {},
 			lang: 'en-US',
 			followingToolbar: true,
 			otherStaticBar: '',
-			// toolbar
+
 			toolbar: [
 				['style', ['style']],
 				['font', ['bold', 'underline', 'clear']],
@@ -7458,7 +7263,7 @@
 				['para', ['ul', 'ol', 'paragraph']],
 				['table', ['table']],
 				['insert', ['link', 'picture', 'video']],
-				['view', ['fullscreen', 'codeview', 'help']]
+				['view', ['fullscreen', 'help']]
 			],
 			// popover
 			popatmouse: true,
@@ -7474,17 +7279,8 @@
 				table: [
 					['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
 					['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
-				],
-				air: [
-					['color', ['color']],
-					['font', ['bold', 'underline', 'clear']],
-					['para', ['ul', 'paragraph']],
-					['table', ['table']],
-					['insert', ['link', 'picture']]
 				]
 			},
-			// air mode: inline editor
-			airMode: false,
 			width: null,
 			height: null,
 			linkTargetBlank: true,
@@ -7496,6 +7292,7 @@
 			hintDirection: 'bottom',
 			tooltip: 'auto',
 			container: 'body',
+			popoverContainer: 'body',
 			maxTextLength: 0,
 			blockquoteBreakingLevel: 2,
 			styleTags: ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -7540,7 +7337,6 @@
 				onInit: null,
 				onFocus: null,
 				onBlur: null,
-				onBlurCodeview: null,
 				onEnter: null,
 				onKeyup: null,
 				onKeydown: null,
@@ -7565,10 +7361,10 @@
 					'CTRL+U': 'underline',
 					'CTRL+SHIFT+S': 'strikethrough',
 					'CTRL+BACKSLASH': 'removeFormat',
-					'CTRL+SHIFT+L': 'justifyLeft',
-					'CTRL+SHIFT+E': 'justifyCenter',
-					'CTRL+SHIFT+R': 'justifyRight',
-					'CTRL+SHIFT+J': 'justifyFull',
+					// 'CTRL+SHIFT+L': 'justifyLeft',
+					// 'CTRL+SHIFT+E': 'justifyCenter',
+					// 'CTRL+SHIFT+R': 'justifyRight',
+					// 'CTRL+SHIFT+J': 'justifyFull',
 					'CTRL+SHIFT+NUM7': 'insertUnorderedList',
 					'CTRL+SHIFT+NUM8': 'insertOrderedList',
 					'CTRL+LEFTBRACKET': 'outdent',
@@ -7580,7 +7376,7 @@
 					'CTRL+NUM4': 'formatH4',
 					'CTRL+NUM5': 'formatH5',
 					'CTRL+NUM6': 'formatH6',
-					'CTRL+ENTER': 'insertHorizontalRule',
+					// 'CTRL+ENTER': 'insertHorizontalRule',
 					'CTRL+K': 'linkDialog.show'
 				},
 				mac: {
@@ -7594,10 +7390,10 @@
 					'CMD+U': 'underline',
 					'CMD+SHIFT+S': 'strikethrough',
 					'CMD+BACKSLASH': 'removeFormat',
-					'CMD+SHIFT+L': 'justifyLeft',
-					'CMD+SHIFT+E': 'justifyCenter',
-					'CMD+SHIFT+R': 'justifyRight',
-					'CMD+SHIFT+J': 'justifyFull',
+					// 'CMD+SHIFT+L': 'justifyLeft',
+					// 'CMD+SHIFT+E': 'justifyCenter',
+					// 'CMD+SHIFT+R': 'justifyRight',
+					// 'CMD+SHIFT+J': 'justifyFull',
 					'CMD+SHIFT+NUM7': 'insertUnorderedList',
 					'CMD+SHIFT+NUM8': 'insertOrderedList',
 					'CMD+LEFTBRACKET': 'outdent',
@@ -7609,7 +7405,7 @@
 					'CMD+NUM4': 'formatH4',
 					'CMD+NUM5': 'formatH5',
 					'CMD+NUM6': 'formatH6',
-					'CMD+ENTER': 'insertHorizontalRule',
+					// 'CMD+ENTER': 'insertHorizontalRule',
 					'CMD+K': 'linkDialog.show'
 				}
 			},

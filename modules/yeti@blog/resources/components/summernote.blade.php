@@ -54,6 +54,8 @@
 
 							['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
 							['misc', ['undo', 'redo', 'fullscreen', 'help']],
+
+							// ['test', []]
 						],
 
 						popover: {
@@ -72,11 +74,8 @@
 						dialogsFade: true,
 						blockquoteBreakingLevel: 2,
 
-						codeviewFilter: false,
-						codeviewIframeFilter: true,
-
 						// popoverContainer: '#global-popover',
-						popoverContainer: '#active-area',
+						// popoverContainer: '#active-area',
 
 						callbacks: {
 							onImageUpload: function (Files) {

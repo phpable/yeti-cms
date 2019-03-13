@@ -2,11 +2,14 @@
 	outline: none !important
 
 html
-	display: block
 	background:
 		image: url("/images/yeti240.png")
 		repeat: no-repeat
 		position: center center
+
+body
+	display: block
+	min-width: 920px
 
 body.nav > li > a
 	margin: 0 !important
@@ -20,8 +23,11 @@ textarea
 .fbaloo
 	font-family: 'Baloo', serif
 
-.navbar
+#header
+	display: block
+	min-width: 920px
 	height: 56px
+	padding-bottom: 6px
 	margin-left: 50px
 	position: fixed
 	left: 0
@@ -689,15 +695,49 @@ tr.editing
 	&.scroll-container
 		overflow-y: scroll !important
 		overflow-x: hidden !important
+.progress
+	display: block
+	width: 100%
+	position: absolute
+	bottom: 0
 
-.progress-bar-build
-	background-color: #5cb85c !important
+	.progress-bar-build
+		background-color: #5cb85c !important
 
-.progress-bar-deploy
-	background-color: #5bc0de !important
+	.progress-bar-deploy
+		background-color: #5bc0de !important
 
-.progress-bar-prepare
-	background-color: #e91e63 !important
+	.progress-bar-prepare
+		background-color: #e91e63 !important
+
+.yeti-nav
+	display: block
+	background:
+		color: #233445
+
+	&.nav-vertical
+		width: 50px
+		height: 100%
+
+	a
+		display: block
+		width: 50px
+		height: 50px
+		padding: 10px
+		color: #8e9eae
+
+		i
+			display: block
+			width: 30px
+			height: 30px
+			line-height: 30px
+			font-size: 24px
+			text-align: center
+
+		&:hover
+			color: #e1e5e9
+			background:
+				color: #b58900
 
 .toolbtn
 	display: inline-block
