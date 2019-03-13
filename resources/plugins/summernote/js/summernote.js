@@ -59,27 +59,25 @@
 		};
 		return Renderer;
 	}());
+
 	var renderer = {
 		create: function (markup, callback) {
 			return function () {
 				var options = typeof arguments[1] === 'object' ? arguments[1] : arguments[0];
 				var children = $$1.isArray(arguments[0]) ? arguments[0] : [];
+
 				if (options && options.children) {
 					children = options.children;
 				}
+
 				return new Renderer(markup, children, options, callback);
 			};
 		}
 	};
 
 	var editor = renderer.create('<div class="note-editor note-frame panel panel-default"/>');
-
-	// var toolbar = renderer.create('<div class="note-toolbar panel-heading" role="toolbar"></div></div>');
-	//<div id="active-area" class="btn-group"></div>
-
 	var toolbar = renderer.create('<div class="note-toolbar panel-heading" role="toolbar"></div>');
 	var editingArea = renderer.create('<div class="note-editing-area"/>');
-	var codable = renderer.create('<textarea class="note-codable" role="textbox" aria-multiline="true"/>');
 	var editable = renderer.create('<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"/>');
 	var statusbar = renderer.create([
 		//'<output class="note-status-output" aria-live="polite"/>',
@@ -170,19 +168,11 @@
 	});
 
 	var popover = renderer.create([
-		'<div class="note-popover popover in">',
-		// '<div class="arrow"></div>',
-		'<div class="popover-content note-children-container"/>',
+		'<div class="note-popover">',
+			'<div class="static-popover-content note-children-container"/></div>',
 		'</div>'
 	].join(''), function ($node, options) {
-		/*
-		var direction = typeof options.direction !== 'undefined' ? options.direction : 'bottom';
-
-		$node.addClass(direction);
-		if (options.hideArrow) {
-			$node.find('.arrow').hide();
-		}
-		*/
+		$node.hide();
 	});
 
 	var checkbox = renderer.create('<div class="checkbox"></div>', function ($node, options) {
@@ -203,7 +193,6 @@
 		editor: editor,
 		toolbar: toolbar,
 		editingArea: editingArea,
-		codable: codable,
 		editable: editable,
 		statusbar: statusbar,
 		buttonGroup: buttonGroup,
@@ -265,7 +254,6 @@
 				toolbar: $editor.find('.note-toolbar'),
 				editingArea: $editor.find('.note-editing-area'),
 				editable: $editor.find('.note-editable'),
-				codable: $editor.find('.note-codable'),
 				statusbar: $editor.find('.note-statusbar')
 			};
 		},
@@ -5996,12 +5984,12 @@
 
 		Toolbar.prototype.initialize = function () {
 			var _this = this;
+
 			this.options.toolbar = this.options.toolbar || [];
-			if (!this.options.toolbar.length) {
-				this.$toolbar.hide();
-			} else {
-				this.context.invoke('buttons.build', this.$toolbar, this.options.toolbar);
-			}
+			this.context.invoke('buttons.build', this.$toolbar, this.options.toolbar);
+
+			this.$toolbar.append('<div id="static-popover" class="btn-group"></div>');
+
 			if (this.options.toolbarContainer) {
 				this.$toolbar.appendTo(this.options.toolbarContainer);
 			}
@@ -6014,6 +6002,7 @@
 				this.$window.on('scroll resize', this.followScroll);
 			}
 		};
+
 		Toolbar.prototype.destroy = function () {
 			this.$toolbar.children().remove();
 			if (this.options.followingToolbar) {
@@ -6259,12 +6248,10 @@
 		LinkPopover.prototype.initialize = function () {
 			this.$popover = this.ui.popover({
 				className: 'note-link-popover',
-				callback: function ($node) {
-					var $content = $node.find('.popover-content,.note-popover-content');
-					$content.prepend('<span><a target="_blank"></a>&nbsp;</span>');
-				}
-			}).render().appendTo(this.options.container);
-			var $content = this.$popover.find('.popover-content,.note-popover-content');
+			}).render().appendTo(this.options.popoverContainer !== undefined
+				? this.options.popoverContainer : this.options.container);
+
+			var $content = this.$popover.find('.popover-content,.static-popover-content,.note-popover-content');
 			this.context.invoke('buttons.build', $content, this.options.popover.link);
 		};
 		LinkPopover.prototype.destroy = function () {
@@ -6451,7 +6438,7 @@
 			}).render().appendTo(this.options.popoverContainer !== undefined
 				? this.options.popoverContainer : this.options.container);
 
-			var $content = this.$popover.find('.popover-content,.note-popover-content');
+			var $content = this.$popover.find('.popover-content,.note-popover-content,.static-popover-content');
 			this.context.invoke('buttons.build', $content, this.options.popover.image);
 		};
 		ImagePopover.prototype.destroy = function () {
@@ -6736,11 +6723,7 @@
 		HelpDialog.prototype.initialize = function () {
 			var $container = this.options.dialogsInBody ? this.$body : this.$editor;
 			var body = [
-				'<p class="text-center">',
-				'<a href="http://summernote.org/" target="_blank">Summernote 0.8.11</a> · ',
-				'<a href="https://github.com/summernote/summernote" target="_blank">Project</a> · ',
-				'<a href="https://github.com/summernote/summernote/issues" target="_blank">Issues</a>',
-				'</p>'
+				'<p class="text-center"></p>'
 			].join('');
 			this.$dialog = this.ui.dialog({
 				title: this.lang.options.help,
@@ -7354,8 +7337,8 @@
 					'ENTER': 'insertParagraph',
 					'CTRL+Z': 'undo',
 					'CTRL+Y': 'redo',
-					'TAB': 'tab',
-					'SHIFT+TAB': 'untab',
+					// 'TAB': 'tab',
+					// 'SHIFT+TAB': 'untab',
 					'CTRL+B': 'bold',
 					'CTRL+I': 'italic',
 					'CTRL+U': 'underline',
@@ -7383,8 +7366,8 @@
 					'ENTER': 'insertParagraph',
 					'CMD+Z': 'undo',
 					'CMD+SHIFT+Z': 'redo',
-					'TAB': 'tab',
-					'SHIFT+TAB': 'untab',
+					// 'TAB': 'tab',
+					// 'SHIFT+TAB': 'untab',
 					'CMD+B': 'bold',
 					'CMD+I': 'italic',
 					'CMD+U': 'underline',

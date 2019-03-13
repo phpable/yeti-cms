@@ -74,8 +74,7 @@
 						dialogsFade: true,
 						blockquoteBreakingLevel: 2,
 
-						// popoverContainer: '#global-popover',
-						// popoverContainer: '#active-area',
+						popoverContainer: '#static-popover',
 
 						callbacks: {
 							onImageUpload: function (Files) {

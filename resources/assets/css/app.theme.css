@@ -1797,11 +1797,6 @@ a.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
 	border-bottom-color: rgba(35, 52, 69, 0.9);
 }
 
-.popover-content {
-	font-size: 12px;
-	line-height: 1.5
-}
-
 .open {
 	z-index: 1050
 }
