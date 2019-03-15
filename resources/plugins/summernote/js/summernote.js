@@ -141,7 +141,7 @@
 			'aria-label': options.title
 		});
 		$node.html([
-			'<div class="modal-dialog">',
+			'<div class="modal-dialog note-dialog">',
 			'  <div class="modal-content">',
 			(options.title
 				? '    <div class="modal-header">' +
@@ -2509,7 +2509,8 @@
 				insert: 'Insert Link',
 				unlink: 'Unlink',
 				edit: 'Edit',
-				textToDisplay: 'Text to display',
+				text: 'Text',
+				title: 'Title',
 				url: 'To what URL should this link go?',
 				openInNewWindow: 'Open in new window',
 				nofollow: 'Set "nofollow" attribute'
@@ -4050,6 +4051,9 @@
 			this.createLink = this.wrapCommand(function (linkInfo) {
 				var linkUrl = linkInfo.url;
 				var linkText = linkInfo.text;
+				var linkTitle = linkInfo.title;
+				// console.log(linkTitle);
+
 				var isNewWindow = linkInfo.isNewWindow;
 				var nofollow = linkInfo.nofollow;
 				var rng = linkInfo.range || _this.createRange();
@@ -4086,6 +4090,7 @@
 				}
 				$$1.each(anchors, function (idx, anchor) {
 					$$1(anchor).attr('href', linkUrl);
+					$$1(anchor).attr('title', linkTitle);
 					if (isNewWindow) {
 						$$1(anchor).attr('target', '_blank');
 					} else {
@@ -4556,11 +4561,11 @@
 			var linkInfo = {
 				range: rng,
 				text: rng.toString(),
+				title: $anchor.attr('title') !== undefined ? $anchor.attr('title') : '',
 				url: $anchor.length ? $anchor.attr('href') : ''
 			};
 			// When anchor exists,
 			if ($anchor.length) {
-				// Set isNewWindow by checking its target.
 				linkInfo.isNewWindow = $anchor.attr('target') === '_blank';
 				linkInfo.nofollow = $anchor.attr('rel') === 'nofollow';
 			}
@@ -4937,10 +4942,8 @@
 				return false;
 			}
 
-			console.log('!!!!');
-
 			var isImage = dom.isImg(target);
-			var $selection = this.$handle;//.find('.note-control-selection');
+			var $selection = this.$handle;
 			this.context.invoke('imagePopover.update', target);
 
 			if (isImage) {
@@ -5964,8 +5967,12 @@
 			var $container = this.options.dialogsInBody ? this.$body : this.$editor;
 			var body = [
 				'<div class="form-group note-form-group">',
-				"<label class=\"note-form-label\">" + this.lang.link.textToDisplay + "</label>",
+				"<label class=\"note-form-label\">" + this.lang.link.text + "</label>",
 				'<input class="note-link-text form-control note-form-control note-input" type="text" />',
+				'</div>',
+				'<div class="form-group note-form-group">',
+				"<label class=\"note-form-label\">" + this.lang.link.title + "</label>",
+				'<input class="note-link-title form-control note-form-control note-input" type="text" />',
 				'</div>',
 				'<div class="form-group note-form-group">',
 				"<label class=\"note-form-label\">" + this.lang.link.url + "</label>",
@@ -6017,15 +6024,19 @@
 		 * @return {Promise}
 		 */
 		LinkDialog.prototype.showLinkDialog = function (linkInfo) {
+			console.log(linkInfo);
+
 			var _this = this;
 			return $$1.Deferred(function (deferred) {
 				var $linkText = _this.$dialog.find('.note-link-text');
+				var $linkTitle = _this.$dialog.find('.note-link-title');
 				var $linkUrl = _this.$dialog.find('.note-link-url');
 				var $linkBtn = _this.$dialog.find('.note-link-btn');
 				var $openInNewWindow = _this.$dialog
 					.find('.sn-checkbox-open-in-new-window input[type=checkbox]');
 				var $nofollow = _this.$dialog
 					.find('.sn-checkbox-nofollow input[type=checkbox]');
+
 				_this.ui.onDialogShown(_this.$dialog, function () {
 					_this.context.triggerEvent('dialog.shown');
 					// if no url was given, copy text to url
@@ -6033,6 +6044,7 @@
 						linkInfo.url = linkInfo.text;
 					}
 					$linkText.val(linkInfo.text);
+					$linkTitle.val(linkInfo.title);
 					var handleLinkTextUpdate = function () {
 						_this.toggleLinkBtn($linkBtn, $linkText, $linkUrl);
 						// if linktext was modified by keyup,
@@ -6072,6 +6084,7 @@
 							range: linkInfo.range,
 							url: $linkUrl.val(),
 							text: $linkText.val(),
+							title: $linkTitle.val(),
 							isNewWindow: $openInNewWindow.is(':checked'),
 							nofollow: $nofollow.is(':checked')
 						});
@@ -6139,7 +6152,6 @@
 			this.$popover.remove();
 		};
 		LinkPopover.prototype.update = function () {
-			// Prevent focusing on editable when invoke('code') is executed
 			if (!this.context.invoke('editor.hasFocus')) {
 				this.hide();
 				return;

@@ -656,17 +656,8 @@
 	border: 1px solid #000
 }
 
-.note-dialog > div {
-	display: none
-}
-
 .note-dialog .form-group {
-	margin-right: 0;
-	margin-left: 0
-}
-
-.note-dialog .note-modal-form {
-	margin: 0
+	margin: 12px 0 0 0;
 }
 
 .note-dialog .note-image-dialog .note-dropzone {
