@@ -94,7 +94,7 @@ class Post extends AModel {
 	 * @return string
 	 */
 	public final function getLightweightAttribute() {
-		return Str::strip(Str::tr($this->body, 5500), 'p', 'a', 'ul', 'ol', 'li');
+		return Str::strip(Str::tr($this->body, 5000), 'p', 'a', 'ul', 'ol', 'li');
 	}
 
 	/**
