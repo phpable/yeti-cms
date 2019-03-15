@@ -133,10 +133,7 @@
 
 						popover: {
 							image: [
-								['imagesize', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto']],
-								['remove', ['removeMedia']],
-								['custom', ['imageTitle']],
-								['custom2', ['captionIt']],
+								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia', 'imageTitle', 'captionIt']],
 							],
 							link: [
 								['link', ['linkDialogShow', 'unlink']]

@@ -27,7 +27,7 @@
 
 
 			if (typeof context.options.captionIt.icon === 'undefined') {
-				context.options.captionIt.icon = '<i class="fa fa-info"></i>';
+				context.options.captionIt.icon = '<i class="fa fa-info-circle"></i>';
 			}
 
 			if (typeof context.options.captionIt.captionText === 'undefined') {

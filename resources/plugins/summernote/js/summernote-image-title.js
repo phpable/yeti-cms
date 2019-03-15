@@ -14,102 +14,11 @@
 	$.extend(true, $.summernote.lang, {
 		'en-US': {
 			imageTitle: {
-				edit: 'Edit title',
+				edit: 'Modify Title',
 				titleLabel: 'Title',
 				altLabel: 'Alternative Text'
 			}
 		},
-		'fr-FR': {
-			imageTitle: {
-				edit: 'Modifier le titre',
-				titleLabel: 'Titre',
-				altLabel: 'Texte alternatif'
-			}
-		},
-		'ja-JP': {
-			imageTitle: {
-				edit: 'タイトルを編集',
-				titleLabel: 'タイトル',
-				altLabel: '代替テキスト'
-			}
-		},
-		'ko-KR': {
-			imageTitle: {
-				edit: '제목 바꾸기',
-				titleLabel: '제목',
-				altLabel: '대체 텍스트'
-			}
-		},
-		'nl-NL': {
-			imageTitle: {
-				edit: 'Titel wijzigen',
-				titleLabel: 'Titel',
-				altLabel: 'Alternatieve tekst'
-			}
-		},
-		'pt-BR': {
-			imageTitle: {
-				edit: 'Editar Título',
-				titleLabel: 'Título',
-				altLabel: 'Texto Alternativo'
-			}
-		},
-		'es-ES': {
-			imageTitle: {
-				edit: 'Editar título',
-				titleLabel: 'Título',
-				altLabel: 'Texto alternativo'
-			}
-		},
-		'ca-ES': {
-			imageTitle: {
-				edit: 'Editar títol',
-				titleLabel: 'Títol',
-				altLabel: 'Text alternatiu'
-			}
-		},
-		'de-DE': {
-			imageTitle: {
-				edit: 'Titel bearbeiten',
-				titleLabel: 'Titel',
-				altLabel: 'ALT-Text'
-			}
-		},
-		'ru-RU': {
-			imageTitle: {
-				edit: 'Заголовок изображения',
-				titleLabel: 'Заголовок',
-				altLabel: 'ALT текст'
-			}
-		},
-		'th-TH': {
-			imageTitle: {
-				edit: 'เปลี่ยนชื่อรูปภาพ',
-				titleLabel: 'ชื่อรูปภาพ',
-				altLabel: 'รายละเอียดของรูปภาพ'
-			}
-		},
-		'zh-TW': {
-			imageTitle: {
-				edit: '編輯',
-				titleLabel: '圖片標題',
-				altLabel: '圖片替代文字'
-			}
-		},
-		'ar-Ar': {
-			imageTitle: {
-				edit: 'عدل العنوان',
-				titleLabel: 'العنوان',
-				altLabel: 'النص البديل'
-			}
-		},
-		'fa-IR': {
-			imageTitle: {
-				edit: 'ویرایش عنوان',
-				titleLabel: 'عنوان',
-				altLabel: 'متن جایگزین'
-			}
-		}
 	});
 
 	$.extend($.summernote.plugins, {

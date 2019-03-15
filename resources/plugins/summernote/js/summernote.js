@@ -78,7 +78,7 @@
 	var editor = renderer.create('<div class="note-editor note-frame panel panel-default"/>');
 	var toolbar = renderer.create('<div class="note-toolbar panel-heading" role="toolbar"></div>');
 	var editingArea = renderer.create('<div class="note-editing-area"/>');
-	var editable = renderer.create('<div class="note-scrollable-conteiner"><div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"/></div>');
+	var editable = renderer.create('<div class="note-scrollable-container"><div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"/></div>');
 	var buttonGroup = renderer.create('<div class="note-btn-group btn-group">');
 	var dropdown = renderer.create('<ul class="dropdown-menu" role="list">', function ($node, options) {
 		var markup = $$1.isArray(options.items) ? options.items.map(function (item) {
@@ -4880,8 +4880,9 @@
 
 		Handle.prototype.initialize = function () {
 			var _this = this;
+
 			this.$handle = $$1([
-				'<div class="note-handle">',
+				// '<div class="note-handle">',
 				'<div class="note-control-selection">',
 				'<div class="note-control-selection-bg"></div>',
 				'<div class="note-control-holder note-control-nw"></div>',
@@ -4891,14 +4892,16 @@
 				(this.options.disableResizeImage ? 'note-control-holder' : 'note-control-sizing'),
 				' note-control-se"></div>',
 				(this.options.disableResizeImage ? '' : '<div class="note-control-selection-info"></div>'),
-				'</div>',
-				'</div>'
-			].join('')).prependTo(this.$editingArea);
+				'</div>'//,
+				// '</div>'
+			// ].join('')).prependTo(this.$editingArea);
+			].join('')).prependTo($('.note-scrollable-container'));
+
 			this.$handle.on('mousedown', function (event) {
 				if (dom.isControlSizing(event.target)) {
 					event.preventDefault();
 					event.stopPropagation();
-					var $target_1 = _this.$handle.find('.note-control-selection').data('target');
+					var $target_1 = _this.$handle/*.find('.note-control-selection')*/.data('target');
 					var posStart_1 = $target_1.offset();
 					var scrollTop_1 = _this.$document.scrollTop();
 					var onMouseMove_1 = function (event) {
@@ -4933,39 +4936,49 @@
 			if (this.context.isDisabled()) {
 				return false;
 			}
+
+			console.log('!!!!');
+
 			var isImage = dom.isImg(target);
-			var $selection = this.$handle.find('.note-control-selection');
+			var $selection = this.$handle;//.find('.note-control-selection');
 			this.context.invoke('imagePopover.update', target);
+
 			if (isImage) {
 				var $image = $$1(target);
-				var position = $image.position();
+				var offset = $image.offset();
 
 				if ($image.parent().is('[data-cnt="wrapper"]')){
-					position = $image.parent().position();
+					offset = $image.parent().offset();
 				}
 
-				var pos = {
-					left: position.left + parseInt($image.css('marginLeft'), 10),
-					top: position.top + parseInt($image.css('marginTop'), 10)
-				};
+				// var pos = {
+				// 	left: position.left + parseInt($image.css('marginLeft'), 10),
+				// 	top: position.top + parseInt($image.css('marginTop'), 10)
+				// };
 
 				var imageSize = {
 					w: $image.outerWidth(false),
 					h: $image.outerHeight(false)
 				};
+
 				$selection.css({
 					display: 'block',
-					left: pos.left,
-					top: pos.top,
 					width: imageSize.w,
 					height: imageSize.h
 				}).data('target', $image); // save current image element.
+
+				$selection.offset($image.offset());
+				$selection.show();
+
 				var origImageObj = new Image();
 				origImageObj.src = $image.attr('src');
 				var sizingText = imageSize.w + 'x' + imageSize.h + ' (' + this.lang.image.original + ': ' + origImageObj.width + 'x' + origImageObj.height + ')';
 				$selection.find('.note-control-selection-info').text(sizingText);
 				this.context.invoke('editor.saveTarget', target);
+
+				this.show();
 			} else {
+				$selection.css({width: 0, height: 0}).offset({left: 0, top: 0});
 				this.hide();
 			}
 			return isImage;
@@ -4979,6 +4992,17 @@
 			this.context.invoke('editor.clearTarget');
 			this.$handle.children().hide();
 		};
+
+		/**
+		 * hide
+		 *
+		 * @param {jQuery} $handle
+		 */
+		Handle.prototype.show = function () {
+			// this.context.invoke('editor.clearTarget');
+			this.$handle.children().show();
+		};
+
 		return Handle;
 	}());
 
