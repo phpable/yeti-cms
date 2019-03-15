@@ -53,9 +53,9 @@
 								: ['insert', ['link']],
 
 							['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
-							['misc', ['undo', 'redo', 'fullscreen', 'help']],
+							['misc', ['undo', 'redo', 'fullscreen', 'help']]
 
-							// ['test', []]
+							//['table', ['table']],
 						],
 
 						popover: {
@@ -67,11 +67,20 @@
 							],
 							link: [
 								['link', ['linkDialogShow', 'unlink']]
+							]
+
+							/**
+							table: [
+								['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+								['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
 							],
+							**/
 						},
 
 						dialogsInBody: true,
 						dialogsFade: true,
+						tabDisable: false,
+
 						blockquoteBreakingLevel: 2,
 
 						popoverContainer: '#static-popover',

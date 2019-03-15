@@ -6486,16 +6486,18 @@
 				}
 			};
 		}
-
 		TablePopover.prototype.shouldInitialize = function () {
 			return !lists.isEmpty(this.options.popover.table);
 		};
 		TablePopover.prototype.initialize = function () {
 			this.$popover = this.ui.popover({
 				className: 'note-table-popover'
-			}).render().appendTo(this.options.container);
-			var $content = this.$popover.find('.popover-content,.note-popover-content');
+			}).render().appendTo(this.options.popoverContainer !== undefined
+				? this.options.popoverContainer : this.options.container);
+
+			var $content = this.$popover.find('.popover-content,.note-popover-content,.static-popover-content');
 			this.context.invoke('buttons.build', $content, this.options.popover.table);
+
 			// [workaround] Disable Firefox's default table editor
 			if (env.isFF) {
 				document.execCommand('enableInlineTableEditing', false, false);
