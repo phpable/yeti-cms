@@ -78,18 +78,7 @@
 	var editor = renderer.create('<div class="note-editor note-frame panel panel-default"/>');
 	var toolbar = renderer.create('<div class="note-toolbar panel-heading" role="toolbar"></div>');
 	var editingArea = renderer.create('<div class="note-editing-area"/>');
-	var editable = renderer.create('<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"/>');
-	var statusbar = renderer.create([
-		//'<output class="note-status-output" aria-live="polite"/>',
-
-		'<div class="note-statusbar" role="status">',
-		'  <div class="note-resizebar" role="seperator" aria-orientation="horizontal" aria-label="Resize">',
-		'    <div class="note-icon-bar"/>',
-		'    <div class="note-icon-bar"/>',
-		'    <div class="note-icon-bar"/>',
-		'  </div>',
-		'</div>'
-	].join(''));
+	var editable = renderer.create('<div class="note-scrollable-conteiner"><div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"/></div>');
 	var buttonGroup = renderer.create('<div class="note-btn-group btn-group">');
 	var dropdown = renderer.create('<ul class="dropdown-menu" role="list">', function ($node, options) {
 		var markup = $$1.isArray(options.items) ? options.items.map(function (item) {
@@ -194,7 +183,6 @@
 		toolbar: toolbar,
 		editingArea: editingArea,
 		editable: editable,
-		statusbar: statusbar,
 		buttonGroup: buttonGroup,
 		dropdown: dropdown,
 		dropdownButtonContents: dropdownButtonContents,
@@ -243,8 +231,7 @@
 				ui.toolbar(),
 				ui.editingArea([
 					ui.editable()
-				]),
-				ui.statusbar()
+				])
 			])).render();
 
 			$editor.insertAfter($note);
@@ -253,8 +240,7 @@
 				editor: $editor,
 				toolbar: $editor.find('.note-toolbar'),
 				editingArea: $editor.find('.note-editing-area'),
-				editable: $editor.find('.note-editable'),
-				statusbar: $editor.find('.note-statusbar')
+				editable: $editor.find('.note-editable')
 			};
 		},
 		removeLayout: function ($note, layoutInfo) {
@@ -4238,7 +4224,7 @@
 				this.$editor.outerWidth(this.options.width);
 			}
 			if (this.options.height) {
-				this.$editable.outerHeight(this.options.height);
+				this.$editable.parent().outerHeight(this.options.height);
 			}
 			if (this.options.maxHeight) {
 				this.$editable.css('max-height', this.options.maxHeight);
@@ -4825,42 +4811,6 @@
 	}
 
 	var EDITABLE_PADDING = 24;
-	var Statusbar = /** @class */ (function () {
-		function Statusbar(context) {
-			this.$document = $$1(document);
-			this.$statusbar = context.layoutInfo.statusbar;
-			this.$editable = context.layoutInfo.editable;
-			this.options = context.options;
-		}
-
-		Statusbar.prototype.initialize = function () {
-			var _this = this;
-			if (this.options.disableResizeEditor) {
-				this.destroy();
-				return;
-			}
-
-			this.$statusbar.on('mousedown', function (event) {
-				event.preventDefault();
-				event.stopPropagation();
-				var editableTop = _this.$editable.offset().top - _this.$document.scrollTop();
-				var onMouseMove = function (event) {
-					var height = event.clientY - (editableTop + EDITABLE_PADDING);
-					height = (_this.options.minheight > 0) ? Math.max(height, _this.options.minheight) : height;
-					height = (_this.options.maxHeight > 0) ? Math.min(height, _this.options.maxHeight) : height;
-					_this.$editable.height(height);
-				};
-				_this.$document.on('mousemove', onMouseMove).one('mouseup', function () {
-					_this.$document.off('mousemove', onMouseMove);
-				});
-			});
-		};
-		Statusbar.prototype.destroy = function () {
-			this.$statusbar.off();
-			this.$statusbar.addClass('locked');
-		};
-		return Statusbar;
-	}());
 
 	var Fullscreen = /** @class */ (function () {
 		function Fullscreen(context) {
@@ -7022,7 +6972,6 @@
 				'editor': Editor,
 				'clipboard': Clipboard,
 				'dropzone': Dropzone,
-				'statusbar': Statusbar,
 				'fullscreen': Fullscreen,
 				'handle': Handle,
 				'autoLink': AutoLink,

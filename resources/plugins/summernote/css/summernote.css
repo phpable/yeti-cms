@@ -236,7 +236,7 @@
 }
 
 .note-editor {
-	position: relative
+	position: relative;
 }
 
 .note-editor .note-dropzone {
@@ -296,12 +296,20 @@
 	overflow: hidden
 }
 
+.note-editor.note-frame .note-editing-area .note-scrollable-conteiner {
+	display: block;
+	overflow: scroll;
+}
+
 .note-editor.note-frame .note-editing-area .note-editable {
 	padding: 10px;
-	overflow: auto;
+	overflow: visible;
 	color: #000;
 	word-wrap: break-word;
-	background-color: #fff
+	background-color: #fff;
+	width: 940px !important;
+	min-width: 940px !important;
+	margin: 0 auto;
 }
 
 .note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {

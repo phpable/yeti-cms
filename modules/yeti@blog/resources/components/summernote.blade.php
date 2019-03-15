@@ -11,6 +11,76 @@
 	@parent
 
 	<link href="/css/summernote.css" rel="stylesheet">
+
+	<style type="text/css">
+		.note-editor {
+			font-family: "Ubuntu Mono", monospace;
+			font-size: 16px;
+		}
+
+		.note-editor h1,
+		.note-editor h2,
+		.note-editor h3,
+		.note-editor h4,
+		.note-editor h5,
+		.note-editor h6 {
+			font-weight: bold;
+			font-style: normal;
+			display: block;
+			color: #221f1f;
+			text-decoration: underline;
+		}
+
+		.note-editor h1 *,
+		.note-editor h2 *,
+		.note-editor h3 *,
+		.note-editor h4 *,
+		.note-editor h5 *,
+		.note-editor h6 * {
+			font-weight: bold;
+			font-style: normal;
+		}
+
+		.note-editor h1 {
+			font-size: 34px;
+			margin: 72px 0 52px 0;
+			text-transform: uppercase;
+		}
+
+		.note-editor h2 {
+			font-size: 30px;
+			margin: 72px 0 52px 0;
+		}
+
+		.note-editor h3 {
+			font-size: 26px;
+			margin: 72px 0 32px 0;
+		}
+
+		.note-editor h4 {
+			font-size: 22px;
+			margin: 52px 0 22px 0;
+		}
+
+		.note-editor h5 {
+			font-size: 18px;
+			margin: 52px 0 22px 0;
+		}
+
+		.note-editor h6 {
+			font-size: 16px;
+			margin: 52px 0 22px 0;
+		}
+
+		.note-editor .dropdown-style h1,
+		.note-editor .dropdown-style h2,
+		.note-editor .dropdown-style h3,
+		.note-editor .dropdown-style h4,
+		.note-editor .dropdown-style h5,
+		.note-editor .dropdown-style h6 {
+			margin: 0 !important;
+		}
+	</style>
 @stop
 
 @section('js')
@@ -47,6 +117,7 @@
 						toolbar: [
 							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
 							['fontsize', ['fontsize']],
+							['color', ['color']],
 
 							__EXTERNALS__
 								? ['insert', ['picture', 'video', 'link']]
@@ -55,7 +126,9 @@
 							['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
 							['misc', ['undo', 'redo', 'fullscreen', 'help']]
 
-							//['table', ['table']],
+							/*
+							['table', ['table']],
+							*/
 						],
 
 						popover: {
@@ -69,12 +142,12 @@
 								['link', ['linkDialogShow', 'unlink']]
 							]
 
-							/**
+							/*
 							table: [
 								['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
 								['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
 							],
-							**/
+							*/
 						},
 
 						dialogsInBody: true,
@@ -122,4 +195,4 @@
 	</script>
 @stop
 
-<textarea id="{{ $id }}" name="{{ $name }}">{{ $text }}</textarea>
+<textarea id="{{ $id }}" name="{{ $name }}" style="display: none">{{ $text }}</textarea>

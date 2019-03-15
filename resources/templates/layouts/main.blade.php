@@ -11,23 +11,22 @@
 
 	<link href='https://fonts.googleapis.com/css?family=Miriam+Libre:400,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap" rel="stylesheet">
+	@yield('fonts')
 
 	<link href="{{ asset('fonts/bbr.ttf') }}?family=Baloo+Bhaijaan" rel="stylesheet">
 
 	<title>Yeti CMS</title>
 
 	<link rel="stylesheet" href="{{ asset('css/main.css') }}">
-
 	@yield('css')
-
-	<script type="text/javascript" src="{{ asset('js/main.js')}}"></script>
-	<script type="text/javascript" src="{{ asset('js/editor.js')}}"></script>
-
-	@yield('js')
 </head>
 
 <body data-effect="full-height">
 	@yield('main')
+
+	<script type="text/javascript" src="{{ asset('js/main.js')}}"></script>
+	<script type="text/javascript" src="{{ asset('js/editor.js')}}"></script>
+	@yield('js')
 
 	<script type="text/javascript">
 		(function($){

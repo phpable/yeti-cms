@@ -1,4 +1,11 @@
 @extends('workspace', ['footer' => isset($footer) ? $footer : true])
+
+@section('fonts')
+	@parent
+
+	<link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
+@stop
+
 @section('js')
 	@parent
 

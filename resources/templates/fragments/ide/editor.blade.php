@@ -6,7 +6,8 @@
 
 @param($value)
 
-<div id="editor-{{ $id }}" class="tab-pane @if ($active) active @endif">
+@section('js')
+	@parent
 
 	<script type="text/javascript">
 		(function($) {
@@ -51,6 +52,8 @@
 			})
 		})(jQuery);
 	</script>
+@stop
+<div id="editor-{{ $id }}" class="tab-pane @if ($active) active @endif">
 
 	<div id="editor-control-{{ $id }}" class="ace-editor">{{ $value }}</div>
 	<input type="hidden" name="{{ $name }}" value="" />
