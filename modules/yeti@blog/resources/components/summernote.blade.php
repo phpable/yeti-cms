@@ -116,8 +116,8 @@
 
 						toolbar: [
 							['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-							['fontsize', ['fontsize']],
 							['color', ['color']],
+							['fontsize', ['fontsize']],
 
 							__EXTERNALS__
 								? ['insert', ['picture', 'video', 'link']]
@@ -186,6 +186,15 @@
 										}
 									});
 								}
+							},
+							onPaste: function (jEvent) {
+								var bufferText = ((jEvent.originalEvent || jEvent).clipboardData
+									|| window.clipboardData).getData('Text');
+
+								bufferText = bufferText.replace(/<((?:\/|!doctype\s*)?[a-z0-9_-]+)\s*(?:[^>\s]+(?:\s*=\s*(?:(?:'(?:\\'|[^'])*'|"(?:\\"|[^"])*")|[^>\s]+))?\s*)*\/?>/gi, '');
+
+								jEvent.preventDefault();
+								document.execCommand('insertText', false, bufferText);
 							}
 						}
 					});

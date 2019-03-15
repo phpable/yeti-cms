@@ -543,9 +543,11 @@
 	margin: 0
 }
 
+/*
 .note-popover .popover-content .note-color-all .dropdown-menu, .panel-heading.note-toolbar .note-color-all .dropdown-menu {
 	min-width: 337px
 }
+*/
 
 .note-popover .popover-content .note-color .dropdown-toggle, .panel-heading.note-toolbar .note-color .dropdown-toggle {
 	width: 20px;
