@@ -13,8 +13,6 @@
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap" rel="stylesheet">
 	@yield('fonts')
 
-	<link href="{{ asset('fonts/bbr.ttf') }}?family=Baloo+Bhaijaan" rel="stylesheet">
-
 	<title>Yeti CMS</title>
 
 	<link rel="stylesheet" href="{{ asset('css/main.css') }}">
