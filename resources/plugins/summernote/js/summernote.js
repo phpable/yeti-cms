@@ -4052,7 +4052,6 @@
 				var linkUrl = linkInfo.url;
 				var linkText = linkInfo.text;
 				var linkTitle = linkInfo.title;
-				// console.log(linkTitle);
 
 				var isNewWindow = linkInfo.isNewWindow;
 				var nofollow = linkInfo.nofollow;
@@ -6024,9 +6023,8 @@
 		 * @return {Promise}
 		 */
 		LinkDialog.prototype.showLinkDialog = function (linkInfo) {
-			console.log(linkInfo);
-
 			var _this = this;
+
 			return $$1.Deferred(function (deferred) {
 				var $linkText = _this.$dialog.find('.note-link-text');
 				var $linkTitle = _this.$dialog.find('.note-link-title');
