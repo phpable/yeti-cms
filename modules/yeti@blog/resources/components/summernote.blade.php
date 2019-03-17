@@ -101,6 +101,10 @@
 							specificAltField: false,
 						},
 
+						imageCaption: {
+							defaultCaption: "",
+						},
+
 						captionIt: {
 							captionText: 'Default Caption'
 						},
@@ -133,7 +137,7 @@
 
 						popover: {
 							image: [
-								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia', 'imageTitle', 'captionIt']],
+								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia', 'imageTitle', 'imageCaption'/*, 'captionIt'*/]],
 							],
 							link: [
 								['link', ['linkDialogShow', 'unlink']]

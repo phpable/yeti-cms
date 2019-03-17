@@ -12,7 +12,7 @@
 	$.extend(true, $.summernote.lang, {
 		'en-US': {
 			captionIt: {
-				tooltip: 'Caption It'
+				tooltip: 'Add Caption'
 			}
 		}
 	});
