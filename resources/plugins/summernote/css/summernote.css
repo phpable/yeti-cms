@@ -807,10 +807,13 @@
 }
 
 span[data-cnt="wrapper"] {
-	display: inline-block;
+	display: block;
+	float: left;
+	clear: both;
 	position: relative;
 	margin: 0;
 	padding: 0;
+	margin: 0 0 32px 0;
 }
 
 span[data-cnt="caption"] {

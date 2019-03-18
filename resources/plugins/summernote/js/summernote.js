@@ -4447,6 +4447,7 @@
 			var _this = this;
 			return createImage(src, param).then(function ($image) {
 				_this.beforeCommand();
+
 				if (typeof param === 'function') {
 					param($image);
 				} else {
@@ -4455,9 +4456,13 @@
 					}
 					$image.css('width', Math.min(_this.$editable.width(), $image.width()));
 				}
+
 				$image.show();
-				range.create(_this.editable).insertNode($image[0]);
-				range.createFromNodeAfter($image[0]).select();
+
+				var $wrapper = $image.wrap($('<span data-cnt="wrapper" contenteditable="false"></span>')).parent();
+				range.create(_this.editable).insertNode($wrapper[0]);
+				range.createFromNodeAfter($wrapper[0]).select();
+
 				_this.afterCommand();
 			}).fail(function (e) {
 				_this.context.triggerEvent('image.upload.error', e);

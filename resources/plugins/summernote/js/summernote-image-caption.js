@@ -151,7 +151,7 @@
 				};
 
 				if (!$img.parent().is('span[data-cnt="wrapper"]')) {
-					$img.wrap($('<span data-cnt="wrapper"></span>'));
+					$img.wrap($('<span data-cnt="wrapper" contenteditable="false"></span>'));
 				}
 
 				$img.parent().find('span[data-cnt="caption"]').remove();

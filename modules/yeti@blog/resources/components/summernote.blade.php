@@ -137,7 +137,9 @@
 
 						popover: {
 							image: [
-								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia', 'imageTitle', 'imageCaption', 'imageSource']],
+								['float', ['floatLeft', 'floatRight', 'floatNone']],
+								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia']],
+								['attrs', [ 'imageTitle', 'imageCaption', 'imageSource']]
 							],
 							link: [
 								['link', ['linkDialogShow', 'unlink']]
@@ -179,11 +181,9 @@
 										contentType: false,
 										processData: false,
 										success: function (data) {
-											var Image = document.createElement('img');
-											Image.src = data.url;
-											Image.alt = data.name;
-
-											$("#{{ $id }}").summernote('insertNode', Image);
+											$("#{{ $id }}").summernote('insertImage', data.url, function(jImage){
+												jImage.attr('alt', data.name);
+											});
 										}
 									});
 								}
