@@ -102,7 +102,7 @@
 						},
 
 						imageCaption: {
-							defaultCaption: "",
+							defaultCaption: "Default Caption",
 						},
 
 						airMode: false,

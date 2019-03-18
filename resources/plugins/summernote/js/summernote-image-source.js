@@ -13,15 +13,15 @@
 }(function ($) {
 	$.extend(true, $.summernote.lang, {
 		'en-US': {
-			imageCaption: {
-				edit: 'Modify Caption',
-				captionLabel: 'Caption'
+			imageSource: {
+				edit: 'Modify Source',
+				sourceLabel: 'Source'
 			}
 		},
 	});
 
 	$.extend($.summernote.plugins, {
-		'imageCaption': function (context) {
+		'imageSource': function (context) {
 			var self = this;
 
 			var ui = $.summernote.ui;
@@ -29,24 +29,24 @@
 			var $editor = context.layoutInfo.editor;
 			var $editable = context.layoutInfo.editable;
 
-			if (typeof context.options.imageCaption === 'undefined') {
-				context.options.imageCaption = {};
+			if (typeof context.options.imageSource === 'undefined') {
+				context.options.imageSource = {};
 			}
 
-			if (typeof context.options.imageCaption.defaultCaption === 'undefined') {
-				context.options.imageCaption.defaultCaption = "Default caption";
+			if (typeof context.options.imageSource.defaultSource === 'undefined') {
+				context.options.imageSource.defaultSource = "Default source";
 			}
 
 			var options = context.options;
 			var lang = options.langInfo;
 
-			context.memo('button.imageCaption', function () {
+			context.memo('button.imageSource', function () {
 				var button = ui.button({
 					contents: '<i class="fa fa-info-circle"></i>',
-					tooltip: lang.imageCaption.edit,
+					tooltip: lang.imageSource.edit,
 					container: false,
 					click: function (e) {
-						context.invoke('imageCaption.update');
+						context.invoke('imageSource.update');
 					}
 				});
 
@@ -57,14 +57,14 @@
 				var $container = options.dialogsInBody ? $(document.body) : $editor;
 
 				var body = ['<div class="form-group">',
-					'<label>' + lang.imageCaption.captionLabel + '</label>',
-					'<input class="note-caption-caption-text form-control" type="text" />',
+					'<label>' + lang.imageSource.sourceLabel + '</label>',
+					'<input class="note-source-source-text form-control" type="text" />',
 					'</div>'].join('');
 
-				var footer = '<button href="#" class="btn btn-primary note-image-caption-btn">' + lang.imageCaption.edit + '</button>';
+				var footer = '<button href="#" class="btn btn-primary note-image-source-btn">' + lang.imageSource.edit + '</button>';
 
 				this.$dialog = ui.dialog({
-					caption: lang.imageCaption.edit,
+					source: lang.imageSource.edit,
 					body: body,
 					footer: footer
 				}).render().appendTo($container);
@@ -88,53 +88,58 @@
 
 				var imgInfo = {
 					imgDom: $img,
-					caption: $img.attr('data-caption')
+					source: $img.attr('data-source')
 				};
 
-				if (!imgInfo.caption || !imgInfo.caption.length) {
-					imgInfo.caption = context.options.imageCaption.defaultCaption;
-				}
-
-				this.showCaptionDialog(imgInfo).then(function (imgInfo) {
+				this.showLinkDialog(imgInfo).then(function (imgInfo) {
 					ui.hideDialog(self.$dialog);
 					var $img = imgInfo.imgDom;
 
-					if (imgInfo.caption) {
-						$img.attr('data-caption', imgInfo.caption);
+					if (imgInfo.source) {
+						$img.attr('data-source', imgInfo.source);
 					} else {
-						$img.removeAttr('data-caption');
+						$img.removeAttr('data-source');
 					}
 
 					$note.val(context.invoke('code'));
 					$note.change();
 
-					context.invoke('imageCaption.wrap', $img);
+					context.invoke('imageSource.wrap', $img);
 				});
 			};
 
 			this.wrap = function ($img) {
 				var imgInfo = {
 					imgDom: $img,
-					caption: $img.attr('data-caption')
+					source: $img.attr('data-source')
 				};
 
 				if (!$img.parent().is('span[data-cnt="wrapper"]')) {
 					$img.wrap($('<span data-cnt="wrapper"></span>'));
 				}
 
-				$img.parent().find('span[data-cnt="caption"]').remove();
-				if (imgInfo.caption) {
-					$img.after('<span data-cnt="caption">' + imgInfo.caption + '</span>');
+				$img.parent().find('span[data-cnt="source"]').remove();
+				if (imgInfo.source) {
+					$img.after('<span data-cnt="source">' + imgInfo.source + '</span>');
 				}
+
+				// if (imgInfo.source) {
+				// 	$img.after('<span data-cnt="source">' + (function(source){
+				// 		return source.replace(/^https?::\/\/[^\s]+/gi, function(url){
+				// 			return '<a href="' + encodeURI(url) + '">' + url + "</a>";
+				// 		})
+				// 	})(imgInfo.source) + '</span>');
+				// }
+
 
 				$note.val(context.invoke('code'));
 				$note.change();
 			};
 
-			this.showCaptionDialog = function (imgInfo) {
+			this.showLinkDialog = function (imgInfo) {
 				return $.Deferred(function (deferred) {
-					var $imageCaption = self.$dialog.find('.note-caption-caption-text'),
-						$editBtn = self.$dialog.find('.note-image-caption-btn');
+					var $imageSource = self.$dialog.find('.note-source-source-text'),
+						$editBtn = self.$dialog.find('.note-image-source-btn');
 
 					ui.onDialogShown(self.$dialog, function () {
 						context.triggerEvent('dialog.shown');
@@ -143,12 +148,12 @@
 							event.preventDefault();
 							deferred.resolve({
 								imgDom: imgInfo.imgDom,
-								caption: $imageCaption.val(),
+								source: $imageSource.val(),
 							});
 						});
 
-						$imageCaption.val(imgInfo.caption).trigger('focus');
-						self.bindEnterKey($imageCaption, $editBtn);
+						$imageSource.val(imgInfo.source).trigger('focus');
+						self.bindEnterKey($imageSource, $editBtn);
 					});
 
 					ui.onDialogHidden(self.$dialog, function () {
