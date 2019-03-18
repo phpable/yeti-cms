@@ -111,6 +111,7 @@
 
 						airMode: false,
 						styleWithSpan: false,
+						disableDragAndDrop: true,
 						height: (function () {
 							return (__PARENT__.length > 0 ? $("#{{ $parent }}")
 								: jRecipient.parent()).innerHeight();

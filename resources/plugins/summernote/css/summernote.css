@@ -303,13 +303,15 @@
 }
 
 .note-editor.note-frame .note-editing-area .note-editable {
-	padding: 10px;
+	padding: 20px;
 	overflow: visible;
 	color: #000;
 	word-wrap: break-word;
 	background-color: #fff;
-	width: 940px !important;
-	min-width: 940px !important;
+	width: 960px !important;
+	min-width: 960px !important;
+	border-left: 2px dashed #000000;
+	border-right: 2px dashed #000000;
 	margin: 0 auto;
 }
 
