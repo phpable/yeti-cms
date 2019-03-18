@@ -46,7 +46,7 @@
 					tooltip: lang.imageCaption.edit,
 					container: false,
 					click: function (e) {
-						context.invoke('imageCaption.show');
+						context.invoke('imageCaption.update');
 					}
 				});
 
@@ -83,12 +83,14 @@
 				});
 			};
 
-			this.show = function () {
+			this.update = function () {
 				var $img = $($editable.data('target'));
+
 				var imgInfo = {
 					imgDom: $img,
 					caption: $img.attr('data-caption')
 				};
+
 				this.showLinkDialog(imgInfo).then(function (imgInfo) {
 					ui.hideDialog(self.$dialog);
 					var $img = imgInfo.imgDom;
@@ -99,13 +101,30 @@
 						$img.removeAttr('data-caption');
 					}
 
-					if ($img.parent().is('[data-cnt="wrapper"')) {
-						$img.parent().find('[data-cnt="caption"]').text(imgInfo.caption);
-					}
-
 					$note.val(context.invoke('code'));
 					$note.change();
+
+					context.invoke('imageCaption.wrap', $img);
 				});
+			};
+
+			this.wrap = function ($img) {
+				var imgInfo = {
+					imgDom: $img,
+					caption: $img.attr('data-caption')
+				};
+
+				if (!$img.parent().is('span[data-cnt="wrapper"]')) {
+					$img.wrap($('<span data-cnt="wrapper"></span>'));
+				}
+
+				$img.parent().find('span[data-cnt="caption"]').remove();
+				if (imgInfo.caption) {
+					$img.after('<span data-cnt="caption">' + imgInfo.caption + '</span>');
+				}
+
+				$note.val(context.invoke('code'));
+				$note.change();
 			};
 
 			this.showLinkDialog = function (imgInfo) {

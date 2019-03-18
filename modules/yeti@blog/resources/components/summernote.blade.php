@@ -105,10 +105,6 @@
 							defaultCaption: "",
 						},
 
-						captionIt: {
-							captionText: 'Default Caption'
-						},
-
 						airMode: false,
 						styleWithSpan: false,
 						height: (function () {
@@ -137,7 +133,7 @@
 
 						popover: {
 							image: [
-								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia', 'imageTitle', 'imageCaption'/*, 'captionIt'*/]],
+								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia', 'imageTitle', 'imageCaption']],
 							],
 							link: [
 								['link', ['linkDialogShow', 'unlink']]
