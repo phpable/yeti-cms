@@ -105,6 +105,10 @@
 							defaultCaption: "Default Caption",
 						},
 
+						imageSource: {
+							useImageSrc: true,
+						},
+
 						airMode: false,
 						styleWithSpan: false,
 						height: (function () {
@@ -133,7 +137,7 @@
 
 						popover: {
 							image: [
-								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia', 'imageTitle', 'imageCaption']],
+								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia', 'imageTitle', 'imageCaption', 'imageSource']],
 							],
 							link: [
 								['link', ['linkDialogShow', 'unlink']]
@@ -196,6 +200,13 @@
 						}
 					});
 				}
+
+				$(window).resize(function () {
+					jRecipient.parent().find('.note-scrollable-container').height((function () {
+						return (__PARENT__.length > 0 ? $("#{{ $parent }}")
+							: jRecipient.parent()).innerHeight();
+					})() - 40)
+				})
 			});
 		})(jQuery);
 	</script>

@@ -807,7 +807,7 @@
 }
 
 span[data-cnt="wrapper"] {
-	display: block;
+	display: inline-block;
 	position: relative;
 	margin: 0;
 	padding: 0;
@@ -817,7 +817,7 @@ span[data-cnt="caption"] {
 	display: block;
 	position: absolute;
 	font-size: 12px;
-	left: 0;
+	right: 0;
 	bottom: 0;
 	height: 32px;
 	width: 100%;
@@ -830,6 +830,7 @@ span[data-cnt="caption"] {
 	word-wrap: break-word;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	text-align: left;
 }
 
 span[data-cnt="caption"]:before {
@@ -844,4 +845,30 @@ span[data-cnt="caption"]:before {
 	left: 0;
 	line-height: 32px;
 	text-align: center;
+}
+
+span[data-cnt="source"] {
+	display: block;
+	position: absolute;
+	font-size: 10px;
+	font-style: italic;
+	left: 0;
+	bottom: -32px;
+	height: 32px;
+	width: 100%;
+	line-height: 22px;
+	padding: 5px 22px;
+	color: #000000;
+	user-modify: read-only;
+	overflow: hidden;
+	word-wrap: break-word;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-align: right;
+}
+
+span[data-cnt="source"] > a,
+span[data-cnt="source"] > a:hover,
+span[data-cnt="source"] > a:visited {
+	text-decoration: underline;
 }

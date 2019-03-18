@@ -15,7 +15,8 @@
 		'en-US': {
 			imageSource: {
 				edit: 'Modify Source',
-				sourceLabel: 'Source'
+				sourceLink: 'Source',
+				sourceText: 'Text'
 			}
 		},
 	});
@@ -33,8 +34,12 @@
 				context.options.imageSource = {};
 			}
 
-			if (typeof context.options.imageSource.defaultSource === 'undefined') {
-				context.options.imageSource.defaultSource = "Default source";
+			if (typeof context.options.imageSource.useImageSrc === 'undefined') {
+				context.options.imageSource.useImageSrc = true;
+			}
+
+			if (typeof context.options.imageSource.defaultText === 'undefined') {
+				context.options.imageSource.defaultText = "Source";
 			}
 
 			var options = context.options;
@@ -42,7 +47,7 @@
 
 			context.memo('button.imageSource', function () {
 				var button = ui.button({
-					contents: '<i class="fa fa-info-circle"></i>',
+					contents: '<i class="fa fa-external-link"></i>',
 					tooltip: lang.imageSource.edit,
 					container: false,
 					click: function (e) {
@@ -56,10 +61,16 @@
 			this.initialize = function () {
 				var $container = options.dialogsInBody ? $(document.body) : $editor;
 
-				var body = ['<div class="form-group">',
-					'<label>' + lang.imageSource.sourceLabel + '</label>',
+				var body = [
+					'<div class="form-group">',
+					'<label>' + lang.imageSource.sourceText + '</label>',
 					'<input class="note-source-source-text form-control" type="text" />',
-					'</div>'].join('');
+					'</div>',
+					'<div class="form-group">',
+					'<label>' + lang.imageSource.sourceLink + '</label>',
+					'<input class="note-source-source-link form-control" type="text" />',
+					'</div>'
+				].join('');
 
 				var footer = '<button href="#" class="btn btn-primary note-image-source-btn">' + lang.imageSource.edit + '</button>';
 
@@ -88,17 +99,32 @@
 
 				var imgInfo = {
 					imgDom: $img,
-					source: $img.attr('data-source')
+					text: $img.attr('data-source-text'),
+					source: $img.attr('data-source-link')
 				};
+
+				if (!imgInfo.text || !imgInfo.text.length) {
+					imgInfo.text = context.options.imageSource.defaultText;
+				}
+
+				if (!imgInfo.source || !imgInfo.source.length) {
+					imgInfo.source = context.options.imageSource.useImageSrc ? $img.attr('src') : '';
+				}
 
 				this.showLinkDialog(imgInfo).then(function (imgInfo) {
 					ui.hideDialog(self.$dialog);
 					var $img = imgInfo.imgDom;
 
 					if (imgInfo.source) {
-						$img.attr('data-source', imgInfo.source);
+						$img.attr('data-source-link', imgInfo.source);
 					} else {
-						$img.removeAttr('data-source');
+						$img.removeAttr('data-source-link');
+					}
+
+					if (imgInfo.text) {
+						$img.attr('data-source-text', imgInfo.text);
+					} else {
+						$img.removeAttr('data-source-text');
 					}
 
 					$note.val(context.invoke('code'));
@@ -108,37 +134,10 @@
 				});
 			};
 
-			this.wrap = function ($img) {
-				var imgInfo = {
-					imgDom: $img,
-					source: $img.attr('data-source')
-				};
-
-				if (!$img.parent().is('span[data-cnt="wrapper"]')) {
-					$img.wrap($('<span data-cnt="wrapper"></span>'));
-				}
-
-				$img.parent().find('span[data-cnt="source"]').remove();
-				if (imgInfo.source) {
-					$img.after('<span data-cnt="source">' + imgInfo.source + '</span>');
-				}
-
-				// if (imgInfo.source) {
-				// 	$img.after('<span data-cnt="source">' + (function(source){
-				// 		return source.replace(/^https?::\/\/[^\s]+/gi, function(url){
-				// 			return '<a href="' + encodeURI(url) + '">' + url + "</a>";
-				// 		})
-				// 	})(imgInfo.source) + '</span>');
-				// }
-
-
-				$note.val(context.invoke('code'));
-				$note.change();
-			};
-
 			this.showLinkDialog = function (imgInfo) {
 				return $.Deferred(function (deferred) {
-					var $imageSource = self.$dialog.find('.note-source-source-text'),
+					var $imageSource = self.$dialog.find('.note-source-source-link'),
+						$imageText = self.$dialog.find('.note-source-source-text'),
 						$editBtn = self.$dialog.find('.note-image-source-btn');
 
 					ui.onDialogShown(self.$dialog, function () {
@@ -149,10 +148,13 @@
 							deferred.resolve({
 								imgDom: imgInfo.imgDom,
 								source: $imageSource.val(),
+								text: $imageText.val()
 							});
 						});
 
 						$imageSource.val(imgInfo.source).trigger('focus');
+						$imageText.val(imgInfo.text).trigger('focus');
+
 						self.bindEnterKey($imageSource, $editBtn);
 					});
 
@@ -166,6 +168,26 @@
 
 					ui.showDialog(self.$dialog);
 				});
+			};
+
+			this.wrap = function ($img) {
+				var imgInfo = {
+					imgDom: $img,
+					source: $img.attr('data-source-link'),
+					text: $img.attr('data-source-text')
+				};
+
+				if (!$img.parent().is('span[data-cnt="wrapper"]')) {
+					$img.wrap($('<span data-cnt="wrapper"></span>'));
+				}
+
+				$img.parent().find('span[data-cnt="source"]').remove();
+				if (imgInfo.source) {
+					$img.after('<span data-cnt="source">Original: <a href="' + encodeURI(imgInfo.source) + '">' + imgInfo.text + '</a></span>');
+				}
+
+				$note.val(context.invoke('code'));
+				$note.change();
 			};
 		}
 	});

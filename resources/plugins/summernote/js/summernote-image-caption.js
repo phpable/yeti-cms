@@ -112,25 +112,6 @@
 				});
 			};
 
-			this.wrap = function ($img) {
-				var imgInfo = {
-					imgDom: $img,
-					caption: $img.attr('data-caption')
-				};
-
-				if (!$img.parent().is('span[data-cnt="wrapper"]')) {
-					$img.wrap($('<span data-cnt="wrapper"></span>'));
-				}
-
-				$img.parent().find('span[data-cnt="caption"]').remove();
-				if (imgInfo.caption) {
-					$img.after('<span data-cnt="caption">' + imgInfo.caption + '</span>');
-				}
-
-				$note.val(context.invoke('code'));
-				$note.change();
-			};
-
 			this.showCaptionDialog = function (imgInfo) {
 				return $.Deferred(function (deferred) {
 					var $imageCaption = self.$dialog.find('.note-caption-caption-text'),
@@ -161,6 +142,25 @@
 
 					ui.showDialog(self.$dialog);
 				});
+			};
+
+			this.wrap = function ($img) {
+				var imgInfo = {
+					imgDom: $img,
+					caption: $img.attr('data-caption')
+				};
+
+				if (!$img.parent().is('span[data-cnt="wrapper"]')) {
+					$img.wrap($('<span data-cnt="wrapper"></span>'));
+				}
+
+				$img.parent().find('span[data-cnt="caption"]').remove();
+				if (imgInfo.caption) {
+					$img.after('<span data-cnt="caption">' + imgInfo.caption + '</span>');
+				}
+
+				$note.val(context.invoke('code'));
+				$note.change();
 			};
 		}
 	});
