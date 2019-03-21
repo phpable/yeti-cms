@@ -625,7 +625,6 @@
 		unique: unique
 	};
 
-	var isSupportAmd = typeof define === 'function' && define.amd; // eslint-disable-line
 	/**
 	 * returns whether font is installed or not.
 	 *
@@ -660,35 +659,6 @@
 		}
 	}
 	var isEdge = /Edge\/\d+/.test(userAgent);
-	var hasCodeMirror = !!window.CodeMirror;
-	if (!hasCodeMirror && isSupportAmd) {
-		// Webpack
-		if (typeof __webpack_require__ === 'function') { // eslint-disable-line
-			try {
-				// If CodeMirror can't be resolved, `require.resolve` will throw an
-				// exception and `hasCodeMirror` won't be set to `true`.
-				require.resolve('codemirror');
-				hasCodeMirror = true;
-			} catch (e) {
-				// do nothing
-			}
-		} else if (typeof require !== 'undefined') {
-			// Browserify
-			if (typeof require.resolve !== 'undefined') {
-				try {
-					// If CodeMirror can't be resolved, `require.resolve` will throw an
-					// exception and `hasCodeMirror` won't be set to `true`.
-					require.resolve('codemirror');
-					hasCodeMirror = true;
-				} catch (e) {
-					// do nothing
-				}
-				// Almond/Require
-			} else if (typeof require.specified !== 'undefined') {
-				hasCodeMirror = require.specified('codemirror');
-			}
-		}
-	}
 	var isSupportTouch = (('ontouchstart' in window) ||
 		(navigator.MaxTouchPoints > 0) ||
 		(navigator.msMaxTouchPoints > 0));
@@ -714,9 +684,7 @@
 		isSafari: !isEdge && /safari/i.test(userAgent),
 		browserVersion: browserVersion,
 		jqueryVersion: parseFloat($$1.fn.jquery),
-		isSupportAmd: isSupportAmd,
 		isSupportTouch: isSupportTouch,
-		hasCodeMirror: hasCodeMirror,
 		isFontInstalled: isFontInstalled,
 		isW3CRangeSupport: !!document.createRange,
 		inputEventName: inputEventName
@@ -2169,6 +2137,7 @@
 				this.sc.innerHTML = dom.emptyPara;
 				return new WrappedRange(this.sc.firstChild, 0, this.sc.firstChild, 0);
 			}
+
 			/**
 			 * [workaround] firefox often create range on not visible point. so normalize here.
 			 *  - firefox: |<p>text</p>|
@@ -2178,6 +2147,7 @@
 			if (dom.isParaInline(this.sc) || dom.isPara(this.sc)) {
 				return rng;
 			}
+
 			// find inline top ancestor
 			var topAncestor;
 			if (dom.isInline(rng.sc)) {
@@ -2192,11 +2162,13 @@
 			// siblings not in paragraph
 			var inlineSiblings = dom.listPrev(topAncestor, dom.isParaInline).reverse();
 			inlineSiblings = inlineSiblings.concat(dom.listNext(topAncestor.nextSibling, dom.isParaInline));
+
 			// wrap with paragraph
 			if (inlineSiblings.length) {
 				var para = dom.wrap(lists.head(inlineSiblings), 'p');
 				dom.appendChildNodes(para, lists.tail(inlineSiblings));
 			}
+
 			return this.normalize();
 		};
 		/**
@@ -2208,11 +2180,13 @@
 		WrappedRange.prototype.insertNode = function (node) {
 			var rng = this.wrapBodyInlineWithPara().deleteContents();
 			var info = dom.splitPoint(rng.getStartPoint(), dom.isInline(node));
+
 			if (info.rightNode) {
 				info.rightNode.parentNode.insertBefore(node, info.rightNode);
 			} else {
 				info.container.appendChild(node);
 			}
+
 			return node;
 		};
 		/**
@@ -2484,6 +2458,7 @@
 				floatLeft: 'Float Left',
 				floatRight: 'Float Right',
 				floatNone: 'Float None',
+				floatCenter: 'Float Center',
 				shapeRounded: 'Shape: Rounded',
 				shapeCircle: 'Shape: Circle',
 				shapeThumbnail: 'Shape: Thumbnail',
@@ -2734,6 +2709,7 @@
 	function createImage(url) {
 		return $$1.Deferred(function (deferred) {
 			var $img = $$1('<img>');
+
 			$img.one('load', function () {
 				$img.off('error abort');
 				deferred.resolve($img);
@@ -4148,11 +4124,13 @@
 			 */
 			this.removeMedia = this.wrapCommand(function () {
 				var $target = $$1(_this.restoreTarget()).parent();
-				if ($target.parent('figure').length) {
-					$target.parent('figure').remove();
+
+				if ($target.parent('[data-cnt="container"]').length) {
+					$target.parent().remove();
 				} else {
 					$target = $$1(_this.restoreTarget()).detach();
 				}
+
 				_this.context.triggerEvent('media.delete', $target, _this.$editable);
 			});
 			/**
@@ -4162,19 +4140,32 @@
 			 */
 			this.floatMe = this.wrapCommand(function (value) {
 				var $target = $$1(_this.restoreTarget());
-				$target.toggleClass('note-float-left', value === 'left');
-				$target.toggleClass('note-float-right', value === 'right');
-				$target.css('float', value);
+
+				if ($target.parent().is('span[data-cnt="wrapper"]')) {
+					$target = $target.parent();
+				}
+
+				if (value === 'center') {
+					$target.css({float: 'none', marginLeft: 'auto', marginRight: 'auto'});
+				}else {
+					$target.css('float', value);
+				}
 			});
+
 			/**
 			 * resize overlay element
 			 * @param {String} value
 			 */
 			this.resize = this.wrapCommand(function (value) {
 				var $target = $$1(_this.restoreTarget());
+
+				if ($target.parent().is('span[data-cnt="wrapper"]')){
+					$target = $target.parent();
+				}
+
 				$target.css({
 					width: value > 0 ? value * 100 + '%' : 'auto',
-					height: ''
+					height: 'auto'
 				});
 			});
 		}
@@ -4244,19 +4235,24 @@
 		Editor.prototype.handleKeyMap = function (event) {
 			var keyMap = this.options.keyMap[env.isMac ? 'mac' : 'pc'];
 			var keys = [];
+
 			if (event.metaKey) {
 				keys.push('CMD');
 			}
+
 			if (event.ctrlKey && !event.altKey) {
 				keys.push('CTRL');
 			}
+
 			if (event.shiftKey) {
 				keys.push('SHIFT');
 			}
+
 			var keyName = key.nameFromCode[event.keyCode];
 			if (keyName) {
 				keys.push(keyName);
 			}
+
 			var eventName = keyMap[keys.join('+')];
 			if (eventName) {
 				if (this.context.invoke(eventName) !== false) {
@@ -4445,21 +4441,19 @@
 		 */
 		Editor.prototype.insertImage = function (src, param) {
 			var _this = this;
-			return createImage(src, param).then(function ($image) {
-				_this.beforeCommand();
 
+			return createImage(src).then(function ($image) {
+				_this.beforeCommand();
+				var width = Math.min(_this.$editable.width(), $image.width());
+
+				var $wrapper = _this.context.invoke('editor.wrapImage', $image);
 				if (typeof param === 'function') {
 					param($image);
-				} else {
-					if (typeof param === 'string') {
-						$image.attr('data-filename', param);
-					}
-					$image.css('width', Math.min(_this.$editable.width(), $image.width()));
 				}
 
+				$wrapper.find('[data-cnt="wrapper"]').css('width', width);
 				$image.show();
 
-				var $wrapper = $image.wrap($('<span data-cnt="wrapper" contenteditable="false"></span>')).parent();
 				range.create(_this.editable).insertNode($wrapper[0]);
 				range.createFromNodeAfter($wrapper[0]).select();
 
@@ -4468,6 +4462,21 @@
 				_this.context.triggerEvent('image.upload.error', e);
 			});
 		};
+
+		/**
+		 * insert image
+		 *
+		 * @param {jQuery} $img
+		 * @return {jQuery}
+		 */
+		Editor.prototype.wrapImage = function ($img) {
+			$img = $img.wrap($('<span data-cnt="wrapper" contenteditable="false"></span>')).parent();
+			$img = $img.wrap('<span data-cnt="container"></span>').parent();
+
+			return  $img;
+
+		};
+
 		/**
 		 * insertImages
 		 * @param {File[]} files
@@ -4622,6 +4631,7 @@
 		 */
 		Editor.prototype.resizeTo = function (pos, $target, bKeepRatio) {
 			var imageSize;
+
 			if (bKeepRatio) {
 				var newRatio = pos.y / pos.x;
 				var ratio = $target.data('ratio');
@@ -4635,7 +4645,13 @@
 					height: pos.y
 				};
 			}
-			$target.css(imageSize);
+
+			if ($target.parent().is('span[data-cnt="wrapper"]')) {
+				$target.parent().css(imageSize);
+			} else {
+				$target.css(imageSize);
+			}
+
 		};
 		/**
 		 * returns whether editable area has focus or not.
@@ -4702,17 +4718,6 @@
 		};
 		return Clipboard;
 	}());
-
-	var CodeMirror;
-	if (env.hasCodeMirror) {
-		if (env.isSupportAmd) {
-			require(['codemirror'], function (cm) {
-				CodeMirror = cm;
-			});
-		} else {
-			CodeMirror = window.CodeMirror;
-		}
-	}
 
 	var EDITABLE_PADDING = 24;
 
@@ -5534,6 +5539,13 @@
 					contents: _this.ui.icon(_this.options.icons.alignJustify),
 					tooltip: _this.lang.image.floatNone,
 					click: _this.context.createInvokeHandler('editor.floatMe', 'none')
+				}).render();
+			});
+			this.context.memo('button.floatCenter', function () {
+				return _this.button({
+					contents: _this.ui.icon(_this.options.icons.alignJustify),
+					tooltip: _this.lang.image.floatCenter,
+					click: _this.context.createInvokeHandler('editor.floatMe', 'center')
 				}).render();
 			});
 			// Remove Buttons
@@ -6921,11 +6933,6 @@
 				onImageUploadError: null,
 				onImageLinkInsert: null
 			},
-			codemirror: {
-				mode: 'text/html',
-				htmlMode: true,
-				lineNumbers: true
-			},
 			keyMap: {
 				pc: {
 					'ENTER': 'insertParagraph',
@@ -7005,7 +7012,6 @@
 				'caret': 'note-icon-caret',
 				'circle': 'note-icon-circle',
 				'close': 'note-icon-close',
-				'code': 'note-icon-code',
 				'eraser': 'note-icon-eraser',
 				'font': 'note-icon-font',
 				'frame': 'note-icon-frame',

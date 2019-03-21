@@ -280,14 +280,6 @@
 	vertical-align: sub
 }
 
-.note-editor .note-editing-area img.note-float-left {
-	margin-right: 10px
-}
-
-.note-editor .note-editing-area img.note-float-right {
-	margin-left: 10px
-}
-
 .note-editor.note-frame {
 	border: 1px solid #a9a9a9
 }
@@ -303,20 +295,24 @@
 }
 
 .note-editor.note-frame .note-editing-area .note-editable {
-	padding: 20px;
+	padding: 30px;
 	overflow: visible;
 	color: #000;
 	word-wrap: break-word;
 	background-color: #fff;
-	width: 960px !important;
-	min-width: 960px !important;
-	border-left: 2px dashed #000000;
-	border-right: 2px dashed #000000;
+	width: 980px !important;
+	min-width: 980px !important;
+	border-left: 2px double #000000;
+	border-right: 2px double #000000;
 	margin: 0 auto;
 }
 
 .note-editor.note-frame .note-editing-area .note-editable[contenteditable="false"] {
 	background-color: #e5e5e5
+}
+
+.note-editor.note-frame .note-editing-area .note-editable p {
+	clear: both;
 }
 
 .note-editor.note-frame .note-editing-area .note-editable a {
@@ -808,14 +804,32 @@
 	outline: 0
 }
 
+span[data-cnt="container"] {
+	display: block;
+	width: 100%;
+}
+
+span[data-cnt="container"]:after {
+	content: '';
+	display: block;
+	position: revert;
+	clear: both;
+	height: 0;
+	width: 0;
+}
+
 span[data-cnt="wrapper"] {
 	display: block;
-	float: left;
 	clear: both;
 	position: relative;
-	margin: 0;
 	padding: 0;
 	margin: 0 0 32px 0;
+}
+
+span[data-cnt="wrapper"] > img {
+	display: block;
+	width: 100%;
+	height: 100%;
 }
 
 span[data-cnt="caption"] {

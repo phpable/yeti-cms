@@ -138,7 +138,7 @@
 
 						popover: {
 							image: [
-								['float', ['floatLeft', 'floatRight', 'floatNone']],
+								['float', ['floatLeft', 'floatCenter', 'floatRight']],
 								['image', ['imageSize100', 'imageSize50', 'imageSize25', 'imageSizeAuto', 'removeMedia']],
 								['attrs', [ 'imageTitle', 'imageCaption', 'imageSource']]
 							],

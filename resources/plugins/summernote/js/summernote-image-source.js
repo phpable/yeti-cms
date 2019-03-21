@@ -178,11 +178,11 @@
 				};
 
 				if (!$img.parent().is('span[data-cnt="wrapper"]')) {
-					$img.wrap($('<span data-cnt="wrapper" contenteditable="false"></span>'));
+					context.invoke('editor.wrapImage', $img);
 				}
 
 				$img.parent().find('span[data-cnt="source"]').remove();
-				if (imgInfo.source) {
+				if (imgInfo.source && imgInfo.text) {
 					$img.after('<span data-cnt="source">Original: <a href="' + encodeURI(imgInfo.source) + '">' + imgInfo.text + '</a></span>');
 				}
 
