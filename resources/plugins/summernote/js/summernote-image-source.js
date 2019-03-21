@@ -183,7 +183,7 @@
 
 				$img.parent().find('span[data-cnt="source"]').remove();
 				if (imgInfo.source && imgInfo.text) {
-					$img.after('<span data-cnt="source">Original: <a href="' + encodeURI(imgInfo.source) + '">' + imgInfo.text + '</a></span>');
+					$img.after('<span data-cnt="source">Original: <a target="_blank" href="' + encodeURI(imgInfo.source) + '">' + imgInfo.text + '</a></span>');
 				}
 
 				$note.val(context.invoke('code'));
