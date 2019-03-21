@@ -11,12 +11,12 @@ use \Able\Helpers\Src;
 class ProcessMedia implements SelfHandling {
 
 	/**
-	 * @var null
+	 * @var File
 	 */
 	private $File = null;
 
 	/**
-	 * @var null
+	 * @var string
 	 */
 	private $type = null;
 

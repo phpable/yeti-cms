@@ -117,7 +117,9 @@ class FilesController extends AController {
 		$File = $Directory->toPath()
 			->append($File->getClientOriginalName())->toFile();
 
-		Bus::dispatch(new ProcessMedia($File, $type));
+		if (!in_array($File->getExtension(), ['gif'])){
+			Bus::dispatch(new ProcessMedia($File, $type));
+		}
 
 		return [
 			'error' => false,
