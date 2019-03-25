@@ -735,8 +735,6 @@
 	/**
 	 * @method isText
 	 *
-	 *
-	 *
 	 * @param {Node} node
 	 * @return {Boolean} true if node's type is text(3)
 	 */
@@ -746,8 +744,6 @@
 
 	/**
 	 * @method isElement
-	 *
-	 *
 	 *
 	 * @param {Node} node
 	 * @return {Boolean} true if node's type is element(1)
@@ -770,6 +766,10 @@
 		}
 		// Chrome(v31.0), FF(v25.0.1) use DIV for paragraph
 		return node && /^DIV|^P|^LI|^H[1-7]/.test(node.nodeName.toUpperCase());
+	}
+
+	function isContainer(node) {
+		return node && $(node).is('div[cnt="container"]');
 	}
 
 	function isHeading(node) {
@@ -1675,6 +1675,7 @@
 		isElement: isElement,
 		isVoid: isVoid,
 		isPara: isPara,
+		isContainer: isContainer,
 		isPurePara: isPurePara,
 		isHeading: isHeading,
 		isInline: isInline,
@@ -1934,6 +1935,7 @@
 			}
 			return this;
 		};
+
 		/**
 		 * @return {WrappedRange}
 		 */
@@ -2148,6 +2150,8 @@
 				return rng;
 			}
 
+			console.log(rng, rng.sc);
+
 			// find inline top ancestor
 			var topAncestor;
 			if (dom.isInline(rng.sc)) {
@@ -2159,14 +2163,17 @@
 			} else {
 				topAncestor = rng.sc.childNodes[rng.so > 0 ? rng.so - 1 : 0];
 			}
-			// siblings not in paragraph
-			var inlineSiblings = dom.listPrev(topAncestor, dom.isParaInline).reverse();
-			inlineSiblings = inlineSiblings.concat(dom.listNext(topAncestor.nextSibling, dom.isParaInline));
 
-			// wrap with paragraph
-			if (inlineSiblings.length) {
-				var para = dom.wrap(lists.head(inlineSiblings), 'p');
-				dom.appendChildNodes(para, lists.tail(inlineSiblings));
+			if (topAncestor !== undefined) {
+				// siblings not in paragraph
+				var inlineSiblings = dom.listPrev(topAncestor, dom.isParaInline).reverse();
+				inlineSiblings = inlineSiblings.concat(dom.listNext(topAncestor.nextSibling, dom.isParaInline));
+
+				// wrap with paragraph
+				if (inlineSiblings.length) {
+					var para = dom.wrap(lists.head(inlineSiblings), 'p');
+					dom.appendChildNodes(para, lists.tail(inlineSiblings));
+				}
 			}
 
 			return this.normalize();
@@ -2719,6 +2726,20 @@
 			}).css({
 				display: 'none'
 			}).appendTo(document.body).attr('src', url);
+		}).promise();
+	}
+
+	/**
+	 * @method createContainer
+	 * @return {Promise} - then: $cnt
+	 */
+	function createContainer() {
+		return $$1.Deferred(function (deferred) {
+			var $cnt = $$1('<div data-cnt="container" contenteditable="false"></div>').css({
+				display: 'none'
+			});
+
+			deferred.resolve($cnt);
 		}).promise();
 	}
 
@@ -4460,6 +4481,31 @@
 				_this.afterCommand();
 			}).fail(function (e) {
 				_this.context.triggerEvent('image.upload.error', e);
+			});
+		};
+
+		/**
+		 * insert container
+		 *
+		 * @param {String|Function} param
+		 * @return {Promise}
+		 */
+		Editor.prototype.insertContainer = function (param) {
+			var _this = this;
+
+			return createContainer().then(function ($cnt) {
+				_this.beforeCommand();
+
+				if (typeof param === 'function') {
+					param($cnt);
+				}
+
+				$cnt.show();
+
+				range.create(_this.editable).insertNode($cnt[0]);
+				range.createFromNodeAfter($cnt[0]).select();
+
+				_this.afterCommand();
 			});
 		};
 

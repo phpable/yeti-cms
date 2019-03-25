@@ -122,6 +122,7 @@ mix.scripts([
 	paths.plugins + 'summernote/js/summernote-image-title.js',
 	paths.plugins + 'summernote/js/summernote-image-caption.js',
 	paths.plugins + 'summernote/js/summernote-image-source.js',
+	paths.plugins + 'summernote/js/summernote-table-content.js',
 ], 'public/js/summernote.js');
 
 mix.scripts([

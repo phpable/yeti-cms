@@ -125,7 +125,7 @@
 							['fontsize', ['fontsize']],
 
 							__EXTERNALS__
-								? ['insert', ['picture', 'video', 'link']]
+								? ['insert', ['picture', 'video', 'link', 'tableContent']]
 								: ['insert', ['link']],
 
 							['meta', ['style', 'ul', 'ol', 'paragraph', 'height']],
