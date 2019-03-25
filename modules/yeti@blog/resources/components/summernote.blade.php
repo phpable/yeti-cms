@@ -144,6 +144,9 @@
 							],
 							link: [
 								['link', ['linkDialogShow', 'unlink']]
+							],
+							tableContent: [
+								['content', ['tableContentRefresh']]
 							]
 
 							/*
@@ -181,6 +184,7 @@
 										cache: false,
 										contentType: false,
 										processData: false,
+
 										success: function (data) {
 											$("#{{ $id }}").summernote('insertImage', data.url, function(jImage){
 												jImage.attr('alt', data.name);

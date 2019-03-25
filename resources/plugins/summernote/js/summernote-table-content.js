@@ -15,6 +15,7 @@
 		'en-US': {
 			tableContent: {
 				tooltip: 'Content',
+				refresh: 'Refresh'
 			}
 		},
 	});
@@ -46,10 +47,28 @@
 				return button.render();
 			});
 
+			context.memo('button.tableContentRefresh', function () {
+				var button = ui.button({
+					contents: '<i class="fa fa-refresh"></i>',
+					tooltip: lang.tableContent.refresh,
+					container: false,
+
+					click: function (e) {
+						context.invoke('tableContent.refresh');
+					},
+				});
+
+				return button.render();
+			});
+
 			this.insert = function() {
 				context.invoke("editor.insertContainer", function ($cnt) {
 					context.invoke('tableContent.update', $cnt);
 				});
+			};
+
+			this.refresh = function() {
+				console.log('~REFRESH~');
 			};
 
 			this.update = function($cnt){

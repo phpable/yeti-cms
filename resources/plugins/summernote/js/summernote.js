@@ -2129,6 +2129,15 @@
 		WrappedRange.prototype.isCollapsed = function () {
 			return this.sc === this.ec && this.so === this.eo;
 		};
+
+		/**
+		 * returns whether range is inside a special container or not
+		 */
+		WrappedRange.prototype.isInsideContainer = function () {
+			return $(this.sc).closest('[data-role="table-content"]').length
+				|| $(this.ec).closest('[data-role="table-content"]').length;
+		};
+
 		/**
 		 * wrap inline nodes which children of body with paragraph
 		 *
@@ -6113,8 +6122,9 @@
 				this.hide();
 				return;
 			}
+
 			var rng = this.context.invoke('editor.createRange');
-			if (rng.isCollapsed() && rng.isOnAnchor()) {
+			if (rng.isCollapsed() && rng.isOnAnchor() && !rng.isInsideContainer()) {
 				var anchor = dom.ancestor(rng.sc, dom.isAnchor);
 				var href = $$1(anchor).attr('href');
 				this.$popover.find('a').attr('href', href).html(href);
