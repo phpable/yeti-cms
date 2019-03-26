@@ -61,6 +61,19 @@
 				return button.render();
 			});
 
+			this.initialize = function(){
+				$editable.find('[data-role="table-content"]').find('a').click(function (jEvent) {
+					jEvent.preventDefault();
+					jEvent.stopPropagation();
+
+					if (jEvent.ctrlKey){
+						window.location.href = window.location.href.replace(/#.*$/, '') + $(this).attr('href');
+					}
+
+					return false;
+				});
+			};
+
 			this.insert = function() {
 				context.invoke("editor.insertContainer", function ($cnt) {
 					context.invoke('tableContent.update', $cnt);

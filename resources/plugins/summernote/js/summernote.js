@@ -2072,6 +2072,7 @@
 			}
 			return new WrappedRange(boundaryPoints.sc, boundaryPoints.so, boundaryPoints.ec, boundaryPoints.eo);
 		};
+
 		/**
 		 * delete contents on range
 		 * @return {WrappedRange}
@@ -2103,6 +2104,7 @@
 			});
 			return new WrappedRange(point.node, point.offset, point.node, point.offset).normalize();
 		};
+
 		/**
 		 * makeIsOn: return isOn(pred) function
 		 */
@@ -2112,6 +2114,7 @@
 				return !!ancestor && (ancestor === dom.ancestor(this.ec, pred));
 			};
 		};
+
 		/**
 		 * @param {Function} pred
 		 * @return {Boolean}
@@ -2123,6 +2126,7 @@
 			var node = dom.ancestor(this.sc, pred);
 			return node && dom.isLeftEdgeOf(this.sc, node);
 		};
+
 		/**
 		 * returns whether range was collapsed or not
 		 */
@@ -2158,8 +2162,6 @@
 			if (dom.isParaInline(this.sc) || dom.isPara(this.sc)) {
 				return rng;
 			}
-
-			console.log(rng, rng.sc);
 
 			// find inline top ancestor
 			var topAncestor;
@@ -6144,6 +6146,59 @@
 		return LinkPopover;
 	}());
 
+	var ContainerPopover = /** @class */ (function () {
+		function ContainerPopover(context) {
+			var _this = this;
+			this.context = context;
+			this.ui = $$1.summernote.ui;
+			this.options = context.options;
+			this.events = {
+				'summernote.keyup summernote.mouseup summernote.change summernote.scroll': function () {
+					_this.update();
+				},
+				'summernote.disable summernote.dialog.shown': function () {
+					_this.hide();
+				}
+			};
+		}
+		ContainerPopover.prototype.shouldInitialize = function () {
+			return !lists.isEmpty(this.options.popover.container);
+		};
+		ContainerPopover.prototype.initialize = function () {
+			this.$popover = this.ui.popover({
+				className: 'note-container-popover',
+			}).render().appendTo(this.options.popoverContainer !== undefined
+				? this.options.popoverContainer : this.options.container);
+
+			var $content = this.$popover.find('.popover-content,.static-popover-content,.note-popover-content');
+			this.context.invoke('buttons.build', $content, this.options.popover.container);
+		};
+		ContainerPopover.prototype.destroy = function () {
+			this.$popover.remove();
+		};
+		ContainerPopover.prototype.update = function () {
+			if (!this.context.invoke('editor.hasFocus')) {
+				this.hide();
+				return;
+			}
+
+			var rng = this.context.invoke('editor.createRange');
+			if (rng.isCollapsed() && rng.isInsideContainer()) {
+				this.$popover.css({
+					display: 'block'
+				});
+			} else {
+				this.hide();
+			}
+		};
+
+		ContainerPopover.prototype.hide = function () {
+			this.$popover.hide();
+		};
+
+		return ContainerPopover;
+	}());
+
 	var ImageDialog = /** @class */ (function () {
 		function ImageDialog(context) {
 			this.context = context;
@@ -6890,6 +6945,7 @@
 				'toolbar': Toolbar,
 				'linkDialog': LinkDialog,
 				'linkPopover': LinkPopover,
+				'containerPopover': ContainerPopover,
 				'imageDialog': ImageDialog,
 				'imagePopover': ImagePopover,
 				'tablePopover': TablePopover,
@@ -6921,6 +6977,9 @@
 				],
 				link: [
 					['link', ['linkDialogShow', 'unlink']]
+				],
+				container: [
+					['container', ['remove']]
 				],
 				table: [
 					['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],

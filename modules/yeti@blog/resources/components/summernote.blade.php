@@ -145,8 +145,8 @@
 							link: [
 								['link', ['linkDialogShow', 'unlink']]
 							],
-							tableContent: [
-								['content', ['tableContentRefresh']]
+							container: [
+								['container', ['remove', 'tableContentRefresh']]
 							]
 
 							/*
