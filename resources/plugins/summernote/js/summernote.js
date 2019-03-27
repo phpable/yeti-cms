@@ -2508,6 +2508,9 @@
 				openInNewWindow: 'Open in new window',
 				nofollow: 'Set "nofollow" attribute'
 			},
+			container: {
+				remove: 'Remove'
+			},
 			table: {
 				table: 'Table',
 				addRowAbove: 'Add row above',
@@ -4165,6 +4168,7 @@
 
 				_this.context.triggerEvent('media.delete', $target, _this.$editable);
 			});
+
 			/**
 			 * float me
 			 *
@@ -4681,6 +4685,14 @@
 				this.afterCommand();
 			}
 		};
+		Editor.prototype.removeContainer = function () {
+			var rng = this.createRange(this.$editable);
+			if (rng.isCollapsed() && rng.isInsideContainer()) {
+				this.beforeCommand();
+				$(rng.commonAncestor()).closest('[data-cnt="container"]').remove();
+				this.afterCommand();
+			}
+		};
 		/**
 		 * @param {Position} pos
 		 * @param {jQuery} $target - target element
@@ -5115,6 +5127,7 @@
 			this.addToolbarButtons();
 			this.addImagePopoverButtons();
 			this.addLinkPopoverButtons();
+			this.addContainerPopoverButtons();
 			this.addTablePopoverButtons();
 			this.fontInstalledMap = {};
 		};
@@ -5629,6 +5642,18 @@
 					contents: _this.ui.icon(_this.options.icons.unlink),
 					tooltip: _this.lang.link.unlink,
 					click: _this.context.createInvokeHandler('editor.unlink')
+				}).render();
+			});
+		};
+
+		Buttons.prototype.addContainerPopoverButtons = function () {
+			var _this = this;
+
+			this.context.memo('button.remove', function () {
+				return _this.button({
+					contents: _this.ui.icon(_this.options.icons.trash),
+					tooltip: _this.lang.container.remove,
+					click: _this.context.createInvokeHandler('editor.removeContainer')
 				}).render();
 			});
 		};
