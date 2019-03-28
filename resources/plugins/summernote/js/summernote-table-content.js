@@ -87,21 +87,24 @@
 				var jContent = $('<ul data-level="1"></ul>');
 
 				$editable.find('h1,h2,h3').each(function (index) {
-					var offset = this.tagName.replace(/^h+/i, '');
-
-					while(jContent.data('level') < offset){
-						jContent = jContent.append('<li data-role="virtual"><ul data-level="' + offset + '"></ul></li>').find('ul');
-					}
-
-					while (jContent.data('level') > offset){
-						jContent = jContent.closest('ul[data-level=' + offset + ']');
-					}
-
 					var jThis = $(this);
-					var id =  'tabcontent-' + (index + 1);
 
-					jThis.attr('id', id);
-					jContent.append('<li><a href="#' + id + '">' + jThis.text() + '</a></li>');
+					if (jThis.text().length > 0) {
+						var offset = this.tagName.replace(/^h+/i, '');
+
+						while (jContent.data('level') < offset) {
+							jContent = jContent.append('<li data-role="virtual"><ul data-level="' + offset + '"></ul></li>').find('ul');
+						}
+
+						while (jContent.data('level') > offset) {
+							jContent = jContent.closest('ul[data-level=' + offset + ']');
+						}
+
+						var id = 'tabcontent-' + (index + 1);
+
+						jThis.attr('id', id);
+						jContent.append('<li><a href="#' + id + '">' + jThis.text() + '</a></li>');
+					}
 				});
 
 				jContent.closest('[data-level="1"]').find('ul').addBack().each(function(){
