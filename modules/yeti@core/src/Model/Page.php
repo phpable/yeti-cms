@@ -102,8 +102,8 @@ class Page extends AModel
 	/**
 	 * @return string
 	 */
-	public final function getTitleAttribute(){
-		return $this->fromConfig('title');
+	public final function getTitleAttribute(): string {
+		return (string)$this->fromConfig('title');
 	}
 
 	/**
@@ -116,8 +116,8 @@ class Page extends AModel
 	/**
 	 * @return string
 	 */
-	public final function getDescriptionAttribute(){
-		return $this->fromConfig('description');
+	public final function getDescriptionAttribute(): string {
+		return (string)$this->fromConfig('description');
 	}
 
 	/**

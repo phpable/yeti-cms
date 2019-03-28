@@ -908,7 +908,7 @@ div[data-role="table-content"] {
 }
 
 div[data-role="table-content"] > ul:before {
-	content: 'Table Of Contents';
+	content: 'Table of Contents';
 	display: block;
 	position: absolute;
 	line-height: 52px;

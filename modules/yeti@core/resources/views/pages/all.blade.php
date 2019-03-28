@@ -46,7 +46,6 @@
 				<tbody>
 					@foreach($Pages as $Page)
 						<tr>
-
 							<td>{{ $Page->name }}</td>
 
 							@if (!empty($Page->url))
