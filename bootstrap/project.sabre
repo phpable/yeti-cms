@@ -13,7 +13,7 @@
 			@yield(css)
 
 			@if (function_exists('collect'))
-				{!! collect('css') !!}
+				{!! section('css') !!}
 			@end
 		</style>
 	</head>
@@ -26,7 +26,7 @@
 			@yield(js)
 
 			@if (function_exists('collect'))
-				{!! collect('js') !!}
+				{!! section('js') !!}
 			@end
 		</script>
 

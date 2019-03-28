@@ -68,7 +68,7 @@ if (!function_exists('collect')) {
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	function collect(string $tag, string $key = null, \Closure $Handler = null) {
+	function section(string $tag, string $key = null, \Closure $Handler = null) {
 		static $__CACHE = [];
 
 		if (!in_array($tag, ['css', 'js'])){

@@ -159,16 +159,16 @@ Route::group(['domain' => '{project}.' . Config::get('app.domain')], function() 
 			$CacheFile = Path::create(Config::get('building.destination'))
 				->append($project, '.datacache')->forceFile();
 
-			if ($CacheFile->getContent() !== ($cache = md5(json_encode($Scope->objects)))) {
+			$cache = md5(json_encode($Scope->objects));
+
+//			if ($CacheFile->getContent() !== ($cache = md5(json_encode($Scope->objects)))) {
 				$CacheFile->rewrite($cache);
 
-				/*
 				Artisan::call('yeti:data:build', [
-					'scope' => 'writersperhour',
+					'scope' => $Scope->name,
 					'--force' => true,
 				]);
-				*/
-			}
+//			}
 
 			$Directory = Path::create(Config::get('building.destination'))
 				->append($project, 'pages')->forceDirectory();
