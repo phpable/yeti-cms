@@ -53,7 +53,7 @@
 					tooltip: lang.tableContent.refresh,
 					container: false,
 
-					click: function (e) {
+					click: function () {
 						context.invoke('tableContent.refresh');
 					},
 				});
@@ -62,16 +62,7 @@
 			});
 
 			this.initialize = function(){
-				$editable.find('[data-role="table-content"]').find('a').click(function (jEvent) {
-					jEvent.preventDefault();
-					jEvent.stopPropagation();
-
-					if (jEvent.ctrlKey){
-						window.location.href = window.location.href.replace(/#.*$/, '') + $(this).attr('href');
-					}
-
-					return false;
-				});
+				context.invoke('tableContent.prevent', $editable.find('[data-role="table-content"]'));
 			};
 
 			this.insert = function() {
@@ -81,7 +72,15 @@
 			};
 
 			this.refresh = function() {
-				console.log('~REFRESH~');
+				var rng = $.summernote.range.create($editable)
+				if (rng.isCollapsed() && rng.isInsideContainer()) {
+					var cnt = $(rng.commonAncestor()).closest('[data-cnt="container"]');
+					if (cnt.length) {
+						cnt.empty();
+
+						context.invoke('tableContent.update', cnt);
+					}
+				}
 			};
 
 			this.update = function($cnt){
@@ -120,8 +119,23 @@
 				$cnt.attr('data-role', 'table-content');
 				$cnt.append(jContent.closest('[data-level="1"]')[0].outerHTML);
 
+				context.invoke('tableContent.prevent', $cnt);
+
 				$note.val(context.invoke('code'));
 				$note.change();
+			};
+
+			this.prevent = function ($cnt) {
+				$cnt.find('a').click(function (jEvent) {
+					jEvent.preventDefault();
+					jEvent.stopPropagation();
+
+					if (jEvent.ctrlKey){
+						window.location.href = window.location.href.replace(/#.*$/, '') + $(this).attr('href');
+					}
+
+					return false;
+				});
 			};
 		}
 	});
