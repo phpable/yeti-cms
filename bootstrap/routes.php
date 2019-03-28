@@ -18,8 +18,6 @@ use \Yeti\Main\Model\User;
 use \Yeti\Main\Model\Module;
 use \Yeti\Main\Model\Project;
 
-use \Yeti\Main\Building\Builder;
-
 use \MatthiasMullie\Minify\CSS;
 use \MatthiasMullie\Minify\JS;
 
@@ -156,26 +154,21 @@ Route::group(['domain' => '{project}.' . Config::get('app.domain')], function() 
 			$Params = [];
 			$Page = findPageByUrl($url, $Params);
 
-			$CacheFile = Path::create(Config::get('building.destination'))
-				->append($project, '.datacache')->forceFile();
+			Artisan::call('yeti:data:build', [
+				'scope' => $Scope->name,
+				'--force' => true,
+			]);
 
-			$cache = md5(json_encode($Scope->objects));
-
-//			if ($CacheFile->getContent() !== ($cache = md5(json_encode($Scope->objects)))) {
-				$CacheFile->rewrite($cache);
-
-				Artisan::call('yeti:data:build', [
+			if (!env('APP_DEBUG_TEMPLATES')) {
+				Artisan::call('yeti:project:build', [
 					'scope' => $Scope->name,
+					'--target' => $Page->name,
 					'--force' => true,
 				]);
-//			}
+			}
 
 			$Directory = Path::create(Config::get('building.destination'))
 				->append($project, 'pages')->forceDirectory();
-
-			if (!env('APP_DEBUG_TEMPLATES') || $Directory->isEmpty()){
-				(new Builder($Directory))->build($Page);
-			}
 
 			$Root = $Directory->toPath()
 				->append($Page->name)->toDirectory();
