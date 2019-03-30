@@ -59,7 +59,7 @@ if (!function_exists('is_page')) {
 	}
 }
 
-if (!function_exists('collect')) {
+if (!function_exists('section')) {
 
 	/**
 	 * @param string $tag
