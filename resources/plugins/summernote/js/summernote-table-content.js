@@ -86,11 +86,19 @@
 			this.update = function($cnt){
 				var jContent = $('<ul data-level="1"></ul>');
 
-				$editable.find('h1,h2,h3').each(function (index) {
+				$editable.find('h2,h3,h4').each(function (index) {
 					var jThis = $(this);
 
 					if (jThis.text().length > 0) {
-						var offset = this.tagName.replace(/^h+/i, '');
+						var offset = this.tagName.replace(/^h+/i, '') - 1;
+
+						if (offset < 1){
+							offset = 1;
+						}
+
+						if (offset > 3){
+							offset = 3;
+						}
 
 						while (jContent.data('level') < offset) {
 							jContent = jContent.append('<li data-role="virtual"><ul data-level="' + offset + '"></ul></li>').find('ul');

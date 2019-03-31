@@ -955,7 +955,7 @@ div[data-role="table-content"] ul > li::marker {
 }
 
 div[data-role="table-content"] ul[data-level="1"] > li {
-	list-style: lower-roman;
+	list-style: upper-roman;
 	font-size: 26px;
 	margin-bottom: 16px;
 }
