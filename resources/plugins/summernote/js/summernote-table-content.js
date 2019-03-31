@@ -101,7 +101,8 @@
 						}
 
 						while (jContent.data('level') < offset) {
-							jContent = jContent.append('<li data-role="virtual"><ul data-level="' + offset + '"></ul></li>').find('ul');
+							jContent = jContent.append('<li data-role="virtual"><ul id="tab'
+								+ index + '" data-level="' + offset + '"></ul></li>').find('ul#tab' + index);
 						}
 
 						while (jContent.data('level') > offset) {
@@ -109,8 +110,8 @@
 						}
 
 						var id = 'tabcontent-' + (index + 1);
-
 						jThis.attr('id', id);
+
 						jContent.append('<li><a href="#' + id + '">' + jThis.text() + '</a></li>');
 					}
 				});
