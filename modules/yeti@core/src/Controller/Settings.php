@@ -29,7 +29,7 @@ class Settings extends AController {
 		}
 
 		App::scope()
-			->update(Input::only('name', 'url', 'title', 'description'))
+			->update(Input::only('name', 'domain'))
 			->store(Input::only('deploy_path', 'index_page_id', 'login_page_id', 'error_page_id'));
 
 		return redirect()->route('yeti@core:settings.edit')
