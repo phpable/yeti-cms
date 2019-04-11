@@ -125,7 +125,7 @@ class Module extends AModel {
 
 			}
 
-			return Arr::path($this->Manifest, preg_split('/\.+/',
+			return Arr::follow($this->Manifest, preg_split('/\.+/',
 				$name, -1, PREG_RECURSION_LIMIT_ERROR)) ?? $default;
 
 		}catch (\Exception $Exception){

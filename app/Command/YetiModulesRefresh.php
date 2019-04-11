@@ -205,7 +205,7 @@ class YetiModulesRefresh extends Command {
 							return sprintf('"%s:%s" => "%s"', $Module->getMnemonic(), $value,
 								Str::join('\\', $Module->getNamespace(), 'Model', Src::tcm($value, '-', '_')));
 
-						}, (array)Arr::path(json_decode(Path::create(module_path($Module,
+						}, (array)Arr::follow(json_decode(Path::create(module_path($Module,
 					'manifest.json'))->toFile()->getContent(), true), 'export', 'objects'));
 
 					if (!empty($Exports)){
