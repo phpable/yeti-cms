@@ -2,7 +2,10 @@
 /node_modules
 /resources/temporary/*
 /.sass-cache
+/export
 /imports
+/composed
+
 Homestead.yaml
 .env
 composer.phar

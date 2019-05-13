@@ -5,6 +5,7 @@ use \Illuminate\Foundation\Console\Kernel;
 
 use \Yeti\Main\Command\YetiExport;
 use \Yeti\Main\Command\YetiImport;
+use \Yeti\Main\Command\YetiCompose;
 use \Yeti\Main\Command\YetiProjectDeploy;
 use \Yeti\Main\Command\YetiModulesRefresh;
 use \Yeti\Main\Command\YetiAdminList;
@@ -38,6 +39,7 @@ class Console extends Kernel {
 
 		YetiExport::class,
 		YetiImport::class,
+		YetiCompose::class,
 
 		YetiDataBuild::class,
 		YetiProjectBuild::class,
