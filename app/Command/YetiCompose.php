@@ -81,23 +81,15 @@ class YetiCompose extends ACommand {
 				}
 			}
 
-			/*
+			$Directory = (new Path($this->argument('destination'),
+				App::scope()->name, 'snippets'))->forceDirectory();
+
 			foreach (Snippet::all() as $Snippet) {
-				$Destination = $Directory->toPath()->append('snippets', 'snippet_'
-					. $Snippet->id)->forceDirectory();
+				if ($this->compose($Directory, $Snippet)) {
 
-				foreach ($Snippet->templates as $Template) {
-					$Destination->toPath()->append('template_'
-						. $Template->id . '.' . $Template->type)->forceFile()->rewrite((string)$Template->source);
-
-					$count++;
+					$this->info(sprintf("Exported: snippet #%s", $Snippet->id));
 				}
-
-				$this->info("Exported: snippet #" . $Snippet->id);
 			}
-			*/
-
-			$this->warn("Total: " . $count);
 		} catch (\Throwable $Exception) {
 			$this->error($Exception->getMessage());
 		}
@@ -157,6 +149,32 @@ class YetiCompose extends ACommand {
 
 					? $Item->template->name : 'main'));
 		}
+
+		foreach ($Item->templates()
+			->orderBy('name')->get() as $Template) {
+
+				$Fragments = Arr::improve($Fragments,
+					in_array($Template->type, [
+						'css',
+						'js'
+					])
+
+				? $Template->type : $Template->name, $Template->source);
+		}
+
+		return [
+			$Item->name => $Fragments
+		];
+	}
+
+	/**
+	 * @param Snippet $Item
+	 * @return array
+	 *
+	 * @throws Exception
+	 */
+	public final function collectSnippets(Snippet $Item): array {
+		$Fragments = [];
 
 		foreach ($Item->templates()
 			->orderBy('name')->get() as $Template) {
