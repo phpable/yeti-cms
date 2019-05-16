@@ -54,10 +54,6 @@
 						<li class="empty-after">
 							@yield('commands')
 
-							<a href="{{ preview(isset($Preview) ? $Preview : null) }}" target="_blank" title="Preview">
-								<i class="fa fa-eye"></i>
-							</a>
-
 							<a href="javascript:void(0);" data-href="{{ route('yeti@main:deploy') }}" id="btn-deploy" title="Deploy">
 								<i class="fa fa-heart"></i>
 							</a>

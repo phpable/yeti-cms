@@ -56,15 +56,6 @@ function pagelink($name, array $Args = []) {
 }
 
 /**
- * @param null|Page $Page
- * @return string
- */
-function preview(?Page $Page = null) {
-	return Request::getScheme() . '://' . App::scope()->name . '.' . Request::getHost()
-	. (!is_null($Page) && !empty($Page->url) ? ('/' . ltrim($Page->url, '/')) : null);
-}
-
-/**
  * @return array
  */
 function entrances(): array {
