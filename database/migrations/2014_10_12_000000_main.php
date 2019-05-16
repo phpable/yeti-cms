@@ -62,7 +62,6 @@ class Main extends Migration {
 			$Table->string('url', 255);
 
 			$Table->text('storage')->nullable();
-			$Table->text('objects')->nullable();
 
 			$Table->timestamp('builded_at');
 			$Table->timestamp('deployed_at');
