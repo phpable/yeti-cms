@@ -188,7 +188,7 @@ class YetiCompose extends ACommand {
 						'js'
 					])
 
-				? $Template->type : $Template->name, $Template->source);
+				? $Template->type : '@', $Template->source);
 		}
 
 		return [
@@ -243,7 +243,12 @@ class YetiCompose extends ACommand {
 		}
 
 		if ($name == 'js') {
+			yield "@parent\n\n";
 			yield '<script type="text/javascript">';
+		}
+
+		if ($name == 'css') {
+			yield "@parent\n\n";
 		}
 
 		if (!empty(trim($content))) {
