@@ -7,7 +7,6 @@ use \Illuminate\Support\Facades\URL;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Log;
 
-use \Illuminate\Foundation\Exceptions\Handler;
 use \Illuminate\Auth\AuthenticationException;
 use \Illuminate\Auth\Access\AuthorizationException;
 use \Illuminate\Validation\ValidationException;
@@ -21,7 +20,8 @@ use \Yeti\Main\Exception\InvalidScopeException;
 use \Throwable;
 use \Exception;
 
-class Interceptor extends Handler {
+class Handler
+	extends \Illuminate\Foundation\Exceptions\Handler {
 
 	/**
 	 * @var array
@@ -38,10 +38,10 @@ class Interceptor extends Handler {
 	 * Report or log an exception.
 	 * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
 	 *
-	 * @param Throwable $Exception $Exception
+	 * @param Exception $Exception
 	 * @throws Exception
 	 */
-	public function report(Throwable $Exception) {
+	public function report(Exception $Exception) {
 		parent::report($Exception);
 	}
 
@@ -78,8 +78,6 @@ class Interceptor extends Handler {
 			return redirect()->to(URL::previous())
 				->withError($Exception->getMessage());
 		}
-
-
 
 		return parent::render($Request, $Exception);
 	}

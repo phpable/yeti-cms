@@ -23,15 +23,6 @@ abstract class AModel extends Model {
 	}
 
 	/**
-	 * @param AModel $Model
-	 * @return bool
-	 */
-	public final function is(AModel $Model){
-		return get_class($Model) == get_class($this)
-			&& $Model->id == $this->id;
-	}
-
-	/**
 	 * @return string
 	 */
 	public final function getType(){

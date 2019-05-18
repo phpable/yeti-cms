@@ -3,7 +3,9 @@ namespace Yeti\Main\Providers;
 
 use \Illuminate\Http\Request;
 use \Illuminate\Routing\Router;
+
 use \Illuminate\Foundation\Support\Providers\RouteServiceProvider;
+
 use \Illuminate\Support\Facades\Input;
 use \Illuminate\Support\Facades\Route;
 
@@ -21,16 +23,15 @@ class YetiRouteProvider extends RouteServiceProvider {
 
 	/**
 	 * Define your route model bindings, pattern filters, etc.
-	 * @param  \Illuminate\Routing\Router $Router
 	 * @return void
 	 */
-	public function boot(Router $Router) {
-		parent::boot($Router);
+	public function boot() {
+		parent::boot();
 	}
 
 	/**
 	 * Define the routes for the application.
-	 * @param  \Illuminate\Routing\Router $Router
+	 * @param Router $Router
 	 * @return void
 	 */
 	public function map(Router $Router) {
@@ -74,7 +75,6 @@ class YetiRouteProvider extends RouteServiceProvider {
 
 				}
 			}
-
 		});
 	}
 }

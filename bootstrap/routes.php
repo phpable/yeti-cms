@@ -30,11 +30,11 @@ use \Able\IO\Path;
 use \Able\IO\Directory;
 
 Route::group(['domain' => Config::get('app.domain')], function(){
-	Route::group(['middleware' => 'guest'], function () {
-		Route::controllers([
-			'auth' => 'AuthController',
-		]);
-	});
+//	Route::group(['middleware' => 'guest'], function () {
+//		Route::controllers([
+//			'auth' => 'AuthController',
+//		]);
+//	});
 
 	Route::group(['middleware' => 'auth'], function () {
 		Route::group(['middleware' => 'unscope'], function () {

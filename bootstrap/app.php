@@ -62,7 +62,7 @@ $App->singleton(
 
 $App->singleton(
 	\Illuminate\Contracts\Debug\ExceptionHandler::class,
-	\Yeti\Main\Exception\Interceptor::class
+	\Yeti\Main\Exception\Handler::class
 );
 
 return $App;

@@ -20,8 +20,6 @@ use \Yeti\Main\Command\YetiProjectBuild;
 use \Yeti\Main\Command\YetiResourcesCheck;
 
 use \Yeti\Main\Command\LaravelConsoleMake;
-use \Yeti\Main\Command\LaravelCommandMake;
-use \Yeti\Main\Command\LaravelMacrosMake;
 use \Yeti\Main\Command\LaravelControllerMake;
 use \Yeti\Main\Command\LaravelMiddlewareMake;
 use \Yeti\Main\Command\LaravelModelMake;
@@ -53,8 +51,6 @@ class Console extends Kernel {
 		YetiProjectConfig::class,
 
 		LaravelConsoleMake::class,
-		LaravelCommandMake::class,
-		LaravelMacrosMake::class,
 		LaravelMiddlewareMake::class,
 		LaravelModelMake::class,
 
