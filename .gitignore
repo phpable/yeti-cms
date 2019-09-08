@@ -1,4 +1,5 @@
 /vendor
+/workbench
 /node_modules
 /resources/temporary/*
 /.sass-cache
