@@ -29,7 +29,7 @@
 		"symfony/process": "^5.0",
 		"symfony/routing": "^5.0",
 		"symfony/var-dumper": "^5.0",
-		"vlucas/phpdotenv": "~1.0",
+		"vlucas/phpdotenv": "^4.0",
 
 		"able/helpers": "dev-master",
 		"able/io": "dev-master",
