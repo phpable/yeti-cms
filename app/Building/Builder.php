@@ -20,6 +20,7 @@ use \Yeti\Main\Building\Storages\Structures\SExternal;
 
 use \Able\Helpers\Arr;
 use \Able\Helpers\Jsn;
+use \Able\Helpers\Str;
 
 use \Able\IO\Path;
 use \Able\IO\File;
@@ -79,9 +80,13 @@ class Builder {
 	 */
 	public final function proceed(Page $Page, Directory $Terget, array $Arguments = [], array $Overrides = []){
 		$Terget->toPath()->append('page.json')->forceFile()
-			->rewrite(Jsn::encode(array_merge($Page->config, ['url' => $Page->url, 'pid' => $Page->id], $Overrides)));
+			->rewrite(Jsn::encode(array_merge($Page->config, [
+				'url' => $Page->url,
+				'hash' => $Page->hash
+			], $Overrides)));
 
-		$View = $Terget->toPath()->append('view.php')->forceFile();
+		$View = $Terget->toPath()
+			->append('view.php')->forceFile();
 
 		Collector::stack('page', $Page);
 		if ($Page->builder == 'standard') {

@@ -15,8 +15,11 @@ use \Illuminate\Database\Eloquent\Relations\HasMany;
 
 use \Able\Helpers\Jsn;
 use \Able\Helpers\Arr;
+use \Able\Helpers\Str;
 
 use \Able\IO\Path;
+
+use Exception;
 
 class Project extends AModel {
 
@@ -39,7 +42,8 @@ class Project extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $appends = ['uid', 'path'];
+	protected $appends = ['uid',
+		'path', 'hash'];
 
 	/**
 	 * @var array
@@ -55,7 +59,7 @@ class Project extends AModel {
 
 	/**
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function options(): array {
 		return Jsn::decode($this->storage);
@@ -64,7 +68,7 @@ class Project extends AModel {
 	/**
 	 * @param string $name
 	 * @return null|string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function option(string $name): ?string {
 		return Arr::get($this->options(), $name);
@@ -72,7 +76,7 @@ class Project extends AModel {
 
 	/**
 	 * @param array $Options
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function store(array $Options){
 		$this->storage = Jsn::merge($this->storage, $Options);
@@ -88,10 +92,17 @@ class Project extends AModel {
 
 	/**
 	 * @return Path
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public final function getPathAttribute(): Path {
 		return Path::create(base_path('projects'), $this->name);
+	}
+
+	/**
+	 * @return string
+	 */
+	public final function getHashAttribute(): string {
+		return md5(Str::join('|', Arr::collect($this->id, $this->created_at)));
 	}
 }
 

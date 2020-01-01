@@ -4,6 +4,7 @@ namespace Yeti\Core\Model;
 use \Able\Helpers\Arr;
 use \Able\Helpers\Arg;
 use \Able\Helpers\Src;
+use \Able\Helpers\Str;
 
 use \Yeti\Core\Model\Layout;
 use \Yeti\Main\Model\Project;
@@ -46,7 +47,8 @@ class Page extends AModel
 	/**
 	 * @var array
 	 */
-	protected $appends = ['absolute_url'];
+	protected $appends = ['absolute_url',
+		'hash'];
 
 	/**
 	 * @const string
@@ -130,8 +132,15 @@ class Page extends AModel
 	/**
 	 * @return string
 	 */
-	public final function getAbsoluteUrlAttribute(){
+	public final function getAbsoluteUrlAttribute(): string {
 		return implode('/', array_filter([rtrim($this->project->domain, '/'), ltrim($this->url, '/')]));
+	}
+
+	/**
+	 * @return string
+	 */
+	public final function getHashAttribute(): string {
+		return md5(Str::join('|', Arr::collect($this->id, $this->Project->hash)));
 	}
 
 	/**
