@@ -38,7 +38,8 @@ class Post extends AModel {
 	/**
 	 * @var array
 	 */
-	protected $appends = ['topic', 'author', 'lightweight'];
+	protected $appends = ['topic',
+		'author', 'lightweight', 'hash'];
 
 	/**
 	 * @var array
@@ -105,5 +106,11 @@ class Post extends AModel {
 			? $this->attributes['description'] : Str::tr($this->getPreviewAttribute(), 255);
 	}
 
+	/**
+	 * @return string
+	 */
+	public final function getHashAttribute(): string {
+		return md5(Str::join('|', Arr::collect($this->id, $this->created_at)));
+	}
 }
 
