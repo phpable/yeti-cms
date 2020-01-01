@@ -110,7 +110,7 @@ class Post extends AModel {
 	 * @return string
 	 */
 	public final function getHashAttribute(): string {
-		return md5(Str::join('|', Arr::collect($this->id, $this->created_at)));
+		return md5(Str::join('|', Arr::collect($this->id, (string)$this->created_at)));
 	}
 }
 
