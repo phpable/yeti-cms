@@ -126,7 +126,7 @@ class Module extends AModel {
 			}
 
 			return Arr::follow($this->Manifest, ...preg_split('/\.+/',
-				$name, -1, PREG_RECURSION_LIMIT_ERROR)) ?? $default;
+				$name, -1, PREG_SPLIT_NO_EMPTY)) ?? $default;
 
 		}catch (\Exception $Exception){
 			throw new \Exception(sprintf('Can\'t load the manifest file: %s!',
