@@ -79,7 +79,7 @@ class Builder {
 	 */
 	public final function proceed(Page $Page, Directory $Terget, array $Arguments = [], array $Overrides = []){
 		$Terget->toPath()->append('page.json')->forceFile()
-			->rewrite(Jsn::encode(array_merge($Page->config, ['url' => $Page->url], $Overrides)));
+			->rewrite(Jsn::encode(array_merge($Page->config, ['url' => $Page->url, 'pid' => $Page->id], $Overrides)));
 
 		$View = $Terget->toPath()->append('view.php')->forceFile();
 
