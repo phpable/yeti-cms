@@ -21,7 +21,7 @@
 	<body>
 		@yield(main)
 
-		<script type="text/javascript" src="{{ $__public }}/main.min.js"></script>
+		<script type="text/javascript" src="{{ $__public }}/main.min.js?hash={{ md5(time()) }}"></script>
 		<script type="text/javascript">
 			@yield(js)
 
