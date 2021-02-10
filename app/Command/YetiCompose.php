@@ -79,6 +79,9 @@ class YetiCompose extends ACommand {
 
 					$this->info(sprintf("Exported: page #%s", $Page->id));
 				}
+
+				$Directory->toPath()->append(sprintf('%s.json', $Page->name))
+					->forceFile()->rewrite(json_encode(Arr::only($Page->toArray(), 'title', 'description', 'url'), JSON_PRETTY_PRINT));
 			}
 
 			$Directory = (new Path($this->argument('destination'),
